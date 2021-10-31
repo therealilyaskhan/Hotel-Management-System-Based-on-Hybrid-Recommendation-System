@@ -3,16 +3,18 @@ When you have 'type: module' in the package.json file, your source code should u
 */
 import path from 'path';
 import express from 'express';
+import dotenv from 'dotenv';
+import fileupload from 'express-fileupload';
+
+import connectDB from './db.js';
 import studentsRouter from './routes/students.js';
+import meetingsRouter from './routes/meetings.js';
 import tutorsRouter from './routes/tutors.js';
 import tutorAuth from './routes/tutorAuth.js';
 import studentAuth from './routes/studentAuth.js';
-import dotenv from 'dotenv';
-import connectDB from './db.js';
 import errorHandler from './middleware/errorHandler.js';
-import fileupload from 'express-fileupload';
 
-dotenv.config({ path: '../config/.env' });
+dotenv.config({ path: './config/.env' });
 
 //connect to cluster
 connectDB();
@@ -30,6 +32,11 @@ app.use(fileupload());
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+//default route
+app.get('/', function (req, res) {
+  res.send("Default Page");
+});
+
 // tutor account api:
 app.use('/api/auth/tutors', tutorAuth);
 
@@ -42,7 +49,11 @@ app.use('/api/students', studentsRouter);
 // the "tutors" api coming from the "routes" folder
 app.use('/api/tutors', tutorsRouter);
 
+// MEETINGS
+app.use('/api/meetings', meetingsRouter);
+
 //errorHandler middleware at the end of all routings ? read at "NodeJS Fundamentals" search "error handler middleware"
 app.use(errorHandler);
+
 
 app.listen(port, () => console.log(`server at https://localhost:${port}`));

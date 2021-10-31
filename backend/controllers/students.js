@@ -8,7 +8,15 @@ export const getStudents = expressAsyncHandler(async (req, res, next) => {
   if (!students)
     throw new ErrorResponse(`No students found`, 404);
 
-  res.status(200).json({ success: true, count: students.length, data: students });
+  //if students are found then fill the res object
+  res
+    .status(200)
+    .json({
+      success: true,
+      count: students.length,
+      data: students
+    });
+
 });
 
 export const getStudent = expressAsyncHandler(async (req, res, next) => {

@@ -5,9 +5,9 @@ import ErrorResponse from '../utils/ErrorResponse.js';
 //student signup endpoint
 export const signup = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { firstName, lastName, email, address, password, zipcode } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
-  if (!(firstName && lastName && email && address && password && zipcode))
+  if (!(firstName && lastName && email && password))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Student
@@ -15,9 +15,7 @@ export const signup = expressAsyncHandler(async (req, res, next) => {
     firstName,
     lastName,
     email,
-    address,
-    password,
-    zipcode
+    password
   });
 
   //create token:
