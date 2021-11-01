@@ -10,9 +10,8 @@ import connectDB from './db.js';
 import studentsRouter from './routes/students.js';
 import meetingsRouter from './routes/meetings.js';
 import tutorsRouter from './routes/tutors.js';
-import tutorAuth from './routes/tutorAuth.js';
-import studentAuth from './routes/studentAuth.js';
 import errorHandler from './middleware/errorHandler.js';
+import feedbacksRouter from './routes/feedbacks.js';
 
 dotenv.config({ path: './config/.env' });
 
@@ -37,12 +36,6 @@ app.get('/', function (req, res) {
   res.send("Default Page");
 });
 
-// tutor account api:
-app.use('/api/auth/tutors', tutorAuth);
-
-// student account api:
-app.use('/api/auth/students', studentAuth);
-
 // the "students" api coming from the "routes" folder
 app.use('/api/students', studentsRouter);
 
@@ -51,6 +44,9 @@ app.use('/api/tutors', tutorsRouter);
 
 // MEETINGS
 app.use('/api/meetings', meetingsRouter);
+
+//Feedbacks
+app.use('/api/feedbacks', feedbacksRouter);
 
 //errorHandler middleware at the end of all routings ? read at "NodeJS Fundamentals" search "error handler middleware"
 app.use(errorHandler);
