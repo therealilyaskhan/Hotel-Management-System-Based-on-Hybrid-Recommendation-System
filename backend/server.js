@@ -12,6 +12,11 @@ import meetingsRouter from './routes/meetings.js';
 import tutorsRouter from './routes/tutors.js';
 import errorHandler from './middleware/errorHandler.js';
 import feedbacksRouter from './routes/feedbacks.js';
+import coursesRouter from './routes/courses.js';
+import teachesRouter from './routes/teaches.js';
+import messagesRouter from './routes/messages.js';
+import transactionsRouter from './routes/transactions.js';
+import inboxesRouter from './routes/inboxes.js';
 
 dotenv.config({ path: './config/.env' });
 
@@ -31,22 +36,39 @@ app.use(fileupload());
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-//default route
+//DEFAULT / ROOT
 app.get('/', function (req, res) {
   res.send("Default Page");
 });
 
-// the "students" api coming from the "routes" folder
+//STUDENTS
 app.use('/api/students', studentsRouter);
 
-// the "tutors" api coming from the "routes" folder
+//TUTORS
 app.use('/api/tutors', tutorsRouter);
 
 // MEETINGS
 app.use('/api/meetings', meetingsRouter);
 
-//Feedbacks
+//FEEDBACKS
 app.use('/api/feedbacks', feedbacksRouter);
+
+//COURSES
+app.use('/api/courses', coursesRouter);
+
+//TEACHES
+app.use('/api/teaches', teachesRouter);
+
+//TRANSACTIONS
+app.use('/api/transactions', transactionsRouter);
+
+//INBOXES
+app.use('/api/inboxes', inboxesRouter);
+
+//MESSAGES
+app.use('/api/messages', messagesRouter);
+
+
 
 //errorHandler middleware at the end of all routings ? read at "NodeJS Fundamentals" search "error handler middleware"
 app.use(errorHandler);
