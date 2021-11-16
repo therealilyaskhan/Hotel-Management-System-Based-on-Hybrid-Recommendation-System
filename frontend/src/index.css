@@ -623,3 +623,108 @@ h6 {
   border-radius: 3px;
   display: none;
 }
+
+/* tutor profile card css */
+
+.tutor__profile-container {
+  color: #334e64;
+  font-family: 'Montserrat', sans-serif;
+  position: relative;
+  background-color: #fff;
+  width: 280px;
+  padding: 80px 20px 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 60px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-top: 90px;
+}
+
+.tutor__img-container {
+  width: 110px;
+  height: 110px;
+  overflow: hidden;
+  border: 5px solid #002984;
+  border-radius: 50%;
+  box-shadow: 0 8px 55px #002984;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.tutor__img-container img {
+  width: 100%;
+  max-width: 100%;
+  transform: scale(1.1);
+}
+
+.tutor__info {
+  margin-bottom: 6px;
+}
+
+.tutor__info i {
+  margin-right: 8px;
+  font-size: 1.1em;
+}
+
+.tutor__place {
+  margin-bottom: 25px;
+}
+
+.tutor__full-name {
+  font-size: 1.4em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #002984;
+}
+
+.tutor__posts-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1em;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.tutor__posts-info span {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* Social colors */
+
+.tutor__action {
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  color: #fff;
+  background-color: #d31258;
+  border: none;
+  border-radius: 50px;
+  padding: 6px 10px;
+  width: 80%;
+  margin-top: 15px;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.tutor__action.inbox {
+  background-color: #6741ff;
+}
+
+.tutor__action:hover {
+  transform: scale(1.05);
+  opacity: 0.85;
+}
