@@ -72,6 +72,6 @@ export const createMeeting = expressAsyncHandler(async (req, res, next) => {
   // //create token:
   // const token = meeting.getSignedJwtToken();
 
-  res.status(200).json({ success: true, _id: meeting });
+  res.status(200).json({ success: true, data: meeting });
 
 });

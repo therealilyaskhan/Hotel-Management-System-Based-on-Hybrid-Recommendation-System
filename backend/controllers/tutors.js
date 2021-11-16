@@ -108,11 +108,14 @@ export const tutorImageUpload = expressAsyncHandler(async (req, res, next) => {
       throw new ErrorResponse('Could not upload the image.', 500);
     }
 
-    await Tutor.findByIdAndUpdate(req.params.id, { image: file.name });
+    const imageURL = "/uploads/" + file.name;
+
+    await Tutor.findByIdAndUpdate(req.params.id, { imageURL });
+    const tutor = await Tutor.findById(req.params.id);
 
     res.status(200).json({
       success: true,
-      data: file.name
+      data: tutor
     });
 
   });
@@ -121,22 +124,23 @@ export const tutorImageUpload = expressAsyncHandler(async (req, res, next) => {
 
 //tutor signup endpoint function
 export const signup = expressAsyncHandler(async (req, res, next) => {
-  const { firstName, lastName, email, address, password, zipcode } = req.body;
+  const { firstName, lastName, email, password, hourlyRate, experience, description } = req.body;
 
   // Create Tutor
   const tutor = await Tutor.create({
     firstName,
     lastName,
     email,
-    address,
     password,
-    zipcode
+    hourlyRate,
+    experience,
+    description
   });
 
   //create token:
   const token = tutor.getSignedJwtToken();
 
-  res.status(200).json({ success: true, token, firstName: tutor.firstName, _id: tutor._id });
+  res.status(200).json({ success: true, token, data: tutor });
 
 });
 
@@ -166,6 +170,6 @@ export const signin = expressAsyncHandler(async (req, res, next) => {
   //generate token for signed user:
   const token = tutor.getSignedJwtToken();
 
-  res.status(200).json({ success: true, token, firstName: tutor.firstName, _id: tutor._id });
+  res.status(200).json({ success: true, token, data: tutor });
 
 });

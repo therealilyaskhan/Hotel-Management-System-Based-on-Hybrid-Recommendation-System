@@ -25,79 +25,61 @@ const tutorSchema = new Schema({
     unique: true,
     match: [/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'please Enter a valid email address']
   },
-  address: {
-    type: String,
-    required: [true, 'Please enter an address']
-  },
-  location: {
-    type: {
-      type: String,
-      enum: ['Point']
-    },
-    coordinates: {
-      type: [Number],
-      index: '2dsphere'
-    },
-    city: String,
-    region: String,
-    zipcode: String,
-    country: String
-  },
-  image: {
-    type: String,
-    default: 'no-photo.jpg'
-  },
-  subjects: {
-    type: [String],
-    enum: [
-      'Maths',
-      'Science',
-      'Language',
-      'English',
-      'Computer',
-      'Coding',
-      'Algebra',
-      'Chemistry',
-      'Physics',
-      'Calculus',
-      'Geometry',
-      'Accounting',
-      'Other'
-    ]
-    //TODO: subjects functionality
-    // required: [true, 'Please select subjects you teach']
-  },
-  averageRating: {
-    type: Number,
-    min: [0, 'Rating must be at least 0'],
-    max: [5, 'Rating can not be more than 5']
-  },
-  description: {
-    type: String,
-    trim: true,
-    maxlength: [500, 'Description can not be more than 500 characters']
-  },
-  hourlyRate: {
-    type: Number,
-    // required: [true, 'Please add a hourly rate']
-  },
   password: {
     type: String,
     minlength: 6,
     required: [true, 'Please enter password'],
     select: false
   },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-  zipcode: {
-    type: String,
-    required: [true, 'Please enter your zip code']
+  hourlyRate: {
+    type: Number,
+    required: [true, 'Please add a hourly rate']
   },
-  isTutor: {
-    type: Boolean,
-    default: true,
-    required: true
-  }
+  experience: {
+    type: Number,
+    required: [true, 'Please add experience']
+  },
+  description: {
+    type: String,
+    trim: true,
+    default: "No description",
+    maxlength: [500, 'Description can not be more than 500 characters']
+  },
+  imageURL: {
+    type: String,
+    default: '/uploads/no-photo.jpg'
+  },
+  category: {
+    type: String,
+    default: "tutors"
+  },
+  categoryName: {
+    type: String,
+    enum: ['none', 'science', 'design', 'development', 'religious', 'marketing', 'personal', 'business', 'music', 'photography', 'arts', 'language', 'elementary', 'maths', 'ecommerce'],
+    default: "none"
+  },
+  categoryID: {
+    type: Number,
+    min: 0,
+    max: 14,
+    default: 0
+  },
+  totalEarnings: {
+    type: Number,
+    default: 0
+  },
+  totalMeetings: {
+    type: Number,
+    default: 0
+  },
+  averageRating: {
+    type: Number,
+    min: [0, 'Rating must be at least 0'],
+    max: [5, 'Rating can not be more than 5'],
+    default: 0
+  },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date
 }, { timestamps: true });
 
 // adding instance method to the instances of the Tutor Model:
@@ -118,42 +100,6 @@ tutorSchema.methods.matchPassword = async function (enteredPassword) {
 tutorSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-});
-
-//translating the zip code into GeoJSON location object:
-tutorSchema.pre('save', async function (next) {
-  //not using arrow => due to *this* binding prob
-  const where = encodeURIComponent(JSON.stringify({
-    "postalCode": this.zipcode
-  }));
-
-  const response = await fetch(
-    `https://parseapi.back4app.com/classes/Pakistanzipcode_pakistan_zip_code_database?where=${where}`,
-    {
-      method: 'GET',
-      headers: {
-        'X-Parse-Application-Id': 'tB4AASFt7dbCpKb1vZLB3NznqV8VRm8rljlBAtdS',
-        'X-Parse-REST-API-Key': 'SlDPos11mPY8Y69biFdgPIkK6d4OpKCxPKJGypiG',
-      }
-    }
-  );
-
-  const data = await response.json();
-
-  const loc = data.results;
-
-  this.location = {
-    type: 'Point',
-    coordinates: [loc[0].geoPosition.longitude, loc[0].geoPosition.latitude],
-    city: loc[0].placeName,
-    region: loc[0].adminName1,
-    zipcode: loc[0].postalCode,
-    country: loc[0].countryCode
-  };
-
-  //now discard address and zipcode now from getting into DB
-  this.zipcode = undefined;
-  next();
 });
 
 const Tutor = model('Tutor', tutorSchema);

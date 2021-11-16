@@ -1,3 +1,4 @@
+import path from 'path';
 import Student from '../models/Student.js';
 import expressAsyncHandler from 'express-async-handler'; // read about express-async-handler in NodeJS Fundamentals notes;
 import ErrorResponse from '../utils/ErrorResponse.js';
@@ -51,7 +52,7 @@ export const deleteStudent = expressAsyncHandler(async (req, res, next) => {
 
 //student signup function
 export const signup = expressAsyncHandler(async (req, res, next) => {
-  console.log('blahhhh');
+
   //pulling props out of req.body for validation reasons
   const { firstName, lastName, email, password } = req.body;
 
@@ -69,7 +70,7 @@ export const signup = expressAsyncHandler(async (req, res, next) => {
   //create token:
   const token = student.getSignedJwtToken();
 
-  res.status(200).json({ success: true, token, firstName: student.firstName, _id: student._id });
+  res.status(200).json({ success: true, token, data: student });
 
 });
 
@@ -99,6 +100,48 @@ export const signin = expressAsyncHandler(async (req, res, next) => {
   //generate token for signed user:
   const token = student.getSignedJwtToken();
 
-  res.status(200).json({ success: true, token, firstName: student.firstName, _id: student._id });
+  res.status(200).json({ success: true, token, data: student });
+
+});
+
+//student image upload
+export const studentImageUpload = expressAsyncHandler(async (req, res, next) => {
+  const student = await Student.findById(req.params.id);
+  if (!student)
+    throw new ErrorResponse(`Student not found with id of ${req.params.id}`, 404);
+
+
+  if (!req.files)
+    throw new ErrorResponse('Please attach your photo.', 400);
+
+  const file = req.files.image;
+
+  // Make sure the image is a photo
+  if (!file.mimetype.startsWith('image'))
+    throw new ErrorResponse('Please attach file of type image.', 400);
+  // Check filesize
+  if (file.size > process.env.MAX_FILE_UPLOAD)
+    throw new ErrorResponse(`Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`, 400);
+
+
+  // Create custom filename
+  file.name = `photo_${student._id}${path.parse(file.name).ext}`;
+
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+    if (err) {
+      throw new ErrorResponse('Could not upload the image.', 500);
+    }
+
+    const imageURL = "/uploads/" + file.name;
+
+    await Student.findByIdAndUpdate(req.params.id, { imageURL });
+    const student = await Student.findById(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      data: student
+    });
+
+  });
 
 });

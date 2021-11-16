@@ -30,17 +30,27 @@ export const getCourse = expressAsyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: course });
 });
 
-// update single course data
-export const updateCourse = expressAsyncHandler(async (req, res, next) => {
-  const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
+//autocomplete course titles / search suggestions
+export const autocompleteTitles = expressAsyncHandler(async (req, res, next) => {
 
-  if (!course)
-    throw new ErrorResponse(`Course not found with id of ${req.params.id}`, 404);
+  const term = req.query.term.trim();
 
-  res.status(200).json({ success: true, data: course });
+  const titles = await Course.find(
+    {
+      title: {
+        $regex: new RegExp('^' + term + '.*', 'i')
+      }
+    },
+    { _id: 0, __v: 0 }
+  ).exec();
+
+  if (titles.length > 16)
+    titles = titles.slice(0, 15);
+
+  if (!titles.length)
+    res.status(200).json([]);
+  else
+    res.status(200).json(titles);
 });
 
 //delete single course by id
@@ -56,20 +66,21 @@ export const deleteCourse = expressAsyncHandler(async (req, res, next) => {
 //create new course 
 export const createCourse = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { title, category } = req.body;
+  const { title } = req.body;
 
-  if (!(title && category))
+  if (!title)
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Course
-  const course = await Course.create({
-    title,
-    category
-  });
+  const course = await Course.updateOne(
+    { title },
+    { $setOnInsert: { title } },
+    { upsert: true }
+  );
 
   // //create token:
   // const token = course.getSignedJwtToken();
 
-  res.status(200).json({ success: true, _id: course });
+  res.status(200).json({ success: true, data: course });
 
 });

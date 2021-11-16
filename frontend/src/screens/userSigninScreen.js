@@ -1,22 +1,45 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { signin } from '../store/actionCreators/userActions';
 
 function UserSigninScreen(props) {
-  const { userInfo, loading, error } = props;
+  const [userInfo, setUserInfo] = useState(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isTutor, setIsTutor] = useState(false);
 
-  const redirect = props.location.search ? props.location.search.split('=')[1] : '/';
+  const redirect = userInfo.category === 'students' ? '/' : '/tutors/dashboard/profile';
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
+    let signinEndpoint = isTutor ? "tutors/signin" : "students/signin";
+
     e.preventDefault();
-    if (email && password)
-      props.authenticateUser(email, password, isTutor);
+    if (email && password) {
+      const student = {
+        email,
+        password
+      };
+
+      try {
+        setLoading(true);
+        const res = await axios.post(signinEndpoint, student);
+        const data = res.data.data;
+        if (data) {
+          localStorage.setItem('userInfo', JSON.stringify(data));
+          setUserInfo(data);
+          setLoading(false);
+        }
+
+      } catch (err) {
+        setLoading(false);
+        setError(err.message);
+      }
+    }
   };
 
   useEffect(() => {
@@ -62,38 +85,20 @@ function UserSigninScreen(props) {
           </div>
 
           <button type="submit" className="btn btn-primary btn-block">Sign In</button>
-          <p className="forgot-password text-center">
+          <div className="forgot-password text-center">
             New User?
-            <Link to="/users/signup"> Sign up?</Link>
+            <Link to="/students/signup"> Sign up?</Link>
             <div>Or</div>
             {
               isTutor ?
-                (<Link onClick={() => setIsTutor(false)}>Signin as Student</Link>) :
-                (<Link onClick={() => setIsTutor(true)}>Signin as Tutor</Link>)
+                (<Link to="#" onClick={() => setIsTutor(false)}>Signin as Student</Link>) :
+                (<Link to="#" onClick={() => setIsTutor(true)}>Signin as Tutor</Link>)
             }
-          </p>
+          </div>
         </form>
       </div>
     </div>
   );
 }
 
-//here we are subscribing to the state.user.userInfo object property living inside the redux store, each time this state.user.userInfo object is replace by a new object returned by any one of the reducers, we are going to get the updated object inside the props.userInfo, and whenever new props are passed to a component, that component as a whole is always re-rendered always;
-const mapStateToProps = (state) => {
-  return {
-    userInfo: state.userSignin.userInfo,
-    error: state.userSignin.error,
-    loading: state.userSignin.loading
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    authenticateUser: (email, password, isTutor) => {
-      dispatch(signin(email, password, isTutor));
-    }
-  };
-};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserSigninScreen);
+export default withRouter(UserSigninScreen);

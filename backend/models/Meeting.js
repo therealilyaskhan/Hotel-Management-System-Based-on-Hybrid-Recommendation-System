@@ -11,7 +11,8 @@ const meetingSchema = new Schema({
   status: {
     type: String,
     required: [true, 'Please provide meeting status'],
-    enum: ['Pending', 'Attended']
+    enum: ['pending', 'attended'],
+    default: "pending"
   },
   tutorID: {
     type: mongoose.Schema.Types.ObjectId,
@@ -41,7 +42,7 @@ const meetingSchema = new Schema({
   slot: {
     type: String,
     required: [true, 'Please add a slot for meeting'],
-    enum: ['Morning', 'Afternoon', 'Evening']
+    enum: ['morning', 'afternoon', 'evening']
   }
 }, { timestamps: true });
 

@@ -27,13 +27,25 @@ const studentSchema = new Schema({
   },
   imageURL: {
     type: String,
-    default: 'no-photo.jpg'
+    default: '/uploads/no-photo.jpg'
   },
   password: {
     type: String,
     minlength: 6,
     required: [true, 'Please enter password'],
     select: false
+  },
+  category: {
+    type: String,
+    default: "students"
+  },
+  totalExpenditures: {
+    type: Number,
+    default: 0
+  },
+  totalMeetings: {
+    type: Number,
+    default: 0
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date

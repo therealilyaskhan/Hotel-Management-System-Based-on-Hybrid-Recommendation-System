@@ -5,7 +5,7 @@ import ErrorResponse from '../utils/ErrorResponse.js';
 //get all inboxes of a user (tutor or student) using their ID:
 export const getInboxes = expressAsyncHandler(async (req, res, next) => {
   const inboxes = await Inbox.find({
-    members: { $in: [req.params.id] },
+    members: req.params.id
   });
 
   if (!inboxes)

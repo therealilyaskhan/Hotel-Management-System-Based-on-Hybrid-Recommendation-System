@@ -5,6 +5,7 @@ import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import fileupload from 'express-fileupload';
+import cors from 'cors';
 
 import connectDB from './db.js';
 import studentsRouter from './routes/students.js';
@@ -17,6 +18,7 @@ import teachesRouter from './routes/teaches.js';
 import messagesRouter from './routes/messages.js';
 import transactionsRouter from './routes/transactions.js';
 import inboxesRouter from './routes/inboxes.js';
+import locationsRouter from './routes/locations.js';
 
 dotenv.config({ path: './config/.env' });
 
@@ -25,13 +27,25 @@ connectDB();
 
 const app = express();
 const port = process.env.PORT;
+const inProduction = process.env.NODE_ENV === "production";
 const __dirname = path.resolve();
 
 //req body parser: express.json() returns an express's native middleware function that accepts as argument 'req' , 'res' and 'next' objects, the http req object that it accepts, it parses the body of that and attaches it a body property which is also an object, previously when express did have this middleware natively we had to use body parser middleware function from npm;
 app.use(express.json());
 
+// For the cors config below, when in production, "http://localhost:5000" should be "http://foo.com"
+app.use(
+  cors({
+    origin: inProduction ? "http://localhost:5000" : "http://localhost:3000"
+  })
+);
+
 // fileupload middlware
-app.use(fileupload());
+app.use(fileupload(
+  {
+    createParentPath: true,
+  }
+));
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -67,6 +81,9 @@ app.use('/api/inboxes', inboxesRouter);
 
 //MESSAGES
 app.use('/api/messages', messagesRouter);
+
+//LOCATIONS
+app.use('/api/locations', locationsRouter);
 
 
 

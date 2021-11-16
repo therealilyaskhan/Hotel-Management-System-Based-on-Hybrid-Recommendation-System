@@ -1,6 +1,5 @@
-import React from 'react';
 const MessageBox = ({ msg, variant, children }) => {
-  return (<div className={`alert alert-${variant || 'info'}`} > { msg} {children && children} </div >);
+  return (<div className={`alert alert-${variant || 'info'}`} > {msg} {children && children} </div >);
 };
 
 export default MessageBox;

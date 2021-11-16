@@ -1,29 +1,70 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import HomeScreen from './screens/HomeScreen';
-import userSigninScreen from './screens/userSigninScreen';
-import UserSignupScreen from './screens/userSignupScreen';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import HomeLayout from './layout/HomeLayout';
+import StudentDashboard from './layout/StudentDashboard';
+import TutorDashboard from './layout/TutorDashboard';
+import { ThemeProvider } from '@material-ui/core/styles';
 
-import Navbar from './components/Navbar';
+import Topbar from './components/Topbar';
 import Footer from './components/Footer';
+import UserSigninScreen from './screens/UserSigninScreen';
+import StudentSignupScreen from './screens/StudentSignupScreen';
+import TutorSignupScreen from './screens/TutorSignupScreen';
+import TutorMoreInfoScreen from './screens/TutorMoreInfoScreen';
+import Messenger from './screens/Messenger';
 
-
+import theme from './theme/theme';
+import ResultsLayout from './layout/ResultsLayout';
 
 function App() {
   return (
-    <Router>
-      <>
-        <Navbar />
-        <main>
-          <Switch>
-            <Route path="/" component={HomeScreen} exact></Route>
-            <Route path="/users/signup" component={UserSignupScreen} ></Route>
-            <Route path="/users/signin" component={userSigninScreen}></Route>
-          </Switch>
-        </main>
-        <Footer />
-      </>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Switch>
+          <Route path="/" exact>
+            <Topbar sticky responsive />
+            <HomeLayout />
+            < Footer />
+          </Route>
+          <Route path="/signin">
+            <Topbar />
+            <UserSigninScreen />
+            < Footer />
+          </Route>
+          <Route path="/students/signup">
+            <Topbar />
+            <StudentSignupScreen />
+            < Footer />
+          </Route>
+          <Route path="/tutors/signup">
+            <Topbar />
+            <TutorSignupScreen />
+            < Footer />
+          </Route>
+          <Route path="/tutors/moreinfo">
+            <Topbar />
+            <TutorMoreInfoScreen />
+            < Footer />
+          </Route>
+          <Route path="/tutors/dashboard">
+            <TutorDashboard />
+            <Footer crop />
+          </Route>
+          <Route path="/students/dashboard">
+            <StudentDashboard />
+            <Footer crop />
+          </Route>
+          <Route path="/messenger">
+            <Topbar sticky responsive color="#00b0ff" />
+            <Messenger />
+          </Route>
+          <Route path="/results">
+            <Topbar sticky responsive color="#00b0ff" />
+            <ResultsLayout />
+          </Route>
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

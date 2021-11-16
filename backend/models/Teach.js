@@ -9,10 +9,11 @@ const teachSchema = new Schema({
     ref: 'Tutor',
     required: [true, 'Please provide tutor ID']
   },
-  courseID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course',
-    required: [true, 'Please provide tutor ID']
+  course: {
+    type: String,
+    required: [true, 'Please add a course title'],
+    trim: true,
+    lowercase: true
   }
 }, { timestamps: true });
 

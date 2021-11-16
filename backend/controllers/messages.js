@@ -25,7 +25,7 @@ export const getMessages = expressAsyncHandler(async (req, res, next) => {
 //create new message 
 export const createMessage = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { inboxID, message, senderID } = req.body;
+  const { inboxID, message, senderID, senderImageURL } = req.body;
 
   if (!(inboxID && message && senderID))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
@@ -34,7 +34,8 @@ export const createMessage = expressAsyncHandler(async (req, res, next) => {
   const msg = await Message.create({
     inboxID,
     message,
-    senderID
+    senderID,
+    senderImageURL
   });
 
   // //create token:
