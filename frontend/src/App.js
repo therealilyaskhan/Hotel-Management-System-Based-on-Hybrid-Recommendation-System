@@ -60,6 +60,7 @@ function App() {
           <Route path="/results">
             <Topbar sticky responsive />
             <ResultsLayout />
+            <Footer />
           </Route>
         </Switch>
       </Router>

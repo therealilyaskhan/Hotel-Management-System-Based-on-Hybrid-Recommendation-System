@@ -57,7 +57,7 @@ function ResultsLayout(props) {
               <Box fontSize={25} className="text-capitalize pt-4 pb-3 px-4">
                 <span className="font-weight-bold">{tutorIDs.length} {term} tutor{tutorIDs.length > 1 ? "s" : ""}</span> for you
               </Box>
-              <div class="row">
+              <div class="row mb-5">
                 {
                   tutorsData.map((tutor) => (
                     <div key={tutor._id} class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3"><TutorProfileCard tutorInfo={tutor} currentUser={userInfo._id ? userInfo : false} /></div>

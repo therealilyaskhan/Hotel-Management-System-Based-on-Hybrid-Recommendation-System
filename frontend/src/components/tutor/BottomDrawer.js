@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { useState } from 'react';
 import axios from 'axios';
+import { Slider } from '@material-ui/core';
 
 const drawerBleeding = 56;
 
@@ -33,6 +34,7 @@ const Puller = styled(Box)(({ theme }) => ({
 function SwipeableEdgeDrawer(props) {
   const { tutorIDs, setTutorIDs } = props;
   const [open, setOpen] = useState(false);
+  const [distance, setDistance] = useState(3000);
 
   const getNearbyTutors = () => {
 
@@ -48,7 +50,7 @@ function SwipeableEdgeDrawer(props) {
             tutorIDs,
             latitude: currentUserLat,
             longitude: currentUserLng,
-            distance: 3000
+            distance
           };
 
           try {
@@ -73,6 +75,12 @@ function SwipeableEdgeDrawer(props) {
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+
+  const handleDistanceChange = (event, distance) => {
+    if (typeof distance === 'number') {
+      setDistance(distance);
+    }
   };
 
   return (
@@ -114,7 +122,25 @@ function SwipeableEdgeDrawer(props) {
             overflow: 'auto',
           }}
         >
-          <Box pb={3} textAlign='center'><button type="button" class="btn btn-info" onClick={getNearbyTutors}>        <i className="fas fa-map-marker-alt"></i> &nbsp;Locate Tutors Only Near Me!</button></Box>
+          <Box pb={3} textAlign='center'>
+            <Box width="80%" margin="auto" marginY={3}>
+              <Typography id="non-linear-slider" gutterBottom>
+                Distance: Within {distance} meters
+              </Typography>
+              <Slider
+                size="medium"
+                step={100}
+                marks
+                min={0}
+                valueLabelDisplay="auto"
+                max={30000}
+                value={distance}
+                onChange={handleDistanceChange}
+                color="secondary"
+              />
+            </Box>
+            <button type="button" class="btn btn-info" onClick={getNearbyTutors}>        <i className="fas fa-map-marker-alt"></i> &nbsp;Locate Tutors Only Near Me!</button>
+          </Box>
         </StyledBox>
       </SwipeableDrawer>
     </Root>
