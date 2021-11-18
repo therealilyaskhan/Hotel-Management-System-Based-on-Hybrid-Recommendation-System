@@ -44,19 +44,16 @@ export const getInbox = expressAsyncHandler(async (req, res, next) => {
 //create new inbox 
 export const createInbox = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { ownerID, opponentID, seen, lastMessage, lastMessageTimestamp } = req.body;
+  const { ownerID, opponentID } = req.body;
 
-  if (!(ownerID && opponentID && lastMessage && lastMessageTimestamp))
+  if (!(ownerID && opponentID))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
   // Create Inbox
   const inbox = await Inbox.create({
     members: [
       ownerID,
       opponentID,
-    ],
-    seen,
-    lastMessage,
-    lastMessageTimestamp
+    ]
   });
 
   // //create token:

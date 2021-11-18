@@ -52,7 +52,10 @@ export default function HomeScreen() {
       const tutors = res.data.map((tutor) => tutor.tutorID);
       history.push({
         pathname: '/results',
-        tutorIDs: tutors
+        state: {
+          tutorIDs: tutors,
+          term: inputValue
+        }
       });
     } catch (err) {
       console.log(err);

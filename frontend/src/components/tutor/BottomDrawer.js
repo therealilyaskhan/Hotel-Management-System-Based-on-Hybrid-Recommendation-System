@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { useState } from 'react';
+import axios from 'axios';
 
 const drawerBleeding = 56;
 
@@ -16,13 +17,13 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 const StyledBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
+  backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#fff'
 }));
 
 const Puller = styled(Box)(({ theme }) => ({
   width: 30,
   height: 6,
-  backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[900],
+  backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[400],
   borderRadius: 3,
   position: 'absolute',
   top: 8,
@@ -30,24 +31,57 @@ const Puller = styled(Box)(({ theme }) => ({
 }));
 
 function SwipeableEdgeDrawer(props) {
-  const { window } = props;
+  const { tutorIDs, setTutorIDs } = props;
   const [open, setOpen] = useState(false);
+
+  const getNearbyTutors = () => {
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const currentUserLat = position.coords.latitude;
+        const currentUserLng = position.coords.longitude;
+
+        //filter all tutors and get new list of nearby tutors by default the distance inside which to find tutors would be 3000 in meters i:e 3 kilometers
+
+        if (currentUserLat && currentUserLng) {
+          const payload = {
+            tutorIDs,
+            latitude: currentUserLat,
+            longitude: currentUserLng,
+            distance: 3000
+          };
+
+          try {
+            const res = await axios.post('locations/radius', payload);
+            const filteredTutorIDs = res.data.data;
+            if (filteredTutorIDs.length) {
+              setTutorIDs(filteredTutorIDs);
+              // toggleDrawer(true)
+              setOpen(false);
+            } else {
+              setTutorIDs([]);
+            }
+          } catch (err) {
+            console.log(err.message);
+          }
+        }
+      });
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  };
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
-  // This is used only for the example
-  const container = window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Root>
 
       <Box sx={{ textAlign: 'center', pt: 1 }}>
-        <button className="btn btn-block btn-info" onClick={toggleDrawer(true)}>Apply Filters</button>
+        <button className="btn btn-block btn-info font-weight-bold" onClick={toggleDrawer(true)}>Apply Filters <i class="fas fa-filter"></i></button>
       </Box>
       <SwipeableDrawer
-        container={container}
         anchor="bottom"
         open={open}
         onClose={toggleDrawer(false)}
@@ -70,7 +104,7 @@ function SwipeableEdgeDrawer(props) {
           }}
         >
           <Puller />
-          <Typography sx={{ p: 2, color: 'text.secondary' }}>51 results</Typography>
+          <Typography className="px-4 pt-4" sx={{ p: 2, color: 'text.secondary' }}>{tutorIDs.length} Results</Typography>
         </StyledBox>
         <StyledBox
           sx={{
@@ -80,7 +114,7 @@ function SwipeableEdgeDrawer(props) {
             overflow: 'auto',
           }}
         >
-          <div className="h-100">w</div>
+          <Box pb={3} textAlign='center'><button type="button" class="btn btn-info" onClick={getNearbyTutors}>        <i className="fas fa-map-marker-alt"></i> &nbsp;Locate Tutors Only Near Me!</button></Box>
         </StyledBox>
       </SwipeableDrawer>
     </Root>

@@ -8,7 +8,11 @@ import axios from 'axios';
 function ResultsLayout(props) {
   const location = useLocation();
 
-  const tutorIDs = location.tutorIDs;
+  const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+
+  const [tutorIDs, setTutorIDs] = useState(location.state.tutorIDs);
+  const { term } = location.state;
+
   const [tutorsData, setTutorsData] = useState([]);
 
   useEffect(() => {
@@ -17,26 +21,14 @@ function ResultsLayout(props) {
       const getTutorsData = async () => {
         let res = await axios.all(tutorIDs.map(tutorID => axios.get("tutors/" + tutorID.trim())));
         let tutors = res.map((r) => {
-          const { _id, imageURL, categoryName, firstName, lastName, hourlyRate, experience, averageRating } = r.data.data;
-          return { _id, imageURL, categoryName, firstName, lastName, hourlyRate, experience, averageRating };
+          const { _id, imageURL, categoryName, firstName, lastName, hourlyRate, experience, averageRating, city, country } = r.data.data;
+          return { _id, imageURL, categoryName, firstName, lastName, city, country, hourlyRate, experience, averageRating };
         });
-        console.log(tutors);
+        setTutorsData(tutors);
       };
-
-
-      // const getTutorsData = async () => {
-
-      //   for (const tutorID of tutorIDs) {
-      //     const tutor = await axios.get("tutors/" + tutorID.trim());
-      //     const { _id, imageURL, categoryName, firstName, lastName, hourlyRate, experience, averageRating } = tutor.data.data;
-
-      //     tutors.push({ _id, imageURL, categoryName, firstName, lastName, hourlyRate, experience, averageRating });
-      //   }
-      // };
-
       getTutorsData();
     }
-  }, []);
+  }, [tutorIDs]);
 
   return (
     <Box>
@@ -56,9 +48,23 @@ function ResultsLayout(props) {
             </div>
           </> :
           !tutorsData.length ?
-            <CircularProgress />
+            <Box height={450} display="flex" alignItems="center" justifyContent="center">
+              <CircularProgress />
+            </Box>
             :
-            <TutorProfileCard />
+            <>
+              <BottomDrawer tutorIDs={tutorIDs} setTutorIDs={setTutorIDs} />
+              <Box fontSize={25} className="text-capitalize pt-4 pb-3 px-4">
+                <span className="font-weight-bold">{tutorIDs.length} {term} tutor{tutorIDs.length > 1 ? "s" : ""}</span> for you
+              </Box>
+              <div class="row">
+                {
+                  tutorsData.map((tutor) => (
+                    <div key={tutor._id} class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3"><TutorProfileCard tutorInfo={tutor} currentUser={userInfo._id ? userInfo : false} /></div>
+                  ))
+                }
+              </div>
+            </>
       }
     </Box>
   );

@@ -1,6 +1,6 @@
 //our locations api which is going to deal with locations in the database
 import express from 'express';
-import { getTutors, getLocation, createLocation } from '../controllers/locations.js';
+import { getTutors, getLocation, createLocation, getTutorsWithinRadius } from '../controllers/locations.js';
 
 const router = express.Router();
 
@@ -12,5 +12,8 @@ router.route('/:id').get(getLocation);
 
 //following endpoint is used to get all tutors from a specific location
 router.route('/:latitude/:longitude').get(getTutors);
+
+//get specific list of tutor in a specific location circle radius:
+router.route('/radius').post(getTutorsWithinRadius);
 
 export default router;

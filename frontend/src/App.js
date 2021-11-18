@@ -58,7 +58,7 @@ function App() {
             <Messenger />
           </Route>
           <Route path="/results">
-            <Topbar sticky responsive color="#00b0ff" />
+            <Topbar sticky responsive />
             <ResultsLayout />
           </Route>
         </Switch>

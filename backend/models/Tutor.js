@@ -78,6 +78,14 @@ const tutorSchema = new Schema({
     max: [5, 'Rating can not be more than 5'],
     default: 0
   },
+  city: {
+    type: String,
+    default: ""
+  },
+  country: {
+    type: String,
+    default: ""
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date
 }, { timestamps: true });

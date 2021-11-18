@@ -518,6 +518,7 @@ h6 {
 
 .conversationName {
   font-weight: 500;
+  text-transform: capitalize;
 }
 
 @media screen and (max-width: 768px) {
@@ -672,7 +673,7 @@ h6 {
 }
 
 .tutor__place {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .tutor__full-name {
@@ -682,21 +683,19 @@ h6 {
   color: #002984;
 }
 
-.tutor__posts-info {
+.tutor__rate-info {
   width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: 1em;
+  font-weight: bold;
+  font-size: 2.2em;
   letter-spacing: 0.5px;
   margin-bottom: 5px;
   text-align: center;
 }
 
-.tutor__posts-info span {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 4px;
+.tutor__rate-info span {
+  font-size: 16px;
+  font-weight: lighter;
+  display: inline-block;
 }
 
 /* Social colors */
@@ -721,7 +720,7 @@ h6 {
 }
 
 .tutor__action.inbox {
-  background-color: #6741ff;
+  background-color: #138496;
 }
 
 .tutor__action:hover {

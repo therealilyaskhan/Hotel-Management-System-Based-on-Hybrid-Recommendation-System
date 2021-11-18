@@ -7,18 +7,6 @@ const inboxSchema = new Schema({
   members: {
     type: Array,
     required: true
-  },
-  seen: {
-    type: Boolean,
-    required: true
-  },
-  lastMessage: {
-    type: String,
-    required: [true, 'Please add last message of the conversation'],
-    trim: true
-  },
-  lastMessageTimestamp: {
-    type: Date
   }
 }, { timestamps: true });
 

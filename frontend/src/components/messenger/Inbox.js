@@ -11,10 +11,10 @@ export default function Inbox({ inbox, currentUser }) {
       try {
         let res;
         if (currentUser.category === 'students') {
-          res = await axios("/students/" + endUserID);
+          res = await axios("/tutors/" + endUserID);
         }
         else {
-          res = await axios("/tutors/" + endUserID);
+          res = await axios("/students/" + endUserID);
         }
         setEndUser(res.data.data);
       } catch (err) {
