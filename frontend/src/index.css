@@ -602,6 +602,9 @@ h6 {
   margin: 12px;
   border-radius: 4px;
 }
+.map-sidebar--scheduler {
+  margin: 1.5rem;
+}
 
 .save-location-button {
   position: absolute;
@@ -609,6 +612,9 @@ h6 {
   top: 88%;
   left: 50%;
   transform: translateX(-50%);
+}
+.save-location-button--scheduler {
+  top: 84%;
 }
 
 .coordinates {
@@ -726,4 +732,21 @@ h6 {
 .tutor__action:hover {
   transform: scale(1.05);
   opacity: 0.85;
+}
+
+.loading-modal {
+  background-color: rgba(255, 255, 255, 0.4);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-title {
+  background-color: #e0e0ff;
 }

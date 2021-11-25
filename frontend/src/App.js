@@ -14,6 +14,7 @@ import Messenger from './screens/Messenger';
 
 import theme from './theme/theme';
 import ResultsLayout from './layout/ResultsLayout';
+import ScheduleMeetingScreen from './screens/ScheduleMeetingScreen';
 
 function App() {
   return (
@@ -60,6 +61,11 @@ function App() {
           <Route path="/results">
             <Topbar sticky responsive />
             <ResultsLayout />
+            <Footer />
+          </Route>
+          <Route path="/schedule">
+            <Topbar sticky responsive />
+            <ScheduleMeetingScreen />
             <Footer />
           </Route>
         </Switch>

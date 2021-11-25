@@ -3,23 +3,28 @@ import expressAsyncHandler from 'express-async-handler'; // read about express-a
 import ErrorResponse from '../utils/ErrorResponse.js';
 
 export const getMeetings = expressAsyncHandler(async (req, res, next) => {
-  const meetings = await Meeting.find();
+
+  const userID = req.query.userID.trim();
+
+  const meetings = await Meeting.find(
+    {
+      $or: [{ tutorID: userID }, { studentID: userID }]
+    },
+    { __v: 0 }
+  );
 
   if (!meetings)
-    throw new ErrorResponse(`No meetings found`, 404);
-
-  //if meetings are found then fill the res object
-  res
-    .status(200)
-    .json({
-      success: true,
-      count: meetings.length,
-      data: meetings
-    });
+    res
+      .status(200)
+      .json([]);
+  else
+    res
+      .status(200)
+      .json(meetings);
 
 });
 
-export const getMeeting = expressAsyncHandler(async (req, res, next) => {
+export const getMeetingByID = expressAsyncHandler(async (req, res, next) => {
   const meeting = await Meeting.findById(req.params.id);
 
   if (!meeting)
@@ -40,37 +45,49 @@ export const updateMeeting = expressAsyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: meeting });
 });
 
-export const deleteMeeting = expressAsyncHandler(async (req, res, next) => {
-  const meeting = await Meeting.findByIdAndDelete(req.params.id);
+export const getFilledSlots = expressAsyncHandler(async (req, res, next) => {
+  const { tutorID } = req.params;
+  //find all meetings having the tutorID:
+  const meetings = await Meeting.find({
+    tutorID
+  },
+    {
+      _id: 0,
+      course: 0,
+      studentID: 0,
+      tutorID: 0,
+      feedbackID: 0,
+      status: 0,
+      venue: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0
+    }
+  );
 
-  if (!meeting)
-    throw new ErrorResponse(`Meeting not found with id of ${req.params.id}`, 404);
-
-  res.status(200).json({ success: true, data: {} });
+  if (!meetings.length)
+    res.status(200).json([]);
+  else
+    res.status(200).json(meetings);
 });
 
 //create new meeting 
 export const createMeeting = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { venue, status, tutorID, studentID, date, course, feedbackID, slot } = req.body;
+  const { latitude, longitude, tutorID, studentID, startDate, endDate } = req.body;
 
-  if (!(venue && status && tutorID && studentID && date && course && slot))
+  if (!(latitude && longitude && tutorID && studentID && startDate && endDate))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Meeting
   const meeting = await Meeting.create({
-    venue,
-    status,
+    latitude,
+    longitude,
     tutorID,
     studentID,
-    date,
-    course,
-    feedbackID,
-    slot
+    startDate,
+    endDate
   });
-
-  // //create token:
-  // const token = meeting.getSignedJwtToken();
 
   res.status(200).json({ success: true, data: meeting });
 

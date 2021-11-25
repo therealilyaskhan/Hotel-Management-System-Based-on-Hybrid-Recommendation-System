@@ -1,10 +1,11 @@
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useHistory } from 'react-router';
 import { useEffect, useState } from 'react';
-import SummaryCard from '../components/Card/SummaryCard';
+
 import Content from '../components/Content';
 import axios from 'axios';
+import CollapsibleTable from '../components/CollapsibleTable';
 import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
@@ -56,11 +57,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function StudentDashboardScreen() {
-  const { totalExpenditures, totalMeetings, _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+  const { _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+
   const history = useHistory();
   const classes = useStyles();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [meetings, setMeetings] = useState([]);
   const [pendingMeetings, setPendingMeetings] = useState([]);
   const [activeMeetings, setActiveMeetings] = useState([]);
@@ -80,16 +82,6 @@ export default function StudentDashboardScreen() {
     }
 
   };
-
-  useEffect(() => {
-    if (loading) {
-      return (
-        <Content>
-          <CircularProgress />
-        </Content>
-      );
-    }
-  }, [loading]);
 
   useEffect(() => {
     if (_id) {
@@ -123,6 +115,7 @@ export default function StudentDashboardScreen() {
           setPendingMeetings(pendingOnes);
           setActiveMeetings(activeOnes);
           setAttendedMeetings(attendedOnes);
+          setLoading(false);
         } catch (err) {
           console.log(err);
         }
@@ -134,15 +127,20 @@ export default function StudentDashboardScreen() {
   }, [_id]);
 
   return (
-    <div className={classes.minHeight}>
+    <div>
       <Content>
-        <div className={classes.summaryCards}>
-          <SummaryCard title={"Total Amount Spent"} value={"$" + totalExpenditures.toFixed(2)} />
-          <SummaryCard title={"Active Meetings"} value={activeMeetings.length} />
-          <SummaryCard title={"Upcoming Meetings"} value={pendingMeetings.length} />
-          <SummaryCard title={"Attended Meetings"} value={attendedMeetings.length} />
-          <SummaryCard title={"Total Meetings"} value={meetings.length} />
-        </div>
+        {
+          loading ?
+            <Box className="d-flex justify-content-center align-items-center" minHeight={320}>
+              <CircularProgress />
+            </Box>
+            :
+            <>
+              <CollapsibleTable mb={true} type="Active" meetings={activeMeetings} />
+              <CollapsibleTable mb={true} type="Upcoming" meetings={pendingMeetings} />
+              <CollapsibleTable mb={false} type="Past" meetings={attendedMeetings} />
+            </>
+        }
       </Content>
     </div>
   );

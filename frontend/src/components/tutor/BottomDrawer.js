@@ -46,6 +46,7 @@ function SwipeableEdgeDrawer(props) {
         //filter all tutors and get new list of nearby tutors by default the distance inside which to find tutors would be 3000 in meters i:e 3 kilometers
 
         if (currentUserLat && currentUserLng) {
+
           const payload = {
             tutorIDs,
             latitude: currentUserLat,
@@ -56,7 +57,7 @@ function SwipeableEdgeDrawer(props) {
           try {
             const res = await axios.post('locations/radius', payload);
             const filteredTutorIDs = res.data.data;
-            if (filteredTutorIDs.length) {
+            if (filteredTutorIDs?.length) {
               setTutorIDs(filteredTutorIDs);
               // toggleDrawer(true)
               setOpen(false);
@@ -112,7 +113,7 @@ function SwipeableEdgeDrawer(props) {
           }}
         >
           <Puller />
-          <Typography className="px-4 pt-4" sx={{ p: 2, color: 'text.secondary' }}>{tutorIDs.length} Results</Typography>
+          <Typography className="px-4 pt-4" sx={{ p: 2, color: 'text.secondary' }}>{tutorIDs?.length} Results</Typography>
         </StyledBox>
         <StyledBox
           sx={{

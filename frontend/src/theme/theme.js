@@ -29,6 +29,18 @@ const theme = createMuiTheme({
   },
   //overriding the text-transform style rule of the .root class for the MuiButton Component
   overrides: {
+    MuiStepIcon: {
+      root: {
+        '&$completed': {
+          color: '#28a745',
+        },
+        '&$active': {
+          color: '#00b0ff',
+        },
+      },
+      active: {},
+      completed: {},
+    },
     MuiButton: {
       root: {
         textTransform: 'capitalize'

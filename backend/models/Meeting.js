@@ -1,12 +1,33 @@
 import mongoose from 'mongoose';
+import geocoder from '../utils/geocoder.js';
 
 const Schema = mongoose.Schema;
 const model = mongoose.model;
 
 const meetingSchema = new Schema({
   venue: {
-    type: String,
-    required: [true, 'Please add a venue']
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+    },
+    coordinates: {
+      type: [Number], //array of nums where longitude comes first then latitude
+      index: '2dsphere'
+    },
+    formattedAddress: String,
+    street: String,
+    city: String,
+    state: String,
+    country: String,
+    zipcode: String
+  },
+  latitude: {
+    type: Number,
+    required: [true, 'Please provide latitude point for the tutor location']
+  },
+  longitude: {
+    type: Number,
+    required: [true, 'Please provide longitude point for the tutor location']
   },
   status: {
     type: String,
@@ -29,24 +50,39 @@ const meetingSchema = new Schema({
     ref: 'Feedback',
     default: null
   },
-  date: {
-    type: Date,
+  startDate: {
+    type: String,
+    trim: true,
     required: [true, 'Please select a date when you want to schedule the meeting']
   },
-  course: {
+  endDate: {
     type: String,
-    required: [true, 'Please add a course for the meeting'],
     trim: true,
-    maxlength: [50, 'Course name can not be more than 50 characters']
-  },
-  slot: {
-    type: String,
-    required: [true, 'Please add a slot for meeting'],
-    enum: ['morning', 'afternoon', 'evening']
+    required: [true, 'Please select a date when you want to schedule the meeting']
   }
 }, { timestamps: true });
 
-//by setting timestamps to true, any student document pushed into the mongoDB via the mongoose will implicitly add-onto the the document being inserted two extra fields: 1) createdAt 2) updatedAt fields; the createdAt is going to have the timestamp for when the document was inserted , and the updatedAt is going to have the timestamp for when the record was last updated in the database;
+//before feeding the data into the collection we will convert the  latitude and longitude point submitted by the student into an address and zip code etc:
+meetingSchema.pre('save', async function (next) {
+  const loc = await geocoder.reverse({ lat: this.latitude, lon: this.longitude });
+
+  this.venue = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    street: loc[0].streetName,
+    city: loc[0].city,
+    state: loc[0].stateCode,
+    country: loc[0].countryCode,
+    zipcode: loc[0].zipcode
+  };
+
+  //do not save longitude and latitude points in DB
+  this.latitude = undefined;
+  this.longitude = undefined;
+  next();
+});
+
 
 const Meeting = model('Meeting', meetingSchema);
 export default Meeting;

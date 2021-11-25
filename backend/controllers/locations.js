@@ -32,14 +32,13 @@ export const getTutorsWithinRadius = expressAsyncHandler(async (req, res, next) 
         success: false,
         data: []
       });
-
-  //if tutors are found then fill the res object
-  res
-    .status(200)
-    .json({
-      success: true,
-      data: filteredTutorIDs
-    });
+  else
+    res
+      .status(200)
+      .json({
+        success: true,
+        data: filteredTutorIDs
+      });
 
 });
 
