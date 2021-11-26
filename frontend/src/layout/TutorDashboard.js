@@ -7,6 +7,7 @@ import {
 import AppBarAndDrawer from '../components/tutor/AppBarAndDrawer';
 import TutorProfileScreen from '../screens/TutorProfileScreen';
 import TutorDashboardScreen from '../screens/TutorDashboardScreen';
+import MeetingScreen from '../screens/MeetingScreen';
 import TutorMapScreen from '../screens/TutorMapScreen';
 import LogoutScreen from '../screens/LogoutScreen';
 
@@ -30,13 +31,13 @@ function TutorDashboard() {
           <TutorProfileScreen />
         </Route>
         <Route path="/tutors/dashboard/dashboard">
-          <TutorDashboardScreen _id={_id} />
+          <TutorDashboardScreen />
         </Route>
         <Route path="/tutors/dashboard/map">
           <TutorMapScreen _id={_id} />
         </Route>
-        <Route path="/tutors/dashboard/settings">
-          <div>settings</div>
+        <Route exact path="/tutors/dashboard/meetings">
+          <MeetingScreen />
         </Route>
         <Route path="/tutors/dashboard/logout">
           <LogoutScreen />

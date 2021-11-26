@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function StudentDashboardScreen() {
-  const { totalExpenditures, totalMeetings, _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+  const { totalExpenditures, _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
   const history = useHistory();
   const classes = useStyles();
 

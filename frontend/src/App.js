@@ -32,12 +32,12 @@ function App() {
             < Footer />
           </Route>
           <Route path="/students/signup">
-            <Topbar />
+            <Topbar sticky />
             <StudentSignupScreen />
             < Footer />
           </Route>
           <Route path="/tutors/signup">
-            <Topbar />
+            <Topbar sticky />
             <TutorSignupScreen />
             < Footer />
           </Route>

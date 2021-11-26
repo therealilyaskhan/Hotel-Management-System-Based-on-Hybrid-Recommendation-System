@@ -26,8 +26,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Row(props) {
-  const { root, type } = useStyles(props);
-  const { row } = props;
+  const { root } = useStyles(props);
+  const { row, type } = props;
+
   const [open, setOpen] = React.useState(false);
   const [tutorInfo, setTutorInfo] = React.useState(false);
   const [studentInfo, setStudentInfo] = React.useState(false);

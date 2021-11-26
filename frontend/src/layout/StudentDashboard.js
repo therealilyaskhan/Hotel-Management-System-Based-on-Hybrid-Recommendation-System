@@ -7,7 +7,7 @@ import AppBarAndDrawer from '../components/student/AppBarAndDrawer';
 import LogoutScreen from '../screens/LogoutScreen';
 import StudentDashboardScreen from '../screens/StudentDashboardScreen';
 import StudentProfileScreen from '../screens/StudentProfileScreen';
-import StudentMeetingScreen from '../screens/StudentMeetingScreen';
+import MeetingScreen from '../screens/MeetingScreen';
 
 function StudentDashboard() {
   return (
@@ -21,7 +21,7 @@ function StudentDashboard() {
           <StudentDashboardScreen />
         </Route>
         <Route exact path="/students/dashboard/meetings">
-          <StudentMeetingScreen />
+          <MeetingScreen />
         </Route>
         <Route path="/students/dashboard/logout">
           <LogoutScreen />
