@@ -21,8 +21,8 @@ function ResultsLayout(props) {
       const getTutorsData = async () => {
         let res = await axios.all(tutorIDs.map(tutorID => axios.get("tutors/" + tutorID.trim())));
         let tutors = res.map((r) => {
-          const { _id, imageURL, categoryName, firstName, lastName, hourlyRate, experience, averageRating, city, country } = r.data.data;
-          return { _id, imageURL, categoryName, firstName, lastName, city, country, hourlyRate, experience, averageRating };
+          const { _id, imageURL, description, categoryName, firstName, lastName, hourlyRate, experience, averageRating, city, country } = r.data.data;
+          return { _id, description, imageURL, categoryName, firstName, lastName, city, country, hourlyRate, experience, averageRating };
         });
         setTutorsData(tutors);
       };

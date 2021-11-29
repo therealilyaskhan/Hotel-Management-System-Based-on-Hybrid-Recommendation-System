@@ -26,7 +26,28 @@ io.on("connection", (socket) => {
   //take userID and socketID from user
   socket.on("addUser", (userID) => {
     addUser(userID, socket.id);
-    io.emit("getUsers", users);
+  });
+
+  // send and get notification on timer
+  socket.on("sendNotification", ({ receiverID, type, meetingDuration }) => {
+    const receiver = getUser(receiverID);
+    if (type === 'start')
+      io.to(receiver.socketID).emit("getNotification", {
+        type,
+      });
+    else if (type === 'stop')
+      io.to(receiver.socketID).emit("getNotification", {
+        type,
+        meetingDuration
+      });
+    else if (type === 'paid')
+      io.to(receiver.socketID).emit("getNotification", {
+        type
+      });
+    else if (type === 'approved')
+      io.to(receiver.socketID).emit("getNotification", {
+        type
+      });
   });
 
   //send and get message

@@ -9,8 +9,10 @@ import Footer from './components/Footer';
 import UserSigninScreen from './screens/UserSigninScreen';
 import StudentSignupScreen from './screens/StudentSignupScreen';
 import TutorSignupScreen from './screens/TutorSignupScreen';
+import TutorProfileScreen from './screens/TutorProfileScreen';
 import TutorMoreInfoScreen from './screens/TutorMoreInfoScreen';
 import Messenger from './screens/Messenger';
+import Room from './screens/Room';
 
 import theme from './theme/theme';
 import ResultsLayout from './layout/ResultsLayout';
@@ -41,6 +43,11 @@ function App() {
             <TutorSignupScreen />
             < Footer />
           </Route>
+          <Route path="/tutors/profile">
+            <Topbar sticky />
+            <TutorProfileScreen />
+            < Footer />
+          </Route>
           <Route path="/tutors/moreinfo">
             <Topbar />
             <TutorMoreInfoScreen />
@@ -67,6 +74,9 @@ function App() {
             <Topbar sticky responsive />
             <ScheduleMeetingScreen />
             <Footer />
+          </Route>
+          <Route path="/room">
+            <Room />
           </Route>
         </Switch>
       </Router>

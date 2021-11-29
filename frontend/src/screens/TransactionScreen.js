@@ -1,5 +1,12 @@
+import { Box } from '@material-ui/core';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { useHistory } from 'react-router';
+import { useEffect, useState } from 'react';
+import moment from 'moment';
+
+import Content from '../components/Content';
+import axios from 'axios';
 import * as React from 'react';
-import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -12,12 +19,9 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Countdown from 'react-countdown';
-import axios from 'axios';
 import { makeStyles } from '@material-ui/core';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,21 +32,24 @@ const useStyles = makeStyles((theme) => ({
 
 function Row(props) {
   const { root } = useStyles(props);
-  const { row, type } = props;
+  const { row } = props;
 
   const [open, setOpen] = React.useState(false);
   const [tutorInfo, setTutorInfo] = React.useState(false);
   const [studentInfo, setStudentInfo] = React.useState(false);
+  const [meetingInfo, setMeetingInfo] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
-  const fetchUsersInfo = async (tutorID, studentID) => {
+  const fetchInfo = async (tutorID, studentID, meetingID) => {
     setOpen(!open);
     try {
       setLoading(true);
       const tutorRes = await axios.get("tutors/" + tutorID);
       const studentRes = await axios.get("students/" + studentID);
+      const meetingRes = await axios.get("meetings/" + meetingID);
       setTutorInfo(tutorRes.data.data);
       setStudentInfo(studentRes.data.data);
+      setMeetingInfo(meetingRes.data.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -56,31 +63,31 @@ function Row(props) {
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => fetchUsersInfo(row.tutorID, row.studentID)}
+            onClick={() => fetchInfo(row.tutorID, row.studentID, row.meetingID)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.startDate}
+          {moment(row.createdAt).format("MMMM Do YYYY, h:mm:ss A")}
         </TableCell>
-        <TableCell align="center">{row.venue.formattedAddress}</TableCell>
-        <TableCell align="center">{type === "Active" ? "Ongoing" : row.status}</TableCell>
+        <TableCell align="center">${row.amount.toFixed(2)}</TableCell>
+        <TableCell align="center">{new Date(row.meetingDuration * 1000).toISOString().substr(11, 8)}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box>
               <Typography variant="h6" gutterBottom component="div">
-                Details:
+                Transaction For Meeting:
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
                     <TableCell>Student</TableCell>
                     <TableCell>Tutor</TableCell>
-                    <TableCell>Hourly Charges</TableCell>
-                    <TableCell>Time Left</TableCell>
+                    <TableCell>Meeting Date</TableCell>
+                    <TableCell>Meeting Place</TableCell>
                   </TableRow>
                 </TableHead>
                 {
@@ -99,10 +106,10 @@ function Row(props) {
                           tutorInfo
                         }} className="text-info">{tutorInfo?.firstName} {tutorInfo?.lastName}</Link></TableCell>
                         <TableCell>
-                          {"$" + tutorInfo.hourlyRate.toFixed(2)}
+                          {meetingInfo.startDate}
                         </TableCell>
                         <TableCell>
-                          <Countdown date={Date.now() + moment(row.startDate, "MMMM Do YYYY, h:mm:ss A").diff(moment())} />
+                          {meetingInfo.venue.formattedAddress}
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -116,31 +123,78 @@ function Row(props) {
   );
 }
 
-export default function CollapsibleTable({ meetings, type, mb }) {
+function CollapsibleTable({ transactions, type }) {
   return (
-    <TableContainer className={mb ? "mb-5" : ""} component={Paper}>
-      <Typography variant="h6" className="d-flex align-items-center justify-content-center py-3 table-title shadow-sm" fontSize={22}><span className="text-capitalize">{type} </span>&nbsp; Meetings</Typography>
+    <TableContainer className="transactions-table" component={Paper}>
+      <Typography variant="h6" className="d-flex align-items-center justify-content-center py-3 table-title shadow-sm" fontSize={22}>Transactions History</Typography>
       <Table aria-label="collapsible table">
         {
-          meetings?.length ?
+          transactions?.length ?
             <>
               <TableHead>
                 <TableRow>
                   <TableCell />
-                  <TableCell>Meeting Time</TableCell>
-                  <TableCell align="center">Meeting Place</TableCell>
-                  <TableCell align="center">Meeting Status</TableCell>
+                  <TableCell align="left">Date & Time</TableCell>
+                  <TableCell align="center">{type === 'tutor' ? "Earner" : "Spent"}</TableCell>
+                  <TableCell align="center">Meeting Duration</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {meetings.map((meeting) => (
-                  <Row key={meeting._id} row={meeting} type={type} />
+                {transactions.map((transaction) => (
+                  <Row key={transaction._id} row={transaction} />
                 ))}
               </TableBody>
             </> :
-            <Box className="d-flex justify-content-center align-items-center p-3">No {type} meetings found! {type == "Past" ? "You have not attended any meetings yet." : ""}</Box>
+            <Box className="d-flex justify-content-center align-items-center p-3">
+              No past transactions found!
+            </Box>
         }
       </Table>
     </TableContainer>
+  );
+}
+
+export default function TransactionScreen({ type }) {
+  const { _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+
+  const history = useHistory();
+
+  const [loading, setLoading] = useState(true);
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    if (_id) {
+      const getAllTransactions = async () => {
+        try {
+          const res = await axios.get("transactions?userID=" + _id);
+          const allTransactions = res.data;
+
+          setTransactions(allTransactions);
+          setLoading(false);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getAllTransactions();
+    } else {
+      history.push('/signin');
+    }
+  }, [_id]);
+
+  return (
+    <div>
+      <Content>
+        {
+          loading ?
+            <Box className="d-flex justify-content-center align-items-center" minHeight={320}>
+              <CircularProgress />
+            </Box>
+            :
+            <>
+              <CollapsibleTable mb={true} type={type} transactions={transactions} />
+            </>
+        }
+      </Content>
+    </div>
   );
 }

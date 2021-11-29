@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TutorDashboardScreen() {
-  const { categoryName, totalEarnings, totalMeetings, hourlyRate, experience, averageRating, _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+  const { categoryName, hourlyRate, experience, _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
   const history = useHistory();
   const classes = useStyles();
 
@@ -63,6 +63,8 @@ export default function TutorDashboardScreen() {
   const [pendingMeetings, setPendingMeetings] = useState([]);
   const [activeMeetings, setActiveMeetings] = useState([]);
   const [attendedMeetings, setAttendedMeetings] = useState([]);
+  const [totalEarnings, setTotalEarnings] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
 
   const updateMeetingStatus = async (meetingID) => {
 
@@ -91,8 +93,14 @@ export default function TutorDashboardScreen() {
 
   useEffect(() => {
     if (_id) {
-      const getAllMeetings = async () => {
+      const getInfo = async () => {
         try {
+          const transactions = await axios.get("transactions?userID=" + _id);
+          const allTransactions = transactions.data;
+          setTotalEarnings(allTransactions.reduce((n, { amount }) => n + amount, 0));
+          const feedbacks = await axios.get("feedbacks/" + _id);
+          if (feedbacks.data.length)
+            setAverageRating(feedbacks.data.reduce((n, { rating }) => n + rating, 0) / feedbacks.data.length);
           const res = await axios.get("meetings?userID=" + _id);
           const allMeetings = res.data;
           const pendingOnes = [];
@@ -125,7 +133,7 @@ export default function TutorDashboardScreen() {
           console.log(err);
         }
       };
-      getAllMeetings();
+      getInfo();
     } else {
       history.push('/signin');
     }
@@ -135,14 +143,14 @@ export default function TutorDashboardScreen() {
     <Content>
       <div className={classes.summaryCards}>
         <SummaryCard title={"Tutor Of"} value={categoryName} />
-        <SummaryCard title={"Total Earnings"} value={"$" + totalEarnings.toFixed(2)} />
+        <SummaryCard title={"Total Earnings"} value={"$" + totalEarnings?.toFixed(2)} />
         <SummaryCard title={"Hourly Rate"} value={"$" + hourlyRate} />
         <SummaryCard title={"Experience"} value={experience + " years"} />
         <SummaryCard title={"Active Meetings"} value={activeMeetings.length} />
         <SummaryCard title={"Upcoming Meetings"} value={pendingMeetings.length} />
         <SummaryCard title={"Attended Meetings"} value={attendedMeetings.length} />
         <SummaryCard title={"Total Meetings"} value={meetings.length} />
-        <SummaryCard title={"Average Rating"} value={<Rating name="read-only" value={averageRating} readOnly />} />
+        <SummaryCard title={"Average Rating"} value={<Rating name="read-only" value={averageRating} precision={0.5} readOnly />} />
       </div>
       <div className="mb-4"></div>
 

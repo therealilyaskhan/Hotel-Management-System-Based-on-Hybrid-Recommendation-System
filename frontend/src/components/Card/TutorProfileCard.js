@@ -1,9 +1,36 @@
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
+
+
 function TutorProfileCard({ tutorInfo, currentUser }) {
   const history = useHistory();
+  const [averageRating, setAverageRating] = useState(0);
+  const { _id } = tutorInfo;
+
+  const tutorProfile = {
+    pathname: "/tutors/profile",
+    tutorInfo
+  };
+
+  useEffect(() => {
+    if (_id) {
+      const getAverageRating = async () => {
+        try {
+          const feedbacks = await axios.get("feedbacks/" + _id);
+          if (feedbacks.data.length)
+            setAverageRating(feedbacks.data.reduce((n, { rating }) => n + rating, 0) / feedbacks.data.length);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getAverageRating();
+    }
+  }, [_id]);
+
   const createNewInbox = async () => {
 
     if (tutorInfo?._id && currentUser) {
@@ -50,9 +77,9 @@ function TutorProfileCard({ tutorInfo, currentUser }) {
         <img src={"http://localhost:5000/" + tutorInfo?.imageURL} />
       </div>
       <Box mb={0.2}>
-        <Rating name="read-only" value={tutorInfo?.averageRating} readOnly />
+        <Rating name="read-only" precision={0.5} value={averageRating} readOnly />
       </Box>
-      <p className="tutor__info tutor__full-name">{tutorInfo?.firstName} {tutorInfo?.lastName}</p>
+      <Link to={tutorProfile} className="tutor__info tutor__full-name">{tutorInfo?.firstName} {tutorInfo?.lastName}</Link>
       <p className="tutor__info tutor__role">
         <i className="fas fa-star"></i>
         {tutorInfo?.categoryName} Tutor

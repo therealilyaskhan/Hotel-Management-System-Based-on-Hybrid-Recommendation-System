@@ -1,132 +1,160 @@
+import React from 'react';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import moment from 'moment';
-
-import LoadingBox from '../components/LoadingBox';
+import { useState } from 'react';
+import Rating from '@material-ui/lab/Rating';
+import { Typography } from '@material-ui/core';
+import ReviewCard from '../components/Card/ReviewCard';
 
 function TutorProfileScreen() {
-  const tutorInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
-  const [tutorLocation, setTutorLocation] = useState(localStorage.getItem('userLocation') ? JSON.parse(localStorage.getItem('userLocation')) : false);
+  const location = useLocation();
+  const history = useHistory();
+  const { tutorInfo } = location;
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
+  console.log(tutorInfo);
+
+  const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+
+  const currentUser = userInfo._id ? userInfo : false;
 
   useEffect(() => {
-    const getLocation = async () => {
+    if (!tutorInfo)
+      history.push('/');
+  }, []);
+
+  useEffect(() => {
+    const getFeedbacks = async () => {
       try {
-        if (!tutorLocation) {
-          const res = await axios.get("locations/" + tutorInfo._id);
-          localStorage.setItem('userLocation', JSON.stringify(res.data.data));
-          setTutorLocation(res.data.data);
+        const feedbacks = await axios.get("feedbacks/" + tutorInfo?._id);
+        if (feedbacks.data.length) {
+          setAverageRating(feedbacks.data.reduce((n, { rating }) => n + rating, 0) / feedbacks.data.length);
+          setReviews(feedbacks.data.map(feedback => feedback.review));
+          setFeedbacks(feedbacks.data);
         }
       } catch (err) {
         console.log(err);
       }
     };
-    getLocation();
+    getFeedbacks();
   }, []);
 
-  const imageUpdateHandler = async (event) => {
-    try {
-      const image = event.target.files[0];
-      const files = new FormData();
-      files.append('image', image);
-      const res = await axios.put(`tutors/${tutorInfo._id}/image`, files, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+
+  const createNewInbox = async () => {
+
+    if (tutorInfo?._id && currentUser) {
+      const members = {
+        ownerID: currentUser?._id,
+        opponentID: tutorInfo?._id
+      };
+
+      try {
+        const res = await axios.post('inboxes', members);
+        const inboxCreated = res.data.success;
+        if (inboxCreated) {
+          history.push('/messenger');
+        }
+
+      } catch (err) {
+        console.log(err.message);
+      }
+    } else if (!currentUser) {
+      history.push('/signin');
+    }
+
+  };
+
+  const scheduleNewMeeting = async () => {
+
+    if (tutorInfo?._id && currentUser) {
+      //take user to schedule screen and pass there the tutor id and current user id as state
+      history.push({
+        pathname: '/schedule',
+        state: {
+          tutorInfo,
+          studentInfo: currentUser
         }
       });
-      const data = res.data.data;
-      if (data) {
-        localStorage.setItem('userInfo', JSON.stringify(data));
-        window.location.reload();
-      }
-
-    } catch (err) {
-      console.log(err.message);
+    } else if (!currentUser) {
+      history.push('/signin');
     }
   };
 
   return (
-    <div className="page-content page-container minus-240" id="page-content">
-      <div className="padding">
-        <div className="row container d-flex justify-content-center mx-auto">
-          <div className="col-xl-12 col-md-12">
-            {
-              tutorInfo ?
-                <div className="card user-card-full">
-                  <div className="row m-l-0 m-r-0">
-                    <div className="col-sm-4 bg-c-lite-green user-profile">
-                      <div className="card-block text-center text-white">
-                        <div className="m-b-25 mx-auto w-50"> <img src={"http://localhost:5000/" + tutorInfo.imageURL} className="img-radius w-100" alt="User-Profile-Image" /> </div>
-                        <div>
-                          <label htmlFor="files" className="btn btn-primary btn-sm" role="button">Update Profile Image</label>
-                          <input id="files" name="image" style={{ visibility: "hidden" }} type="file" onChange={imageUpdateHandler} />
-                        </div>
-                        <h6 className="f-w-600 text-uppercase">{tutorInfo.firstName} {tutorInfo.lastName}</h6>
-                        <p>Tutor</p> <i className=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
-                      </div>
-                    </div>
-                    <div className="col-sm-8">
-                      <div className="card-block">
-                        <h6 className="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
-                        <div className="row">
-                          <div className="col-sm-6">
-                            <p className="m-b-10 f-w-600">Email</p>
-                            <h6 className="text-muted f-w-400">{tutorInfo.email}</h6>
-                          </div>
-                          <div className="col-sm-6">
-                            <p className="m-b-10 f-w-600">Registered with us</p>
-                            <h6 className="text-muted f-w-400">{moment(tutorInfo.createdAt).fromNow()}</h6>
-                          </div>
-                        </div>
-                        <div className="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></div>
-                        <div className="row">
-                          <div className="col-sm-6">
-                            <p className="m-b-10 f-w-600">First Name</p>
-                            <h6 className="text-muted f-w-400">{tutorInfo.firstName}</h6>
-                          </div>
-                          <div className="col-sm-6">
-                            <p className="m-b-10 f-w-600">Last Name</p>
-                            <h6 className="text-muted f-w-400">{tutorInfo.lastName}</h6>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-sm-6">
-                            <p className="m-b-10 f-w-600">Description: </p>
-                            <h6 className="text-muted f-w-400">{tutorInfo.description}</h6>
-                          </div>
-                        </div>
-                        <div className="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></div>
-                        {
-                          tutorLocation ?
-                            <div className="row">
-                              <div className="col-sm-6">
-                                <p className="m-b-10 f-w-600">Street Address</p>
-                                <h6 className="text-muted f-w-400">{tutorLocation.formattedAddress}</h6>
-                              </div>
-                              <div className="col-sm-6">
-                                <p className="m-b-10 f-w-600">Zip Code</p>
-                                <h6 className="text-muted f-w-400">{tutorLocation.zipcode}</h6>
-                              </div>
-                            </div> :
-                            <div className="row">
-                              <div className="col-sm-6">
-                                <p className="m-b-10 f-w-600">Location Information: </p>
-                                <h6 className="text-muted f-w-400">No Location Info Available to Show (Goto Map to Set your permanent location)</h6>
-                              </div>
-                            </div>
-                        }
-                      </div>
+    <div className="container my-4">
+      <div className="profile-header">
+        <div className="profile-img">
+          <img src={"http://localhost:5000/" + tutorInfo?.imageURL} width="200" alt="Profile Image" />
+        </div>
+        <div className="profile-nav-info">
+          <h3 className="user-name">{tutorInfo?.firstName} {tutorInfo?.lastName}</h3>
+          <div className="address">
+            <p id="state" className="state">{tutorInfo?.city}</p>
+            <span id="country" className="country">{tutorInfo?.country}</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div className="main-bd">
+        <div className="left-side">
+          <div className="profile-side">
+            <Typography className="text-capitalize" variant="h6" gutterBottom component="div">
+              {tutorInfo?.categoryName} Tutor
+            </Typography>
+            <div className="user-bio">
+              <Typography className="text-uppercase mb-1 pb-1" variant="h4" gutterBottom component="div">
+                Bio
+              </Typography>
+              <Typography className="text-capitalize mb-2 pb-1" variant="subtitle2" gutterBottom component="div">
+                {tutorInfo?.description}
+              </Typography>
+            </div>
+            <div className="profile-btn">
+              <button onClick={createNewInbox} className="chatbtn" id="chatBtn"><i className="fa fa-comment"></i> Chat</button>
+              <button onClick={scheduleNewMeeting} className="createbtn" id="Create-post"><i className="fa fa-plus"></i> Schedule</button>
+            </div>
+            <div className="user-rating mt-2">
+              <h3 className="rating">{averageRating.toFixed(1)}</h3>
+              <div className="rate">
+                <Rating name="read-only" precision={0.2} value={averageRating} readOnly />
+                <span className="no-of-user-rate"><span className="d-block">{reviews.length}&nbsp;reviews</span></span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div className="right-side">
+
+          <div className="profile-nav">
+            <ul>
+              <li className="user-review active d-block">Reviews</li>
+            </ul>
+          </div>
+          <div className="profile-body">
+            <div className="profile-reviews tab">
+              <div class="comment-section">
+                <div class="container">
+                  <div class="review">
+                    <div class="comment-section">
+                      {
+                        feedbacks.map((feedback) => <ReviewCard key={feedback._id} feedback={feedback} />)
+                      }
                     </div>
                   </div>
                 </div>
-                :
-                <LoadingBox />
-            }
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
-}
+};
 
 export default TutorProfileScreen;

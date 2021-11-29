@@ -18,6 +18,7 @@ import Icon from "@material-ui/core/Icon";
 import Avatar from "@material-ui/core/Avatar";
 import MailIcon from "@material-ui/icons/Mail";
 import { Link } from "react-router-dom";
+import { Badge } from '@material-ui/core';
 export const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    backgroundColor: activeMeeting => activeMeeting ? '#011627' : '#fff',
+    '& *': {
+      color: activeMeeting => activeMeeting ? '#fff' : '#011627'
+    }
   },
   content: {
     flexGrow: 1,
@@ -62,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
 function ResponsiveDrawer(props) {
   const { imageURL } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
-  const { container } = props;
-  const classes = useStyles();
+  const { container, activeMeeting } = props;
+  const classes = useStyles(activeMeeting);
   const theme = useTheme();
   const { pathname } = useLocation();
   const isHome = false; // pathname === "/";
@@ -86,18 +91,28 @@ function ResponsiveDrawer(props) {
           { text: "messenger", icon: "mail" },
           { text: "dashboard", icon: "dashboard" },
           { text: "meetings", icon: "room" },
+          { text: "meeting room", icon: "cottage" },
+          { text: "transactions", icon: "payment" },
           { text: "map", icon: "map" },
           { text: "logout", icon: "logout" },
         ].map(({ text, icon }, index) => (
           <ListItem
+            className={activeMeeting && text === 'meeting room' ? 'active-meeting' : ''}
             component={RouterLink}
-            selected={pathname === `/${text}`}
-            to={text === 'messenger' ? '/messenger' : `/tutors/dashboard/${text}`}
+            selected={pathname === `/tutors/dashboard/profile/${text.replace(/\s/g, '')}`}
+            to={text === 'messenger' ? '/messenger' : `/tutors/dashboard/${text.replace(/\s/g, '')}`}
             button
             key={text}
           >
             <ListItemIcon>
-              <Icon>{icon}</Icon>
+              {
+                activeMeeting && text === 'meeting room' ?
+                  <Badge badgeContent={activeMeeting} color="error">
+                    <Icon>{icon}</Icon>
+                  </Badge>
+                  :
+                  <Icon>{icon}</Icon>
+              }
             </ListItemIcon>
             <ListItemText primary={text.toUpperCase()} />
           </ListItem>

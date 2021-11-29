@@ -5,7 +5,10 @@ import { deleteTransaction, getTransaction, getTransactions, updateTransaction, 
 const router = express.Router();
 
 //all these below are different endpoints of the transactions api
-router.route('/').get(getTransactions).post(createTransaction);
+router.route('/').post(createTransaction);
+
+//get all transactions for a user (tutor or student) using their ID pass via query parameters
+router.route('/').get(getTransactions);
 
 router.route('/:id').get(getTransaction).put(updateTransaction).delete(deleteTransaction);
 

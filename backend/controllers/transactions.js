@@ -4,19 +4,23 @@ import ErrorResponse from '../utils/ErrorResponse.js';
 
 //get all transactions
 export const getTransactions = expressAsyncHandler(async (req, res, next) => {
-  const transactions = await Transaction.find();
+  const userID = req.query.userID.trim();
+
+  const transactions = await Transaction.find(
+    {
+      $or: [{ tutorID: userID }, { studentID: userID }]
+    },
+    { __v: 0 }
+  );
 
   if (!transactions)
-    throw new ErrorResponse(`No transactions found`, 404);
-
-  //if transactions are found then fill the res object
-  res
-    .status(200)
-    .json({
-      success: true,
-      count: transactions.length,
-      data: transactions
-    });
+    res
+      .status(200)
+      .json([]);
+  else
+    res
+      .status(200)
+      .json(transactions);
 
 });
 
@@ -58,7 +62,7 @@ export const createTransaction = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
   const { meetingID, tutorID, studentID, meetingDuration, amount } = req.body;
 
-  if (!(title && category))
+  if (!(meetingID && tutorID && studentID && meetingDuration && amount))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Transaction

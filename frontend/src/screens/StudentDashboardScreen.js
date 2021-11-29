@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function StudentDashboardScreen() {
-  const { totalExpenditures, _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+  const { _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
   const history = useHistory();
   const classes = useStyles();
 
@@ -65,6 +65,7 @@ export default function StudentDashboardScreen() {
   const [pendingMeetings, setPendingMeetings] = useState([]);
   const [activeMeetings, setActiveMeetings] = useState([]);
   const [attendedMeetings, setAttendedMeetings] = useState([]);
+  const [totalExpenditures, setTotalExpenditures] = useState(0);
 
   const updateMeetingStatus = async (meetingID) => {
 
@@ -93,8 +94,11 @@ export default function StudentDashboardScreen() {
 
   useEffect(() => {
     if (_id) {
-      const getAllMeetings = async () => {
+      const getInfo = async () => {
         try {
+          const transactions = await axios.get("transactions?userID=" + _id);
+          const allTransactions = transactions.data;
+          setTotalExpenditures(allTransactions.reduce((n, { amount }) => n + amount, 0));
           const res = await axios.get("meetings?userID=" + _id);
           const allMeetings = res.data;
           const pendingOnes = [];
@@ -127,7 +131,7 @@ export default function StudentDashboardScreen() {
           console.log(err);
         }
       };
-      getAllMeetings();
+      getInfo();
     } else {
       history.push('/signin');
     }
