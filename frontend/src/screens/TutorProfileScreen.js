@@ -16,7 +16,6 @@ function TutorProfileScreen() {
   const [averageRating, setAverageRating] = useState(0);
   const [reviews, setReviews] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
-  console.log(tutorInfo);
 
   const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 

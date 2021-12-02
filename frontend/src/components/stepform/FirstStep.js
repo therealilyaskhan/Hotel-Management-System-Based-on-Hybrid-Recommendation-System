@@ -33,8 +33,6 @@ export default function FirstStep({ activeStep, setActiveStep, setStartDate, sta
           ['15', '18'],
         ]}
         onSelectTimeslot={(allSelectedTimeslots, lastSelectedTimeslot) => {
-          console.log(moment(lastSelectedTimeslot.startDate._d).format("MMMM Do YYYY, h:mm:ss A"));
-          console.log(moment(lastSelectedTimeslot.endDate._d).format("MMMM Do YYYY, h:mm:ss A"));
           setStartDate(moment(lastSelectedTimeslot.startDate._d).format("MMMM Do YYYY, h:mm:ss A"));
           setEndDate(moment(lastSelectedTimeslot.endDate._d).format("MMMM Do YYYY, h:mm:ss A"));
           // 'April 30th 2017, 12:00:00 AM',

@@ -223,7 +223,7 @@ function Room() {
                   </ReactTimerStopwatch>
                 </Box> :
                 <Box>
-                  {studentInfo.firstName} have not started the meeting yet.
+                  Student has not started the meeting yet.
                 </Box>
           }
           <Box className="room__participant">
@@ -284,7 +284,6 @@ function Room() {
                     <Rating
                       value={rating}
                       onChange={(event, newValue) => {
-                        console.log(newValue);
                         setRating(newValue);
                       }}
                       precision={0.5}
