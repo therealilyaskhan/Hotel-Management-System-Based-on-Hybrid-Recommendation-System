@@ -6,20 +6,24 @@ import ReactTimeslotCalendar from "react-timeslot-calendar";
 import moment from "moment";
 import { useEffect, useState } from 'react';
 
-export default function FirstStep({ activeStep, setActiveStep, setStartDate, startDate, setEndDate, tutorID }) {
+export default function FirstStep({ activeStep, setActiveStep, setStartDate, startDate, setEndDate, tutorID, studentID }) {
   const [filledSlots, setFilledSlots] = useState([]);
 
   useEffect(() => {
-    const getTutorFilledSlots = async () => {
+    const getFilledSlots = async () => {
       try {
-        const res = await axios.get("meetings/slots/" + tutorID);
-        const slotsToDisable = res.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
-        setFilledSlots(slotsToDisable);
+        const tutorSlots = await axios.get("meetings/slots/" + tutorID);
+        const slotsToDisableTutor = tutorSlots.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
+
+        const studentSlots = await axios.get("meetings/slots/" + studentID);
+        const slotsToDisableStudent = studentSlots.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
+
+        setFilledSlots([...slotsToDisableTutor, ...slotsToDisableStudent]);
       } catch (err) {
         console.log(err);
       }
     };
-    getTutorFilledSlots();
+    getFilledSlots();
   }, [tutorID]);
 
   return (

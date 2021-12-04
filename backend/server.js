@@ -19,6 +19,7 @@ import messagesRouter from './routes/messages.js';
 import transactionsRouter from './routes/transactions.js';
 import inboxesRouter from './routes/inboxes.js';
 import locationsRouter from './routes/locations.js';
+import studentInterestsRouter from './routes/studentInterests.js';
 
 dotenv.config({ path: './config/.env' });
 
@@ -85,6 +86,8 @@ app.use('/api/messages', messagesRouter);
 //LOCATIONS
 app.use('/api/locations', locationsRouter);
 
+//RECOMMENDATIONS
+app.use('/api/interests', studentInterestsRouter);
 
 
 //errorHandler middleware at the end of all routings ? read at "NodeJS Fundamentals" search "error handler middleware"

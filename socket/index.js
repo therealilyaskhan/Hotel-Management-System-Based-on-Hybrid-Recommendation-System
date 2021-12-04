@@ -51,11 +51,12 @@ io.on("connection", (socket) => {
   });
 
   //send and get message
-  socket.on("sendMessage", ({ senderID, receiverID, message, senderImageURL }) => {
+  socket.on("sendMessage", ({ senderID, senderName, receiverID, message, senderImageURL }) => {
     const user = getUser(receiverID);
     if (user) {
       io.to(user.socketID).emit("getMessage", {
         senderID,
+        senderName,
         message,
         senderImageURL
       });

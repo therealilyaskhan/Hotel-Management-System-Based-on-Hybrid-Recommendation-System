@@ -286,7 +286,6 @@ function Room() {
                       onChange={(event, newValue) => {
                         setRating(newValue);
                       }}
-                      precision={0.5}
                     />
                   </Box>
                   <Box>

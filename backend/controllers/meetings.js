@@ -46,11 +46,12 @@ export const updateMeeting = expressAsyncHandler(async (req, res, next) => {
 });
 
 export const getFilledSlots = expressAsyncHandler(async (req, res, next) => {
-  const { tutorID } = req.params;
-  //find all meetings having the tutorID:
-  const meetings = await Meeting.find({
-    tutorID
-  },
+  const { userID } = req.params;
+  //find all meetings having either student or tutor ID:
+  const meetings = await Meeting.find(
+    {
+      $or: [{ tutorID: userID }, { studentID: userID }]
+    },
     {
       _id: 0,
       course: 0,

@@ -3,6 +3,7 @@ import HomeLayout from './layout/HomeLayout';
 import StudentDashboard from './layout/StudentDashboard';
 import TutorDashboard from './layout/TutorDashboard';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { io } from "socket.io-client";
 
 import Topbar from './components/Topbar';
 import Footer from './components/Footer';
@@ -17,14 +18,29 @@ import Room from './screens/Room';
 import theme from './theme/theme';
 import ResultsLayout from './layout/ResultsLayout';
 import ScheduleMeetingScreen from './screens/ScheduleMeetingScreen';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const user = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+
+  const [socket, setSocket] = useState(false);
+
+  useEffect(() => {
+    if (user)
+      setSocket(io("ws://localhost:8900"));
+  }, []);
+
+  useEffect(() => {
+    if (user && socket)
+      socket?.emit("addUser", user._id);
+  }, [user, socket]);
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
           <Route path="/" exact>
-            <Topbar sticky responsive />
+            <Topbar sticky responsive socket={socket} />
             <HomeLayout />
             < Footer />
           </Route>
@@ -44,7 +60,7 @@ function App() {
             < Footer />
           </Route>
           <Route path="/tutors/profile">
-            <Topbar sticky />
+            <Topbar sticky socket={socket} />
             <TutorProfileScreen />
             < Footer />
           </Route>
@@ -54,11 +70,11 @@ function App() {
             < Footer />
           </Route>
           <Route path="/tutors/dashboard">
-            <TutorDashboard />
+            <TutorDashboard socket={socket} />
             <Footer crop />
           </Route>
           <Route path="/students/dashboard">
-            <StudentDashboard />
+            <StudentDashboard socket={socket} />
             <Footer crop />
           </Route>
           <Route path="/messenger">
@@ -66,12 +82,12 @@ function App() {
             <Messenger />
           </Route>
           <Route path="/results">
-            <Topbar sticky responsive />
+            <Topbar sticky responsive socket={socket} />
             <ResultsLayout />
             <Footer />
           </Route>
           <Route path="/schedule">
-            <Topbar sticky responsive />
+            <Topbar sticky responsive socket={socket} />
             <ScheduleMeetingScreen />
             <Footer />
           </Route>

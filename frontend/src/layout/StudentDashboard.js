@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import {
   Switch,
   Route
@@ -14,12 +15,25 @@ import axios from 'axios';
 import moment from 'moment';
 import TransactionScreen from '../screens/TransactionScreen';
 
-function StudentDashboard() {
+function StudentDashboard({ socket }) {
   const { _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
   const [activeMeeting, setActiveMeeting] = useState([]);
 
   const history = useHistory();
+
+  const [eventMounted, setEventMounted] = useState(false);
+
+  useEffect(() => {
+    if (socket && !eventMounted) {
+      socket.on("getMessage", (data) => {
+        //on getting message notify user
+        console.log(data);
+        toast(`${data.senderName}: ${data.message}`);
+      });
+      setEventMounted(true);
+    }
+  }, [socket, eventMounted]);
 
   useEffect(() => {
     if (_id) {
@@ -47,7 +61,17 @@ function StudentDashboard() {
 
   return (
     <div>
-      <AppBarAndDrawer activeMeeting={activeMeeting.length ? activeMeeting.length : false} />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={4000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        draggable
+        pauseOnHover
+      />
+      <AppBarAndDrawer socket={socket} activeMeeting={activeMeeting.length ? activeMeeting.length : false} />
       <Switch>
         <Route exact path="/students/dashboard/profile">
           <StudentProfileScreen />

@@ -20,7 +20,10 @@
     "react-multivalue-text-input": "^1.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-slick": "^0.28.1",
     "react-timeslot-calendar": "git+https://github.com/TheEventDiscoveryCompany/react-timeslot-calendar.git",
+    "react-toastify": "^8.1.0",
+    "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.3.2",
     "web-vitals": "^1.1.2"
   },

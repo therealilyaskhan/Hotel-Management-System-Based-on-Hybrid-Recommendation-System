@@ -32,7 +32,7 @@ const Puller = styled(Box)(({ theme }) => ({
 }));
 
 function SwipeableEdgeDrawer(props) {
-  const { tutorIDs, setTutorIDs } = props;
+  const { tutorIDs, setTutorIDs, setFilterApplied } = props;
   const [open, setOpen] = useState(false);
   const [distance, setDistance] = useState(3000);
 
@@ -59,7 +59,7 @@ function SwipeableEdgeDrawer(props) {
             const filteredTutorIDs = res.data.data;
             if (filteredTutorIDs?.length) {
               setTutorIDs(filteredTutorIDs);
-              // toggleDrawer(true)
+              setFilterApplied(true);
               setOpen(false);
             } else {
               setTutorIDs([]);

@@ -30,6 +30,17 @@ export default function HomeScreen() {
     }
   }, []);
 
+
+  const kPresentProbability = (a, n, k) => {
+    let count = 0;
+
+    for (let i = 0; i < n; i++)
+      if (a[i] == k)
+        count += 1;
+    // find probability
+    return count / n;
+  };
+
   const autocomplete = async (e, value) => {
     setInputValue(value.trim());
     try {
@@ -49,14 +60,47 @@ export default function HomeScreen() {
 
     try {
       const res = await axios.get("teaches?course=" + inputValue.trim());
-      const tutors = res.data.map((tutor) => tutor.tutorID);
-      history.push({
-        pathname: '/results',
-        state: {
-          tutorIDs: tutors,
-          term: inputValue
+      if (res.data.length) {
+        const tutors = res.data.map((tutor) => tutor.tutorID);
+        //first update the interest of the current student if the student if signed in
+
+        if (userInfo) {
+          //first calculate the most probable category the course belongs to
+
+          let res = await axios.all(tutors.map(tutorID => axios.get("tutors/" + tutorID.trim())));
+
+          const categories = res.map((r) => {
+            const { categoryID } = r.data.data;
+            return { categoryID };
+          });
+
+          const arrayOfCategories = categories.map(c => {
+            return c.categoryID;
+          });
+
+          let listOfProbabilities = {};
+
+          arrayOfCategories.forEach(item => {
+            listOfProbabilities[item] = kPresentProbability(arrayOfCategories, arrayOfCategories.length, item);
+          });
+
+          const interestedCategory = Object.keys(listOfProbabilities).reduce((a, b) => listOfProbabilities[a] > listOfProbabilities[b] ? a : b);
+
+
+
+          const studentID = userInfo?._id;
+
         }
-      });
+
+        //now move to the results page
+        history.push({
+          pathname: '/results',
+          state: {
+            tutorIDs: tutors,
+            term: inputValue
+          }
+        });
+      }
     } catch (err) {
       console.log(err);
     }

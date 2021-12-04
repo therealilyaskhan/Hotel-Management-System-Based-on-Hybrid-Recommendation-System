@@ -85,6 +85,7 @@ export default function Messenger() {
 
     socket.current.emit("sendMessage", {
       senderID: user._id,
+      senderName: user.firstName,
       receiverID,
       message: newMessage,
       senderImageURL: user.imageURL
@@ -108,7 +109,6 @@ export default function Messenger() {
       <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            <input placeholder="Search Inbox" className="chatMenuInput" />
             {
               inboxes.length ? inboxes.map((i) => (
                 <div key={i._id} onClick={() => setCurrentChat(i)}>

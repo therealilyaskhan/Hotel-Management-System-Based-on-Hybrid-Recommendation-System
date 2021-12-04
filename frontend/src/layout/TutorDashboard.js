@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import {
   useHistory,
   Switch,
@@ -15,7 +16,21 @@ import MeetingRoom from '../screens/MeetingRoom';
 import moment from 'moment';
 import axios from 'axios';
 
-function TutorDashboard() {
+function TutorDashboard({ socket }) {
+
+  const [eventMounted, setEventMounted] = useState(false);
+
+  useEffect(() => {
+    if (socket && !eventMounted) {
+      socket.on("getMessage", (data) => {
+        //on getting message notify user
+        console.log(data);
+        toast(`${data.senderName}: ${data.message}`);
+      });
+      setEventMounted(true);
+    }
+  }, [socket, eventMounted]);
+
   const { _id, categoryID } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
   const [activeMeeting, setActiveMeeting] = useState([]);
@@ -57,7 +72,17 @@ function TutorDashboard() {
 
   return (
     <div>
-      <AppBarAndDrawer activeMeeting={activeMeeting.length ? activeMeeting.length : false} />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={4000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        draggable
+        pauseOnHover
+      />
+      <AppBarAndDrawer socket={socket} activeMeeting={activeMeeting.length ? activeMeeting.length : false} />
       <Switch>
         <Route exact path="/tutors/dashboard/profile">
           <TutorProfileInfo />

@@ -16,7 +16,7 @@ router.route('/').get(getMeetings);
 // router.route('/:tutorID/:studentID').get(getMeeting);
 
 //get list of the filled meeting slots for a tutor via ID
-router.route('/slots/:tutorID').get(getFilledSlots);
+router.route('/slots/:userID').get(getFilledSlots);
 
 //get or update a meeting using meetingID
 router.route('/:id').get(getMeetingByID).put(updateMeeting);

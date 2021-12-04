@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -70,13 +70,27 @@ const useStyles = makeStyles((theme) => ({
 function ResponsiveDrawer(props) {
   const { imageURL, category } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
-  const { container, activeMeeting } = props;
+  const { container, activeMeeting, socket } = props;
   const classes = useStyles(activeMeeting);
   const theme = useTheme();
   const { pathname } = useLocation();
 
   const isHome = false; // pathname === "/";
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const [eventMounted, setEventMounted] = useState(false);
+  const [newMessage, setNewMessage] = useState(false);
+
+  useEffect(() => {
+    if (socket && !eventMounted) {
+      socket.on("getMessage", (data) => {
+        //on getting message notify user
+        if (data.message)
+          setNewMessage(true);
+      });
+      setEventMounted(true);
+    }
+  }, [socket, eventMounted]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -116,8 +130,12 @@ function ResponsiveDrawer(props) {
                       <Badge badgeContent={activeMeeting} color="error">
                         <Icon>{icon}</Icon>
                       </Badge>
-                      :
-                      <Icon>{icon}</Icon>
+                      : newMessage && text === 'messenger' ?
+                        <Badge badgeContent="new" color="error">
+                          <Icon>{icon}</Icon>
+                        </Badge>
+                        :
+                        <Icon>{icon}</Icon>
                   }
                 </ListItemIcon>
                 <ListItemText primary={text.toUpperCase()} />

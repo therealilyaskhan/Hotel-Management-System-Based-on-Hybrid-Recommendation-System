@@ -78,9 +78,6 @@ export const createCourse = expressAsyncHandler(async (req, res, next) => {
     { upsert: true }
   );
 
-  // //create token:
-  // const token = course.getSignedJwtToken();
-
   res.status(200).json({ success: true, data: course });
 
 });

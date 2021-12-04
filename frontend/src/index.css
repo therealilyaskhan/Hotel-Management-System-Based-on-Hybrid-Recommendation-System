@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 
+:root {
+  --success-color: #2ecc71;
+  --error-color: #e74c3c;
+}
+
 *,
 *::before,
 *::after {
@@ -635,6 +640,7 @@ h6 {
 
 .tutor__profile-container {
   color: #334e64;
+  text-align: center;
   font-family: 'Montserrat', sans-serif;
   position: relative;
   background-color: #fff;
@@ -648,6 +654,18 @@ h6 {
   align-items: center;
   margin: auto;
   margin-top: 90px;
+}
+.tutor__profile-container.recommender {
+  margin-bottom: 20px;
+  width: 180px;
+  padding: 65px 10px 10px;
+  border-radius: 12px;
+  box-shadow: 0 0 60px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 70px;
 }
 
 .tutor__img-container {
@@ -1164,3 +1182,22 @@ button.createbtn i {
   margin: 0px 3px;
 }
 /* review card styles */
+
+/* student signup validation styles */
+.form__control.success input {
+  border-color: var(--success-color);
+}
+
+.form__control.error input,
+.form__control.error textarea {
+  border-color: var(--error-color);
+}
+
+.form__error-msg {
+  color: var(--error-color);
+  visibility: hidden;
+}
+
+.form__control.error .form__error-msg {
+  visibility: visible;
+}

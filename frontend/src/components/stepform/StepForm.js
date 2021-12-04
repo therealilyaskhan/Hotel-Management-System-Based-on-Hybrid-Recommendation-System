@@ -21,7 +21,7 @@ const StepForm = ({ tutorInfo, studentInfo }) => {
   const handleSteps = (step) => {
     switch (step) {
       case 0:
-        return <FirstStep activeStep={activeStep} setActiveStep={setActiveStep} setStartDate={setStartDate} startDate={startDate} setEndDate={setEndDate} tutorID={tutorInfo._id} />;
+        return <FirstStep activeStep={activeStep} setActiveStep={setActiveStep} setStartDate={setStartDate} startDate={startDate} setEndDate={setEndDate} tutorID={tutorInfo._id} studentID={studentInfo._id} />;
       case 1:
         return <SecondStep activeStep={activeStep} setActiveStep={setActiveStep} setVenue={setVenue} venue={venue} />;
       case 2:

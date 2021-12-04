@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import './bootstrap/bootstrap.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
+import 'react-toastify/dist/ReactToastify.css';
+
 import App from './App';
 import axios from 'axios';
 
