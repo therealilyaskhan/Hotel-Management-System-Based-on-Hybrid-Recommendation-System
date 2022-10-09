@@ -2,6 +2,9 @@
   "name": "tutor-per-hour",
   "type": "module",
   "version": "1.0.0",
+  "engines": {
+    "node": "14.19.3"
+    },
   "description": "",
   "main": "index.js",
   "scripts": {

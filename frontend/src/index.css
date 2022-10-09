@@ -1068,9 +1068,9 @@ button.createbtn i {
 }
 
 @media (max-width: 400px) {
-  body {
+  /* body {
     margin: ;
-  }
+  } */
 
   .profile-header h3 {
   }
