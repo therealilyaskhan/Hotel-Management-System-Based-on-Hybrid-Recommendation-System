@@ -23,11 +23,11 @@ const meetingSchema = new Schema({
   },
   latitude: {
     type: Number,
-    required: [true, 'Please provide latitude point for the tutor location']
+    required: [true, 'Please provide latitude point for the hotel location']
   },
   longitude: {
     type: Number,
-    required: [true, 'Please provide longitude point for the tutor location']
+    required: [true, 'Please provide longitude point for the hotel location']
   },
   status: {
     type: String,
@@ -35,10 +35,10 @@ const meetingSchema = new Schema({
     enum: ['pending', 'attended'],
     default: "pending"
   },
-  tutorID: {
+  hotelID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Tutor',
-    required: [true, 'Please provide tutor ID']
+    ref: 'Hotel',
+    required: [true, 'Please provide hotel ID']
   },
   customerID: {
     type: mongoose.Schema.Types.ObjectId,

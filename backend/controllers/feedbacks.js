@@ -4,11 +4,11 @@ import ErrorResponse from '../utils/ErrorResponse.js';
 
 //get all feedbacks
 export const getFeedbacks = expressAsyncHandler(async (req, res, next) => {
-  const tutorID = req.params.id.trim();
+  const hotelID = req.params.id.trim();
 
   const feedbacks = await Feedback.find(
     {
-      tutorID
+      hotelID
     },
     { __v: 0 }
   );
@@ -50,14 +50,14 @@ export const deleteFeedback = expressAsyncHandler(async (req, res, next) => {
 //create new feedback 
 export const createFeedback = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { tutorID, customerID, meetingID, rating, review } = req.body;
+  const { hotelID, customerID, meetingID, rating, review } = req.body;
 
-  if (!(tutorID && customerID && meetingID && rating && review))
+  if (!(hotelID && customerID && meetingID && rating && review))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Feedback
   const feedback = await Feedback.create({
-    tutorID,
+    hotelID,
     customerID,
     meetingID,
     rating,

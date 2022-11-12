@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 const Schema = mongoose.Schema;
 const model = mongoose.model;
 
-const tutorSchema = new Schema({
+const hotelSchema = new Schema({
   firstName: {
     type: String,
     required: [true, 'Please add first name'],
@@ -51,7 +51,7 @@ const tutorSchema = new Schema({
   },
   category: {
     type: String,
-    default: "tutors"
+    default: "hotels"
   },
   categoryName: {
     type: String,
@@ -90,25 +90,25 @@ const tutorSchema = new Schema({
   resetPasswordExpire: Date
 }, { timestamps: true });
 
-// adding instance method to the instances of the Tutor Model:
+// adding instance method to the instances of the Hotel Model:
 // Sign JWT and return
-tutorSchema.methods.getSignedJwtToken = function () {
+hotelSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE
   });
 };
 
-// Match tutor entered password to hashed password in database
-tutorSchema.methods.matchPassword = async function (enteredPassword) {
+// Match hotel entered password to hashed password in database
+hotelSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 
 // Encrypt password using bcrypt
-tutorSchema.pre('save', async function (next) {
+hotelSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-const Tutor = model('Tutor', tutorSchema);
-export default Tutor;
+const Hotel = model('Hotel', hotelSchema);
+export default Hotel;

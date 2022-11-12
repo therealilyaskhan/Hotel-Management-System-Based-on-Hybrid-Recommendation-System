@@ -9,9 +9,9 @@ const transactionSchema = new Schema({
     ref: 'Meeting',
     required: [true, 'Please provide transaction ID']
   },
-  tutorID: {
+  hotelID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Tutor',
+    ref: 'Hotel',
     required: [true, 'Please provide transaction ID']
   },
   customerID: {

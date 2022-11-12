@@ -9,11 +9,11 @@ const __dirname = path.resolve();
 dotenv.config({ path: './config/.env' });
 
 // Load models
-import Tutor from './models/Tutor.js';
+import Hotel from './models/Hotel.js';
 import Customer from './models/Customer.js';
 
 // Connect to DB
-mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://mik:xenderoo7@clustertutorperhour.5nvdg.mongodb.net/tutorPerHour?retryWrites=true&w=majority', {
+mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://mik:xenderoo7@clusterhotelperhour.5nvdg.mongodb.net/hotelPerHour?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -21,8 +21,8 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://mik:xenderoo7@clustertu
 });
 
 // Read JSON files
-const tutors = JSON.parse(
-  fs.readFileSync(__dirname + '/_jsonData/tutors.json', 'utf-8')
+const hotels = JSON.parse(
+  fs.readFileSync(__dirname + '/_jsonData/hotels.json', 'utf-8')
 );
 
 const customers = JSON.parse(
@@ -32,7 +32,7 @@ const customers = JSON.parse(
 // Insert into DB
 const insertData = async () => {
   try {
-    await Tutor.create(tutors);
+    await Hotel.create(hotels);
     await Customer.create(customers);
     console.log('Data inserted...');
     process.exit();
@@ -44,7 +44,7 @@ const insertData = async () => {
 // Delete data
 const deleteData = async () => {
   try {
-    await Tutor.deleteMany();
+    await Hotel.deleteMany();
     await Customer.deleteMany();
     console.log('Data Destroyed...');
     process.exit();

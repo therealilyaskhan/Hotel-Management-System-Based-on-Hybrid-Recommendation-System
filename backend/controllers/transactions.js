@@ -8,7 +8,7 @@ export const getTransactions = expressAsyncHandler(async (req, res, next) => {
 
   const transactions = await Transaction.find(
     {
-      $or: [{ tutorID: userID }, { customerID: userID }]
+      $or: [{ hotelID: userID }, { customerID: userID }]
     },
     { __v: 0 }
   );
@@ -60,15 +60,15 @@ export const deleteTransaction = expressAsyncHandler(async (req, res, next) => {
 //create new transaction 
 export const createTransaction = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { meetingID, tutorID, customerID, meetingDuration, amount } = req.body;
+  const { meetingID, hotelID, customerID, meetingDuration, amount } = req.body;
 
-  if (!(meetingID && tutorID && customerID && meetingDuration && amount))
+  if (!(meetingID && hotelID && customerID && meetingDuration && amount))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Transaction
   const transaction = await Transaction.create({
     meetingID,
-    tutorID,
+    hotelID,
     customerID,
     meetingDuration,
     amount

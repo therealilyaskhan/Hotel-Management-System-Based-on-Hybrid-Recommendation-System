@@ -1,32 +1,32 @@
 import Location from '../models/Location.js';
-import Tutor from '../models/Tutor.js';
+import Hotel from '../models/Hotel.js';
 import expressAsyncHandler from 'express-async-handler'; // read about express-async-handler in NodeJS Fundamentals notes;
 import ErrorResponse from '../utils/ErrorResponse.js';
 
-//get specific list of tutor in a specific location circle radius:
-export const getTutorsWithinRadius = expressAsyncHandler(async (req, res, next) => {
-  const { tutorIDs, latitude, longitude, distance } = req.body;
+//get specific list of hotel in a specific location circle radius:
+export const getHotelsWithinRadius = expressAsyncHandler(async (req, res, next) => {
+  const { hotelIDs, latitude, longitude, distance } = req.body;
 
   //radius of earth in meters 6371000 m and 6,371 km
   //we will divide the passed distance in meters by the total radius of earth in meters
 
-  //calculation radius in meters for the circle inside which the user wants tutors
+  //calculation radius in meters for the circle inside which the user wants hotels
   const radius = distance / 6371000;
 
-  const tutors = await Location.find({
+  const hotels = await Location.find({
     location: {
       $geoWithin: {
         $centerSphere: [[longitude, latitude], radius]
       }
     },
-    tutorID: { "$in": tutorIDs }
+    hotelID: { "$in": hotelIDs }
   },
     { _id: 0, __v: 0, updatedAt: 0, createdAt: 0, location: 0 }
   );
 
-  const filteredTutorIDs = tutors.map((tutor) => tutor.tutorID);
+  const filteredHotelIDs = hotels.map((hotel) => hotel.hotelID);
 
-  if (!filteredTutorIDs.length)
+  if (!filteredHotelIDs.length)
     res.status(200)
       .json({
         success: false,
@@ -37,35 +37,35 @@ export const getTutorsWithinRadius = expressAsyncHandler(async (req, res, next) 
       .status(200)
       .json({
         success: true,
-        data: filteredTutorIDs
+        data: filteredHotelIDs
       });
 
 });
 
-//get all tutors for a specific point
-export const getTutors = expressAsyncHandler(async (req, res, next) => {
-  const tutors = await Location.find({
+//get all hotels for a specific point
+export const getHotels = expressAsyncHandler(async (req, res, next) => {
+  const hotels = await Location.find({
     inboxID: req.params.inboxID,
   });
 
-  if (!tutors)
-    throw new ErrorResponse(`No tutors found`, 404);
+  if (!hotels)
+    throw new ErrorResponse(`No hotels found`, 404);
 
-  //if tutors are found then fill the res object
+  //if hotels are found then fill the res object
   res
     .status(200)
     .json({
       success: true,
-      count: tutors.length,
-      data: tutors
+      count: hotels.length,
+      data: hotels
     });
 
 });
 
-//get location of a tutor via his id:
+//get location of a hotel via his id:
 export const getLocation = expressAsyncHandler(async (req, res, next) => {
   const location = await Location.findOne({
-    tutorID: req.params.id
+    hotelID: req.params.id
   });
 
   if (!location)
@@ -77,19 +77,19 @@ export const getLocation = expressAsyncHandler(async (req, res, next) => {
 //create new location 
 export const createLocation = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { latitude, longitude, tutorID } = req.body;
+  const { latitude, longitude, hotelID } = req.body;
 
-  if (!(latitude && longitude && tutorID))
+  if (!(latitude && longitude && hotelID))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Location
-  const location = await Location.create({ latitude, longitude, tutorID });
+  const location = await Location.create({ latitude, longitude, hotelID });
 
   const city = location.location.city;
   const country = location.location.country;
 
-  //updating tutor's city and country via his id:
-  await Tutor.findByIdAndUpdate(tutorID, { city, country }, {
+  //updating hotel's city and country via his id:
+  await Hotel.findByIdAndUpdate(hotelID, { city, country }, {
     new: true,
     runValidators: true
   });

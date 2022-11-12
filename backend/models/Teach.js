@@ -4,10 +4,10 @@ const Schema = mongoose.Schema;
 const model = mongoose.model;
 
 const teachSchema = new Schema({
-  tutorID: {
+  hotelID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Tutor',
-    required: [true, 'Please provide tutor ID']
+    ref: 'Hotel',
+    required: [true, 'Please provide hotel ID']
   },
   course: {
     type: String,

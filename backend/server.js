@@ -10,7 +10,7 @@ import cors from 'cors';
 import connectDB from './db.js';
 import customersRouter from './routes/customers.js';
 import meetingsRouter from './routes/meetings.js';
-import tutorsRouter from './routes/tutors.js';
+import hotelsRouter from './routes/hotels.js';
 import errorHandler from './middleware/errorHandler.js';
 import feedbacksRouter from './routes/feedbacks.js';
 import coursesRouter from './routes/courses.js';
@@ -59,8 +59,8 @@ app.get('/', function (req, res) {
 //CUSTOMER
 app.use('/api/customers', customersRouter);
 
-//TUTORS
-app.use('/api/tutors', tutorsRouter);
+//HOTELS
+app.use('/api/hotels', hotelsRouter);
 
 // MEETINGS
 app.use('/api/meetings', meetingsRouter);

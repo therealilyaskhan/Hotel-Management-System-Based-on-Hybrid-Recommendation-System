@@ -7,7 +7,7 @@ const Footer = ({ crop }) => {
             <h3 className="text-white font-weight-light">
               Hotel Management System Based on Hybrid Recommendation System
             </h3>
-            <p className="d-block text-white-50">copyright &copy; Iqra & ___ <span className="d-block text-white mt-1">{new Date().toISOString().slice(0, 10)}</span> </p>
+            <p className="d-block text-white-50">copyright &copy; Iqra & Beenish <span className="d-block text-white mt-1">{new Date().toISOString().slice(0, 10)}</span> </p>
           </div>
         </div>
       </div>

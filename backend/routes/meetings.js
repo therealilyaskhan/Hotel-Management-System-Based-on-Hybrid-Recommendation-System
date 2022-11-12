@@ -9,13 +9,13 @@ const router = express.Router();
 //create new meeting
 router.route('/').post(createMeeting);
 
-//get all meetings for a user (tutor or customer) using their ID pass via query parameters
+//get all meetings for a user (hotel or customer) using their ID pass via query parameters
 router.route('/').get(getMeetings);
 
-//get a single meeting between a tutor and a customer via their ids
-// router.route('/:tutorID/:customerID').get(getMeeting);
+//get a single meeting between a hotel and a customer via their ids
+// router.route('/:hotelID/:customerID').get(getMeeting);
 
-//get list of the filled meeting slots for a tutor via ID
+//get list of the filled meeting slots for a hotel via ID
 router.route('/slots/:userID').get(getFilledSlots);
 
 //get or update a meeting using meetingID

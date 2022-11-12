@@ -2,7 +2,7 @@ import Inbox from '../models/Inbox.js';
 import expressAsyncHandler from 'express-async-handler'; // read about express-async-handler in NodeJS Fundamentals notes;
 import ErrorResponse from '../utils/ErrorResponse.js';
 
-//get all inboxes of a user (tutor or customer) using their ID:
+//get all inboxes of a user (hotel or customer) using their ID:
 export const getInboxes = expressAsyncHandler(async (req, res, next) => {
   const inboxes = await Inbox.find({
     members: req.params.id

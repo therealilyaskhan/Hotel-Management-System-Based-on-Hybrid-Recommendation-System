@@ -5,18 +5,18 @@ const Schema = mongoose.Schema;
 const model = mongoose.model;
 
 const locationSchema = new Schema({
-  tutorID: {
+  hotelID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Tutor',
-    required: [true, 'Please provide Tutor ID']
+    ref: 'Hotel',
+    required: [true, 'Please provide Hotel ID']
   },
   latitude: {
     type: Number,
-    required: [true, 'Please provide latitude point for the tutor location']
+    required: [true, 'Please provide latitude point for the hotel location']
   },
   longitude: {
     type: Number,
-    required: [true, 'Please provide longitude point for the tutor location']
+    required: [true, 'Please provide longitude point for the hotel location']
   },
   location: {
     type: {
@@ -36,7 +36,7 @@ const locationSchema = new Schema({
   }
 }, { timestamps: true });
 
-//before feeding the data into the collection we will convert the  latitude and longitude point submitted by the tutor into an address and zip code etc:
+//before feeding the data into the collection we will convert the  latitude and longitude point submitted by the hotel into an address and zip code etc:
 locationSchema.pre('save', async function (next) {
   const loc = await geocoder.reverse({ lat: this.latitude, lon: this.longitude });
 

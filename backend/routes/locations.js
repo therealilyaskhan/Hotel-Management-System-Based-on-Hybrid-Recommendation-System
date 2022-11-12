@@ -1,19 +1,19 @@
 //our locations api which is going to deal with locations in the database
 import express from 'express';
-import { getTutors, getLocation, createLocation, getTutorsWithinRadius } from '../controllers/locations.js';
+import { getHotels, getLocation, createLocation, getHotelsWithinRadius } from '../controllers/locations.js';
 
 const router = express.Router();
 
 //all these below are different endpoints of the locations api
 router.route('/').post(createLocation);
 
-//endpoint for getting location of a single tutor via id
+//endpoint for getting location of a single hotel via id
 router.route('/:id').get(getLocation);
 
-//following endpoint is used to get all tutors from a specific location
-router.route('/:latitude/:longitude').get(getTutors);
+//following endpoint is used to get all hotels from a specific location
+router.route('/:latitude/:longitude').get(getHotels);
 
-//get specific list of tutor in a specific location circle radius:
-router.route('/radius').post(getTutorsWithinRadius);
+//get specific list of hotel in a specific location circle radius:
+router.route('/radius').post(getHotelsWithinRadius);
 
 export default router;

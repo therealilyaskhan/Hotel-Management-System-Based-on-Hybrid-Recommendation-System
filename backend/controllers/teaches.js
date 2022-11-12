@@ -3,10 +3,10 @@ import expressAsyncHandler from 'express-async-handler'; // read about express-a
 import ErrorResponse from '../utils/ErrorResponse.js';
 
 //get all teaches for a specific course
-export const getTutors = expressAsyncHandler(async (req, res, next) => {
+export const getHotels = expressAsyncHandler(async (req, res, next) => {
   const course = req.query.course.trim();
 
-  const tutors = await Teach.find(
+  const hotels = await Teach.find(
     {
       course: {
         $regex: new RegExp('^' + course + '.*', 'i')
@@ -15,10 +15,10 @@ export const getTutors = expressAsyncHandler(async (req, res, next) => {
     { _id: 0, __v: 0, course: 0, createdAt: 0, updatedAt: 0 }
   ).exec();
 
-  if (!tutors.length)
+  if (!hotels.length)
     res.status(200).json([]);
   else
-    res.status(200).json(tutors);
+    res.status(200).json(hotels);
 
 });
 
@@ -58,14 +58,14 @@ export const deleteTeach = expressAsyncHandler(async (req, res, next) => {
 //create new teach 
 export const createTeach = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { tutorID, course } = req.body;
+  const { hotelID, course } = req.body;
 
-  if (!(tutorID && course))
+  if (!(hotelID && course))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Teach
   const teach = await Teach.create({
-    tutorID,
+    hotelID,
     course
   });
 
