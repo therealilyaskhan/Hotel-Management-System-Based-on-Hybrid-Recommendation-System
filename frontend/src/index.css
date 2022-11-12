@@ -139,7 +139,7 @@ body {
   object-fit: cover;
 }
 
-.become-a-tutor {
+.become-a-hotel {
   background: #703e60;
 }
 
@@ -270,7 +270,7 @@ body {
   background-color: #ffe0e0;
 }
 
-/* student profile styles */
+/* customer profile styles */
 .padding {
   padding: 1rem;
 }
@@ -405,7 +405,7 @@ h6 {
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-/* student profile styles */
+/* customer profile styles */
 
 /* messenger */
 .messenger {
@@ -636,9 +636,9 @@ h6 {
   display: none;
 }
 
-/* tutor profile card css */
+/* hotel profile card css */
 
-.tutor__profile-container {
+.hotel__profile-container {
   color: #334e64;
   text-align: center;
   font-family: 'Montserrat', sans-serif;
@@ -655,7 +655,7 @@ h6 {
   margin: auto;
   margin-top: 90px;
 }
-.tutor__profile-container.recommender {
+.hotel__profile-container.recommender {
   margin-bottom: 20px;
   width: 180px;
   padding: 65px 10px 10px;
@@ -668,7 +668,7 @@ h6 {
   margin-top: 70px;
 }
 
-.tutor__img-container {
+.hotel__img-container {
   width: 110px;
   height: 110px;
   overflow: hidden;
@@ -681,33 +681,33 @@ h6 {
   transform: translate(-50%, -50%);
 }
 
-.tutor__img-container img {
+.hotel__img-container img {
   width: 100%;
   max-width: 100%;
   transform: scale(1.1);
 }
 
-.tutor__info {
+.hotel__info {
   margin-bottom: 6px;
 }
 
-.tutor__info i {
+.hotel__info i {
   margin-right: 8px;
   font-size: 1.1em;
 }
 
-.tutor__place {
+.hotel__place {
   margin-bottom: 15px;
 }
 
-.tutor__full-name {
+.hotel__full-name {
   font-size: 1.4em;
   font-weight: bold;
   letter-spacing: 1px;
   color: #002984;
 }
 
-.tutor__rate-info {
+.hotel__rate-info {
   width: 100%;
   font-weight: bold;
   font-size: 2.2em;
@@ -716,7 +716,7 @@ h6 {
   text-align: center;
 }
 
-.tutor__rate-info span {
+.hotel__rate-info span {
   font-size: 16px;
   font-weight: lighter;
   display: inline-block;
@@ -724,7 +724,7 @@ h6 {
 
 /* Social colors */
 
-.tutor__action {
+.hotel__action {
   text-align: center;
   outline: none;
   cursor: pointer;
@@ -743,11 +743,11 @@ h6 {
   transition: transform 0.3s, opacity 0.3s;
 }
 
-.tutor__action.inbox {
+.hotel__action.inbox {
   background-color: #138496;
 }
 
-.tutor__action:hover {
+.hotel__action:hover {
   transform: scale(1.05);
   opacity: 0.85;
 }
@@ -789,7 +789,7 @@ h6 {
   min-height: 350px;
 }
 
-/* tutor profile styles */
+/* hotel profile styles */
 .right-side {
   flex-grow: 1;
 }
@@ -1114,7 +1114,7 @@ button.createbtn i {
   margin: 20px auto;
 }
 
-/* tutor profile styles */
+/* hotel profile styles */
 
 /* review card styles */
 .comment-section {
@@ -1183,7 +1183,7 @@ button.createbtn i {
 }
 /* review card styles */
 
-/* student signup validation styles */
+/* customer signup validation styles */
 .form__control.success input {
   border-color: var(--success-color);
 }
@@ -1200,4 +1200,7 @@ button.createbtn i {
 
 .form__control.error .form__error-msg {
   visibility: visible;
+}
+.navbarBox {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
 }

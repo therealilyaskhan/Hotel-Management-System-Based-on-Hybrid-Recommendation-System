@@ -8,11 +8,11 @@ import Rating from '@material-ui/lab/Rating';
 import { Typography } from '@material-ui/core';
 import ReviewCard from '../components/Card/ReviewCard';
 
-function TutorProfileScreen() {
+function HotelProfileScreen() {
 
   const location = useLocation();
   const history = useHistory();
-  const { tutorInfo } = location;
+  const { hotelInfo } = location;
   const [averageRating, setAverageRating] = useState(0);
   const [reviews, setReviews] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
@@ -22,14 +22,14 @@ function TutorProfileScreen() {
   const currentUser = userInfo._id ? userInfo : false;
 
   useEffect(() => {
-    if (!tutorInfo)
+    if (!hotelInfo)
       history.push('/');
   }, []);
 
   useEffect(() => {
     const getFeedbacks = async () => {
       try {
-        const feedbacks = await axios.get("feedbacks/" + tutorInfo?._id);
+        const feedbacks = await axios.get("feedbacks/" + hotelInfo?._id);
         if (feedbacks.data.length) {
           setAverageRating(feedbacks.data.reduce((n, { rating }) => n + rating, 0) / feedbacks.data.length);
           setReviews(feedbacks.data.map(feedback => feedback.review));
@@ -45,10 +45,10 @@ function TutorProfileScreen() {
 
   const createNewInbox = async () => {
 
-    if (tutorInfo?._id && currentUser) {
+    if (hotelInfo?._id && currentUser) {
       const members = {
         ownerID: currentUser?._id,
-        opponentID: tutorInfo?._id
+        opponentID: hotelInfo?._id
       };
 
       try {
@@ -69,13 +69,13 @@ function TutorProfileScreen() {
 
   const scheduleNewMeeting = async () => {
 
-    if (tutorInfo?._id && currentUser) {
-      //take user to schedule screen and pass there the tutor id and current user id as state
+    if (hotelInfo?._id && currentUser) {
+      //take user to schedule screen and pass there the hotel id and current user id as state
       history.push({
         pathname: '/schedule',
         state: {
-          tutorInfo,
-          studentInfo: currentUser
+          hotelInfo,
+          customerInfo: currentUser
         }
       });
     } else if (!currentUser) {
@@ -87,13 +87,13 @@ function TutorProfileScreen() {
     <div className="container my-4">
       <div className="profile-header">
         <div className="profile-img">
-          <img src={"http://localhost:5000/" + tutorInfo?.imageURL} width="200" alt="Profile Image" />
+          <img src={"http://localhost:5000/" + hotelInfo?.imageURL} width="200" alt="Profile Image" />
         </div>
         <div className="profile-nav-info">
-          <h3 className="user-name">{tutorInfo?.firstName} {tutorInfo?.lastName}</h3>
+          <h3 className="user-name">{hotelInfo?.firstName} {hotelInfo?.lastName}</h3>
           <div className="address">
-            <p id="state" className="state">{tutorInfo?.city}</p>
-            <span id="country" className="country">{tutorInfo?.country}</span>
+            <p id="state" className="state">{hotelInfo?.city}</p>
+            <span id="country" className="country">{hotelInfo?.country}</span>
           </div>
 
         </div>
@@ -103,14 +103,14 @@ function TutorProfileScreen() {
         <div className="left-side">
           <div className="profile-side">
             <Typography className="text-capitalize" variant="h6" gutterBottom component="div">
-              {tutorInfo?.categoryName} Tutor
+              {hotelInfo?.categoryName} Hotel
             </Typography>
             <div className="user-bio">
               <Typography className="text-uppercase mb-1 pb-1" variant="h4" gutterBottom component="div">
                 Bio
               </Typography>
               <Typography className="text-capitalize mb-2 pb-1" variant="subtitle2" gutterBottom component="div">
-                {tutorInfo?.description}
+                {hotelInfo?.description}
               </Typography>
             </div>
             <div className="profile-btn">
@@ -156,4 +156,4 @@ function TutorProfileScreen() {
   );
 };
 
-export default TutorProfileScreen;
+export default HotelProfileScreen;

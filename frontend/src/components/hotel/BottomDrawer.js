@@ -32,23 +32,23 @@ const Puller = styled(Box)(({ theme }) => ({
 }));
 
 function SwipeableEdgeDrawer(props) {
-  const { tutorIDs, setTutorIDs, setFilterApplied } = props;
+  const { hotelIDs, setHotelIDs, setFilterApplied } = props;
   const [open, setOpen] = useState(false);
   const [distance, setDistance] = useState(3000);
 
-  const getNearbyTutors = () => {
+  const getNearbyHotels = () => {
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         const currentUserLat = position.coords.latitude;
         const currentUserLng = position.coords.longitude;
 
-        //filter all tutors and get new list of nearby tutors by default the distance inside which to find tutors would be 3000 in meters i:e 3 kilometers
+        //filter all hotels and get new list of nearby hotels by default the distance inside which to find hotels would be 3000 in meters i:e 3 kilometers
 
         if (currentUserLat && currentUserLng) {
 
           const payload = {
-            tutorIDs,
+            hotelIDs,
             latitude: currentUserLat,
             longitude: currentUserLng,
             distance
@@ -56,13 +56,13 @@ function SwipeableEdgeDrawer(props) {
 
           try {
             const res = await axios.post('locations/radius', payload);
-            const filteredTutorIDs = res.data.data;
-            if (filteredTutorIDs?.length) {
-              setTutorIDs(filteredTutorIDs);
+            const filteredHotelIDs = res.data.data;
+            if (filteredHotelIDs?.length) {
+              setHotelIDs(filteredHotelIDs);
               setFilterApplied(true);
               setOpen(false);
             } else {
-              setTutorIDs([]);
+              setHotelIDs([]);
             }
           } catch (err) {
             console.log(err.message);
@@ -113,7 +113,7 @@ function SwipeableEdgeDrawer(props) {
           }}
         >
           <Puller />
-          <Typography className="px-4 pt-4" sx={{ p: 2, color: 'text.secondary' }}>{tutorIDs?.length} Results</Typography>
+          <Typography className="px-4 pt-4" sx={{ p: 2, color: 'text.secondary' }}>{hotelIDs?.length} Results</Typography>
         </StyledBox>
         <StyledBox
           sx={{
@@ -140,7 +140,7 @@ function SwipeableEdgeDrawer(props) {
                 color="secondary"
               />
             </Box>
-            <button type="button" class="btn btn-info" onClick={getNearbyTutors}>        <i className="fas fa-map-marker-alt"></i> &nbsp;Locate Tutors Only Near Me!</button>
+            <button type="button" class="btn btn-info" onClick={getNearbyHotels}>        <i className="fas fa-map-marker-alt"></i> &nbsp;Locate Hotels Only Near Me!</button>
           </Box>
         </StyledBox>
       </SwipeableDrawer>

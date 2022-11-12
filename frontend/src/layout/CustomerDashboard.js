@@ -5,17 +5,17 @@ import {
   Route
 } from "react-router-dom";
 import { useHistory } from 'react-router';
-import AppBarAndDrawer from '../components/student/AppBarAndDrawer';
+import AppBarAndDrawer from '../components/customer/AppBarAndDrawer';
 import LogoutScreen from '../screens/LogoutScreen';
-import StudentDashboardScreen from '../screens/StudentDashboardScreen';
-import StudentProfileScreen from '../screens/StudentProfileScreen';
+import CustomerDashboardScreen from '../screens/CustomerDashboardScreen';
+import CustomerProfileScreen from '../screens/CustomerProfileScreen';
 import MeetingScreen from '../screens/MeetingScreen';
 import MeetingRoom from '../screens/MeetingRoom';
 import axios from 'axios';
 import moment from 'moment';
 import TransactionScreen from '../screens/TransactionScreen';
 
-function StudentDashboard({ socket }) {
+function CustomerDashboard({ socket }) {
   const { _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
   const [activeMeeting, setActiveMeeting] = useState([]);
@@ -73,22 +73,22 @@ function StudentDashboard({ socket }) {
       />
       <AppBarAndDrawer socket={socket} activeMeeting={activeMeeting.length ? activeMeeting.length : false} />
       <Switch>
-        <Route exact path="/students/dashboard/profile">
-          <StudentProfileScreen />
+        <Route exact path="/customers/dashboard/profile">
+          <CustomerProfileScreen />
         </Route>
-        <Route exact path="/students/dashboard/dashboard">
-          <StudentDashboardScreen />
+        <Route exact path="/customers/dashboard/dashboard">
+          <CustomerDashboardScreen />
         </Route>
-        <Route exact path="/students/dashboard/meetings">
+        <Route exact path="/customers/dashboard/meetings">
           <MeetingScreen />
         </Route>
-        <Route exact path="/students/dashboard/meetingroom">
+        <Route exact path="/customers/dashboard/meetingroom">
           <MeetingRoom meeting={activeMeeting.length ? activeMeeting : false} />
         </Route>
-        <Route exact path="/students/dashboard/transactions">
-          <TransactionScreen type="student" />
+        <Route exact path="/customers/dashboard/transactions">
+          <TransactionScreen type="customer" />
         </Route>
-        <Route path="/students/dashboard/logout">
+        <Route path="/customers/dashboard/logout">
           <LogoutScreen />
         </Route>
       </Switch>
@@ -97,4 +97,4 @@ function StudentDashboard({ socket }) {
   );
 }
 
-export default StudentDashboard;
+export default CustomerDashboard;

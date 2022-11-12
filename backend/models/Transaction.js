@@ -14,9 +14,9 @@ const transactionSchema = new Schema({
     ref: 'Tutor',
     required: [true, 'Please provide transaction ID']
   },
-  studentID: {
+  customerID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Student',
+    ref: 'Customer',
     required: [true, 'Please provide transaction ID']
   },
   meetingDuration: {

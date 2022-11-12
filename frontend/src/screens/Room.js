@@ -18,10 +18,10 @@ const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
 
 function Room() {
   const { category, _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
-  const currentIsTutor = category === 'tutors';
+  const currentIsHotel = category === 'hotels';
   const history = useHistory();
   const location = useLocation();
-  const [studentStarted, setStudentStarted] = useState(false);
+  const [customerStarted, setCustomerStarted] = useState(false);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [paymentApproved, setPaymentApproved] = useState(false);
   const [rating, setRating] = useState(0);
@@ -30,7 +30,7 @@ function Room() {
   const [isOn, setIsOn] = useState(false);
   const [meetingDuration, setMeetingDuration] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { tutorInfo, studentInfo, meetingInfo } = location.state;
+  const { hotelInfo, customerInfo, meetingInfo } = location.state;
 
   // real time notification on joining room starting meeting and making payment all
   const socket = useRef();
@@ -45,7 +45,7 @@ function Room() {
 
   const startMeeting = () => {
     setIsOn(true);
-    const receiverID = currentIsTutor ? studentInfo._id : tutorInfo._id;
+    const receiverID = currentIsHotel ? customerInfo._id : hotelInfo._id;
     socket.current.emit("sendNotification", {
       receiverID,
       type: 'start',
@@ -57,7 +57,7 @@ function Room() {
   };
 
   const markAsPaid = () => {
-    const receiverID = currentIsTutor ? studentInfo._id : tutorInfo._id;
+    const receiverID = currentIsHotel ? customerInfo._id : hotelInfo._id;
     socket.current.emit("sendNotification", {
       receiverID,
       type: 'paid',
@@ -71,22 +71,22 @@ function Room() {
       /*
       rating,
       review,
-      tutorID
-      studentID
+      hotelID
+      customerID
       meetingID
       */
       const payload = {
         rating,
         review: review.trim(),
-        tutorID: tutorInfo._id,
-        studentID: studentInfo._id,
+        hotelID: hotelInfo._id,
+        customerID: customerInfo._id,
         meetingID: meetingInfo._id
       };
 
       const res = await axios.post('feedbacks', payload);
       const feedbackCreated = res.data.success;
       if (feedbackCreated)
-        history.push('/students/dashboard/dashboard');
+        history.push('/customers/dashboard/dashboard');
       else
         console.log('feedback not created!');
     }
@@ -94,7 +94,7 @@ function Room() {
 
   useEffect(() => {
     if (meetingDuration) {
-      const receiverID = currentIsTutor ? studentInfo._id : tutorInfo._id;
+      const receiverID = currentIsHotel ? customerInfo._id : hotelInfo._id;
       socket.current.emit("sendNotification", {
         receiverID,
         meetingDuration,
@@ -106,7 +106,7 @@ function Room() {
   useEffect(() => {
     socket.current.on("getNotification", (data) => {
       if (data.type === 'start') {
-        setStudentStarted(true);
+        setCustomerStarted(true);
       }
       else if (data.type === 'stop') {
         setMeetingDuration(data.meetingDuration);
@@ -132,18 +132,18 @@ function Room() {
     // we need following info in the payload
     /*
     meetingID,
-    tutorID,
-    studentID,
+    hotelID,
+    customerID,
     meetingDuration,
     amount
     */
     if (meetingDuration) {
       //lets calculate amount first
-      const amount = (meetingDuration / 3600 * tutorInfo.hourlyRate).toFixed(2);
+      const amount = (meetingDuration / 3600 * hotelInfo.hourlyRate).toFixed(2);
 
       const reqBody = {
-        tutorID: tutorInfo._id,
-        studentID: studentInfo._id,
+        hotelID: hotelInfo._id,
+        customerID: customerInfo._id,
         meetingID: meetingInfo._id,
         meetingDuration,
         amount
@@ -165,12 +165,12 @@ function Room() {
           if (transactionCreated) {
             setLoading(false);
             setPaymentApproved(true);
-            const receiverID = currentIsTutor ? studentInfo._id : tutorInfo._id;
+            const receiverID = currentIsHotel ? customerInfo._id : hotelInfo._id;
             socket.current.emit("sendNotification", {
               receiverID,
               type: 'approved',
             });
-            history.push('/tutors/dashboard/dashboard');
+            history.push('/hotels/dashboard/dashboard');
           }
         }
       } catch (err) {
@@ -188,16 +188,16 @@ function Room() {
         </Typography>
         <Box className="d-flex justify-content-around align-items-center">
           <Box className="room__participant">
-            <img src={"http://localhost:5000/" + tutorInfo.imageURL} className="img-radius w-100" alt="User-Profile-Image" />
+            <img src={"http://localhost:5000/" + hotelInfo.imageURL} className="img-radius w-100" alt="User-Profile-Image" />
             <Typography variant="subtitle1" className="mt-2 text-white font-weight-bold" align='center'>
-              TUTOR
+              HOTEL
             </Typography>
             <Typography variant="subtitle1" className="text-white font-weight-bold" align='center'>
-              {tutorInfo.firstName} {tutorInfo.lastName}
+              {hotelInfo.firstName} {hotelInfo.lastName}
             </Typography>
           </Box>
           {
-            !currentIsTutor
+            !currentIsHotel
               ?
               <Box>
                 <ReactTimerStopwatch
@@ -214,7 +214,7 @@ function Room() {
                 </ReactTimerStopwatch>
               </Box>
               :
-              studentStarted ?
+              customerStarted ?
                 <Box>
                   <ReactTimerStopwatch
                     isOn={true}
@@ -223,16 +223,16 @@ function Room() {
                   </ReactTimerStopwatch>
                 </Box> :
                 <Box>
-                  Student has not started the meeting yet.
+                  Customer has not started the meeting yet.
                 </Box>
           }
           <Box className="room__participant">
-            <img src={"http://localhost:5000/" + studentInfo.imageURL} className="img-radius w-100" alt="User-Profile-Image" />
+            <img src={"http://localhost:5000/" + customerInfo.imageURL} className="img-radius w-100" alt="User-Profile-Image" />
             <Typography variant="subtitle1" className="mt-2 text-white font-weight-bold" align='center'>
-              STUDENT
+              CUSTOMER
             </Typography>
             <Typography variant="subtitle1" className="text-white font-weight-bold" align='center'>
-              {studentInfo.firstName} {studentInfo.lastName}
+              {customerInfo.firstName} {customerInfo.lastName}
             </Typography>
           </Box>
         </Box>
@@ -249,13 +249,13 @@ function Room() {
           paymentApproved ?
             <DialogTitle className="pb-0 my-2">
               <Typography className="p-2 payment__title text-info font-weight-bold text-capitalize" variant='h5' align='center'>
-                Congratulations {studentInfo.firstName}!
+                Congratulations {customerInfo.firstName}!
               </Typography>
             </DialogTitle>
             :
             <DialogTitle className="pt-0 mt-0">
               <Typography className="p-2 pt-0 payment__title text-capitalize" variant='h5' align='center'>
-                Great job {currentIsTutor ? tutorInfo.firstName : studentInfo.firstName}! {currentIsTutor ? "You are now about to get paid for the session." : "It's now time to pay your tutor."}
+                Great job {currentIsHotel ? hotelInfo.firstName : customerInfo.firstName}! {currentIsHotel ? "You are now about to get paid for the session." : "It's now time to pay your hotel."}
               </Typography>
             </DialogTitle>
         }
@@ -263,19 +263,19 @@ function Room() {
           paymentApproved ?
             <DialogContent className="pb-0 mb-0">
               <Typography className="px-2 mx-2 payment__title text-capitalize" variant='h5' align='center'>
-                Your payment has been approved by {tutorInfo.firstName}. Please share your overall experience with the tutor
+                Your payment has been approved by {hotelInfo.firstName}. Please share your overall experience with the hotel
               </Typography>
             </DialogContent>
             :
             <DialogContent>
               <Typography variant="subtitle1" className="text-text-center" align='center'>
-                Your meeting lasted for <span className="text-info font-weight-bold">{new Date(meetingDuration * 1000).toISOString().substr(11, 8)}.</span> You {currentIsTutor ? "conducted" : "took"} the session for about <span className="text-info font-weight-bold">{(meetingDuration / 3600).toFixed(4)} hours!</span> and you will {currentIsTutor ? "get paid " : "pay your tutor "}<span className="text-info font-weight-bold">${(meetingDuration / 3600 * tutorInfo.hourlyRate).toFixed(2)}</span>
+                Your meeting lasted for <span className="text-info font-weight-bold">{new Date(meetingDuration * 1000).toISOString().substr(11, 8)}.</span> You {currentIsHotel ? "conducted" : "took"} the session for about <span className="text-info font-weight-bold">{(meetingDuration / 3600).toFixed(4)} hours!</span> and you will {currentIsHotel ? "get paid " : "pay your hotel "}<span className="text-info font-weight-bold">${(meetingDuration / 3600 * hotelInfo.hourlyRate).toFixed(2)}</span>
               </Typography>
             </DialogContent>
         }
         <DialogActions className={paymentApproved ? "d-block px-4 mt-1" : ""}>
           {
-            currentIsTutor ?
+            currentIsHotel ?
               <button disabled={!paid} className="btn-block btn btn-info m-2 mx-4" onClick={approvePayment}>{loading ? <CircularProgress /> : paid ? "APPROVE PAYMENT" : "WAITING FOR PAYMENT"}</button>
               :
               paymentApproved ?
@@ -289,7 +289,7 @@ function Room() {
                     />
                   </Box>
                   <Box>
-                    <TextField fullWidth label="Write a short review to your tutor" variant="outlined" multiline minRows={2} value={review} onChange={(event) => {
+                    <TextField fullWidth label="Write a short review to your hotel" variant="outlined" multiline minRows={2} value={review} onChange={(event) => {
                       setReview(event.target.value);
                     }} />
                   </Box>
@@ -298,7 +298,7 @@ function Room() {
                   </Box>
                 </>
                 :
-                <button disabled={paid} className="text-uppercase btn-block btn btn-info m-2 mx-4" onClick={markAsPaid}>{paid ? `WAITING FOR ${tutorInfo.firstName} TO APPROVE PAYMENT` : "MARK AS PAID"}</button>
+                <button disabled={paid} className="text-uppercase btn-block btn btn-info m-2 mx-4" onClick={markAsPaid}>{paid ? `WAITING FOR ${hotelInfo.firstName} TO APPROVE PAYMENT` : "MARK AS PAID"}</button>
           }
         </DialogActions>
       </Dialog>

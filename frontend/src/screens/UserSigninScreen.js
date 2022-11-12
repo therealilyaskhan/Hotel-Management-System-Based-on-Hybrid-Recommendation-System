@@ -11,23 +11,23 @@ function UserSigninScreen(props) {
   const [error, setError] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isTutor, setIsTutor] = useState(false);
+  const [isHotel, setIsHotel] = useState(false);
 
-  const redirect = userInfo.category === 'students' ? '/' : '/tutors/dashboard/profile';
+  const redirect = userInfo.category === 'customers' ? '/' : '/hotels/dashboard/profile';
 
   const submitHandler = async (e) => {
-    let signinEndpoint = isTutor ? "tutors/signin" : "students/signin";
+    let signinEndpoint = isHotel ? "hotels/signin" : "customers/signin";
 
     e.preventDefault();
     if (email && password) {
-      const student = {
+      const customer = {
         email,
         password
       };
 
       try {
         setLoading(true);
-        const res = await axios.post(signinEndpoint, student);
+        const res = await axios.post(signinEndpoint, customer);
         const data = res.data.data;
         if (data) {
           localStorage.setItem('userInfo', JSON.stringify(data));
@@ -53,7 +53,7 @@ function UserSigninScreen(props) {
     <div className="auth-wrapper my-5">
       <div className="auth-inner mt-5">
         <form onSubmit={submitHandler}>
-          <h3>Sign In {isTutor ? 'Tutor' : 'Student'}</h3>
+          <h3>Sign In {isHotel ? 'Hotel' : 'Customer'}</h3>
 
           {loading && <LoadingBox msg='Signing you in! Please wait...' />}
           {error && <MessageBox msg={error} variant='danger'></MessageBox>}
@@ -87,12 +87,12 @@ function UserSigninScreen(props) {
           <button type="submit" className="btn btn-primary btn-block">Sign In</button>
           <div className="forgot-password text-center">
             New User?
-            <Link to="/students/signup"> Sign up?</Link>
+            <Link to="/customers/signup"> Sign up?</Link>
             <div>Or</div>
             {
-              isTutor ?
-                (<Link to="#" onClick={() => setIsTutor(false)}>Signin as Student</Link>) :
-                (<Link to="#" onClick={() => setIsTutor(true)}>Signin as Tutor</Link>)
+              isHotel ?
+                (<Link to="#" onClick={() => setIsHotel(false)}>Signin as Customer</Link>) :
+                (<Link to="#" onClick={() => setIsHotel(true)}>Signin as Hotel</Link>)
             }
           </div>
         </form>

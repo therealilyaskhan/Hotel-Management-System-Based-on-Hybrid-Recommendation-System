@@ -40,10 +40,10 @@ const meetingSchema = new Schema({
     ref: 'Tutor',
     required: [true, 'Please provide tutor ID']
   },
-  studentID: {
+  customerID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Student',
-    required: [true, 'Please provide student ID']
+    ref: 'Customer',
+    required: [true, 'Please provide customer ID']
   },
   feedbackID: {
     type: mongoose.Schema.Types.ObjectId,
@@ -62,7 +62,7 @@ const meetingSchema = new Schema({
   }
 }, { timestamps: true });
 
-//before feeding the data into the collection we will convert the  latitude and longitude point submitted by the student into an address and zip code etc:
+//before feeding the data into the collection we will convert the  latitude and longitude point submitted by the customer into an address and zip code etc:
 meetingSchema.pre('save', async function (next) {
   const loc = await geocoder.reverse({ lat: this.latitude, lon: this.longitude });
 

@@ -115,7 +115,7 @@ export default function Messenger() {
                   <Inbox inbox={i} currentUser={user} />
                 </div>
               )) :
-                user.category === 'students' ?
+                user.category === 'customers' ?
                   <Box mt={4} ml={2} mr={8}>
                     <Link to="/" className="text-white">
                       <StyledButton
@@ -127,7 +127,7 @@ export default function Messenger() {
                         type="submit"
                         style={{ color: '#fff' }}
                       >
-                        Explore Tutors
+                        Explore Hotels
                       </StyledButton>
                     </Link>
                   </Box> :

@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TutorDashboardScreen() {
+export default function HotelDashboardScreen() {
   const { categoryName, hourlyRate, experience, _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
   const history = useHistory();
   const classes = useStyles();
@@ -142,7 +142,7 @@ export default function TutorDashboardScreen() {
   return (
     <Content>
       <div className={classes.summaryCards}>
-        <SummaryCard title={"Tutor Of"} value={categoryName} />
+        <SummaryCard title={"Hotel Of"} value={categoryName} />
         <SummaryCard title={"Total Earnings"} value={"$" + totalEarnings?.toFixed(2)} />
         <SummaryCard title={"Hourly Rate"} value={"$" + hourlyRate} />
         <SummaryCard title={"Experience"} value={experience + " years"} />

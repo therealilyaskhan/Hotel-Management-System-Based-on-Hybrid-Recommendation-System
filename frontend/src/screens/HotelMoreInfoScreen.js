@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const TutorMoreInfoScreen = (props) => {
+const HotelMoreInfoScreen = (props) => {
   const { firstName, _id, categoryID } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
   const classes = useStyles();
@@ -56,9 +56,9 @@ const TutorMoreInfoScreen = (props) => {
 
   useEffect(() => {
     if (!_id) {
-      props.history.push('/tutors/signup');
+      props.history.push('/hotels/signup');
     } else if (categoryID) {
-      props.history.push('/tutors/dashboard/profile');
+      props.history.push('/hotels/dashboard/profile');
     }
   }, [props.history, _id]);
 
@@ -100,9 +100,9 @@ const TutorMoreInfoScreen = (props) => {
           setLoading(true);
           //posting to courses
           await axios.post("/courses", { title: courseName });
-          //posting to teaches api now to associate courses with tutors
+          //posting to teaches api now to associate courses with hotels
           await axios.post('/teaches', {
-            tutorID: _id,
+            hotelID: _id,
             course: courseName
           });
         } catch (err) {
@@ -112,19 +112,19 @@ const TutorMoreInfoScreen = (props) => {
 
       });
 
-      //updating tutor with category name and categoryID info
-      const tutorInfo = {
+      //updating hotel with category name and categoryID info
+      const hotelInfo = {
         categoryName: category,
         categoryID: categoryID
       };
 
       try {
         setLoading(true);
-        const res = await axios.put(`tutors/${_id}`, tutorInfo);
+        const res = await axios.put(`hotels/${_id}`, hotelInfo);
         const data = res.data.data;
         if (data) {
           localStorage.setItem('userInfo', JSON.stringify(data));
-          props.history.push('/tutors/dashboard/profile');
+          props.history.push('/hotels/dashboard/profile');
           setLoading(false);
         }
 
@@ -137,7 +137,7 @@ const TutorMoreInfoScreen = (props) => {
 
   return (
     <div className="h-75">
-      <Box className="extra-info-text bg-info h-25 d-flex align-items-center justify-content-center mb-5">Hi, {firstName}! We would need some extra info from you to finalize your tutor registration process.</Box>
+      <Box className="extra-info-text bg-info h-25 d-flex align-items-center justify-content-center mb-5">Hi, {firstName}! We would need some extra info from you to finalize your hotel registration process.</Box>
       <Box className="text-center my-5"><a className="btn btn-primary btn-lg" onClick={handleClickOpen}>Click Here & Fill in the Information</a></Box>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose} fullWidth >
         <DialogTitle>Fill the details please!</DialogTitle>
@@ -184,4 +184,4 @@ const TutorMoreInfoScreen = (props) => {
   );
 };
 
-export default withRouter(TutorMoreInfoScreen);
+export default withRouter(HotelMoreInfoScreen);

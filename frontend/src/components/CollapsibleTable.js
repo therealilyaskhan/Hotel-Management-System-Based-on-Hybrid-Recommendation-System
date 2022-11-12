@@ -31,18 +31,18 @@ function Row(props) {
   const { row, type } = props;
 
   const [open, setOpen] = React.useState(false);
-  const [tutorInfo, setTutorInfo] = React.useState(false);
-  const [studentInfo, setStudentInfo] = React.useState(false);
+  const [hotelInfo, setHotelInfo] = React.useState(false);
+  const [customerInfo, setCustomerInfo] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
-  const fetchUsersInfo = async (tutorID, studentID) => {
+  const fetchUsersInfo = async (hotelID, customerID) => {
     setOpen(!open);
     try {
       setLoading(true);
-      const tutorRes = await axios.get("tutors/" + tutorID);
-      const studentRes = await axios.get("students/" + studentID);
-      setTutorInfo(tutorRes.data.data);
-      setStudentInfo(studentRes.data.data);
+      const hotelRes = await axios.get("hotels/" + hotelID);
+      const customerRes = await axios.get("customers/" + customerID);
+      setHotelInfo(hotelRes.data.data);
+      setCustomerInfo(customerRes.data.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -56,7 +56,7 @@ function Row(props) {
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => fetchUsersInfo(row.tutorID, row.studentID)}
+            onClick={() => fetchUsersInfo(row.hotelID, row.customerID)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -77,8 +77,8 @@ function Row(props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Student</TableCell>
-                    <TableCell>Tutor</TableCell>
+                    <TableCell>Customer</TableCell>
+                    <TableCell>Hotel</TableCell>
                     <TableCell>Hourly Charges</TableCell>
                     <TableCell>Time Left</TableCell>
                   </TableRow>
@@ -92,14 +92,14 @@ function Row(props) {
                     <TableBody>
                       <TableRow>
                         <TableCell component="th" scope="row">
-                          {studentInfo.firstName} {studentInfo.lastName}
+                          {customerInfo.firstName} {customerInfo.lastName}
                         </TableCell>
                         <TableCell><Link to={{
-                          pathname: "/tutors/profile",
-                          tutorInfo
-                        }} className="text-info">{tutorInfo?.firstName} {tutorInfo?.lastName}</Link></TableCell>
+                          pathname: "/hotels/profile",
+                          hotelInfo
+                        }} className="text-info">{hotelInfo?.firstName} {hotelInfo?.lastName}</Link></TableCell>
                         <TableCell>
-                          {"$" + tutorInfo.hourlyRate.toFixed(2)}
+                          {"$" + hotelInfo.hourlyRate.toFixed(2)}
                         </TableCell>
                         <TableCell>
                           <Countdown date={Date.now() + moment(row.startDate, "MMMM Do YYYY, h:mm:ss A").diff(moment())} />

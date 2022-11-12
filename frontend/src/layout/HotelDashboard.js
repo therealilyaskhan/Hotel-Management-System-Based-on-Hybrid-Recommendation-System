@@ -5,18 +5,18 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import AppBarAndDrawer from '../components/tutor/AppBarAndDrawer';
-import TutorProfileInfo from '../screens/TutorProfileInfo';
-import TutorDashboardScreen from '../screens/TutorDashboardScreen';
+import AppBarAndDrawer from '../components/hotel/AppBarAndDrawer';
+import HotelProfileInfo from '../screens/HotelProfileInfo';
+import HotelDashboardScreen from '../screens/HotelDashboardScreen';
 import MeetingScreen from '../screens/MeetingScreen';
 import TransactionScreen from '../screens/TransactionScreen';
-import TutorMapScreen from '../screens/TutorMapScreen';
+import HotelMapScreen from '../screens/HotelMapScreen';
 import LogoutScreen from '../screens/LogoutScreen';
 import MeetingRoom from '../screens/MeetingRoom';
 import moment from 'moment';
 import axios from 'axios';
 
-function TutorDashboard({ socket }) {
+function HotelDashboard({ socket }) {
 
   const [eventMounted, setEventMounted] = useState(false);
 
@@ -39,9 +39,9 @@ function TutorDashboard({ socket }) {
 
   useEffect(() => {
     if (!_id) {
-      history.push('/tutors/signup');
+      history.push('/hotels/signup');
     } else if (!categoryID) {
-      history.push('/tutors/moreinfo');
+      history.push('/hotels/moreinfo');
     }
   }, [history, categoryID, _id]);
 
@@ -84,25 +84,25 @@ function TutorDashboard({ socket }) {
       />
       <AppBarAndDrawer socket={socket} activeMeeting={activeMeeting.length ? activeMeeting.length : false} />
       <Switch>
-        <Route exact path="/tutors/dashboard/profile">
-          <TutorProfileInfo />
+        <Route exact path="/hotels/dashboard/profile">
+          <HotelProfileInfo />
         </Route>
-        <Route path="/tutors/dashboard/dashboard">
-          <TutorDashboardScreen />
+        <Route path="/hotels/dashboard/dashboard">
+          <HotelDashboardScreen />
         </Route>
-        <Route path="/tutors/dashboard/map">
-          <TutorMapScreen _id={_id} />
+        <Route path="/hotels/dashboard/map">
+          <HotelMapScreen _id={_id} />
         </Route>
-        <Route exact path="/tutors/dashboard/meetings">
+        <Route exact path="/hotels/dashboard/meetings">
           <MeetingScreen />
         </Route>
-        <Route exact path="/tutors/dashboard/meetingroom">
+        <Route exact path="/hotels/dashboard/meetingroom">
           <MeetingRoom meeting={activeMeeting.length ? activeMeeting : false} />
         </Route>
-        <Route exact path="/tutors/dashboard/transactions">
-          <TransactionScreen type="tutor" />
+        <Route exact path="/hotels/dashboard/transactions">
+          <TransactionScreen type="hotel" />
         </Route>
-        <Route path="/tutors/dashboard/logout">
+        <Route path="/hotels/dashboard/logout">
           <LogoutScreen />
         </Route>
       </Switch>
@@ -111,4 +111,4 @@ function TutorDashboard({ socket }) {
   );
 }
 
-export default TutorDashboard;
+export default HotelDashboard;

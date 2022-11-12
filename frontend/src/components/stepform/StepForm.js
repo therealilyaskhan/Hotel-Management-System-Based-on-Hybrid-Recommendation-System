@@ -9,23 +9,23 @@ import Confirm from './Confirm';
 import Success from './Success';
 import { useEffect, useState } from 'react';
 
-const StepForm = ({ tutorInfo, studentInfo }) => {
+const StepForm = ({ hotelInfo, customerInfo }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [venue, setVenue] = useState('');
 
   // Step titles
-  const labels = ['When are you available for meeting ?', `Where would you like to meet ${tutorInfo.firstName}`, 'Confirmation'];
+  const labels = ['When are you available for meeting ?', `Where would you like to meet ${hotelInfo.firstName}`, 'Confirmation'];
 
   const handleSteps = (step) => {
     switch (step) {
       case 0:
-        return <FirstStep activeStep={activeStep} setActiveStep={setActiveStep} setStartDate={setStartDate} startDate={startDate} setEndDate={setEndDate} tutorID={tutorInfo._id} studentID={studentInfo._id} />;
+        return <FirstStep activeStep={activeStep} setActiveStep={setActiveStep} setStartDate={setStartDate} startDate={startDate} setEndDate={setEndDate} hotelID={hotelInfo._id} customerID={customerInfo._id} />;
       case 1:
         return <SecondStep activeStep={activeStep} setActiveStep={setActiveStep} setVenue={setVenue} venue={venue} />;
       case 2:
-        return <Confirm activeStep={activeStep} setActiveStep={setActiveStep} startDate={startDate} endDate={endDate} setVenue={setVenue} venue={venue} tutorID={tutorInfo._id} studentID={studentInfo._id} />;
+        return <Confirm activeStep={activeStep} setActiveStep={setActiveStep} startDate={startDate} endDate={endDate} setVenue={setVenue} venue={venue} hotelID={hotelInfo._id} customerID={customerInfo._id} />;
       default:
         throw new Error('Unknown step');
     }
@@ -35,7 +35,7 @@ const StepForm = ({ tutorInfo, studentInfo }) => {
   return (
     <>
       {activeStep === labels.length ? (
-        <Success studentName={studentInfo.firstName} tutorName={tutorInfo.firstName} venue={venue} startDate={startDate} />
+        <Success customerName={customerInfo.firstName} hotelName={hotelInfo.firstName} venue={venue} startDate={startDate} />
       ) : (
         <>
           <Box my={5}>
@@ -43,7 +43,7 @@ const StepForm = ({ tutorInfo, studentInfo }) => {
               Meeting Scheduler
             </Typography>
             <Typography variant='subtitle1' align='center' className="mt-2 text-info">
-              Hi {studentInfo.firstName}! Let's schedule your meeting with <span className="text-capitalize">{tutorInfo.firstName}</span>
+              Hi {customerInfo.firstName}! Let's schedule your meeting with <span className="text-capitalize">{hotelInfo.firstName}</span>
             </Typography>
           </Box>
           <Stepper activeStep={activeStep} className="py-3" alternativeLabel>

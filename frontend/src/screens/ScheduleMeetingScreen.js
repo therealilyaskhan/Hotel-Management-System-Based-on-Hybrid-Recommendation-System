@@ -5,12 +5,12 @@ import { useLocation } from 'react-router-dom';
 function ScheduleMeetingScreen() {
   const location = useLocation();
 
-  const { tutorInfo, studentInfo } = location.state;
+  const { hotelInfo, customerInfo } = location.state;
 
   return (
     <Container className="my-4" component='main' maxWidth="xl">
       <Paper className="px-0 py-3 mt-4" variant='elevation' >
-        <StepForm tutorInfo={tutorInfo} studentInfo={studentInfo} />
+        <StepForm hotelInfo={hotelInfo} customerInfo={customerInfo} />
       </Paper>
     </Container>
   );

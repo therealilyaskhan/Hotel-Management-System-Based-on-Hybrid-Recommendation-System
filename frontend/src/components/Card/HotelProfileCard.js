@@ -6,14 +6,14 @@ import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
 
-function TutorProfileCard({ tutorInfo, currentUser }) {
+function HotelProfileCard({ hotelInfo, currentUser }) {
   const history = useHistory();
   const [averageRating, setAverageRating] = useState(0);
-  const { _id } = tutorInfo;
+  const { _id } = hotelInfo;
 
-  const tutorProfile = {
-    pathname: "/tutors/profile",
-    tutorInfo
+  const hotelProfile = {
+    pathname: "/hotels/profile",
+    hotelInfo
   };
 
   useEffect(() => {
@@ -33,10 +33,10 @@ function TutorProfileCard({ tutorInfo, currentUser }) {
 
   const createNewInbox = async () => {
 
-    if (tutorInfo?._id && currentUser) {
+    if (hotelInfo?._id && currentUser) {
       const members = {
         ownerID: currentUser?._id,
-        opponentID: tutorInfo?._id
+        opponentID: hotelInfo?._id
       };
 
       try {
@@ -57,13 +57,13 @@ function TutorProfileCard({ tutorInfo, currentUser }) {
 
   const scheduleNewMeeting = async () => {
 
-    if (tutorInfo?._id && currentUser) {
-      //take user to schedule screen and pass there the tutor id and current user id as state
+    if (hotelInfo?._id && currentUser) {
+      //take user to schedule screen and pass there the hotel id and current user id as state
       history.push({
         pathname: '/schedule',
         state: {
-          tutorInfo,
-          studentInfo: currentUser
+          hotelInfo,
+          customerInfo: currentUser
         }
       });
     } else if (!currentUser) {
@@ -72,31 +72,31 @@ function TutorProfileCard({ tutorInfo, currentUser }) {
 
   };
   return (
-    <div className="tutor__profile-container">
-      <div className="tutor__img-container">
-        <img src={"http://localhost:5000/" + tutorInfo?.imageURL} />
+    <div className="hotel__profile-container">
+      <div className="hotel__img-container">
+        <img src={"http://localhost:5000/" + hotelInfo?.imageURL} />
       </div>
       <Box mb={0.2}>
         <Rating name="read-only" precision={0.5} value={averageRating} readOnly />
       </Box>
-      <Link to={tutorProfile} className="tutor__info tutor__full-name">{tutorInfo?.firstName} {tutorInfo?.lastName}</Link>
-      <p className="tutor__info tutor__role">
+      <Link to={hotelProfile} className="hotel__info hotel__full-name">{hotelInfo?.firstName} {hotelInfo?.lastName}</Link>
+      <p className="hotel__info hotel__role">
         <i className="fas fa-star"></i>
-        {tutorInfo?.categoryName} Tutor
+        {hotelInfo?.categoryName} Hotel
       </p>
-      <p className="tutor__info tutor__place">
+      <p className="hotel__info hotel__place">
         <i className="fas fa-map-marker-alt"></i>
-        {tutorInfo?.city} {tutorInfo?.country}
+        {hotelInfo?.city} {hotelInfo?.country}
       </p>
 
-      <div className="tutor__rate-info">
-        ${tutorInfo?.hourlyRate}<span>&nbsp;/hour</span>
+      <div className="hotel__rate-info">
+        ${hotelInfo?.hourlyRate}<span>&nbsp;/hour</span>
       </div>
 
-      <button className="tutor__action" onClick={scheduleNewMeeting}>Schedule</button>
-      <button className="tutor__action inbox" onClick={createNewInbox}>Message</button>
+      <button className="hotel__action" onClick={scheduleNewMeeting}>Schedule</button>
+      <button className="hotel__action inbox" onClick={createNewInbox}>Message</button>
     </div>
   );
 }
 
-export default TutorProfileCard;
+export default HotelProfileCard;

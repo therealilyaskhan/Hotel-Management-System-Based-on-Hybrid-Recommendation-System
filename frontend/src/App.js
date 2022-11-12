@@ -1,17 +1,17 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import HomeLayout from './layout/HomeLayout';
-import StudentDashboard from './layout/StudentDashboard';
-import TutorDashboard from './layout/TutorDashboard';
+import CustomerDashboard from './layout/CustomerDashboard';
+import HotelDashboard from './layout/HotelDashboard';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { io } from "socket.io-client";
 
 import Topbar from './components/Topbar';
 import Footer from './components/Footer';
 import UserSigninScreen from './screens/UserSigninScreen';
-import StudentSignupScreen from './screens/StudentSignupScreen';
-import TutorSignupScreen from './screens/TutorSignupScreen';
-import TutorProfileScreen from './screens/TutorProfileScreen';
-import TutorMoreInfoScreen from './screens/TutorMoreInfoScreen';
+import CustomerSignupScreen from './screens/CustomerSignupScreen';
+import HotelSignupScreen from './screens/HotelSignupScreen';
+import HotelProfileScreen from './screens/HotelProfileScreen';
+import HotelMoreInfoScreen from './screens/HotelMoreInfoScreen';
 import Messenger from './screens/Messenger';
 import Room from './screens/Room';
 
@@ -49,32 +49,32 @@ function App() {
             <UserSigninScreen />
             < Footer />
           </Route>
-          <Route path="/students/signup">
+          <Route path="/customers/signup">
             <Topbar sticky />
-            <StudentSignupScreen />
+            <CustomerSignupScreen />
             < Footer />
           </Route>
-          <Route path="/tutors/signup">
+          <Route path="/hotels/signup">
             <Topbar sticky />
-            <TutorSignupScreen />
+            <HotelSignupScreen />
             < Footer />
           </Route>
-          <Route path="/tutors/profile">
+          <Route path="/hotels/profile">
             <Topbar sticky socket={socket} />
-            <TutorProfileScreen />
+            <HotelProfileScreen />
             < Footer />
           </Route>
-          <Route path="/tutors/moreinfo">
+          <Route path="/hotels/moreinfo">
             <Topbar />
-            <TutorMoreInfoScreen />
+            <HotelMoreInfoScreen />
             < Footer />
           </Route>
-          <Route path="/tutors/dashboard">
-            <TutorDashboard socket={socket} />
+          <Route path="/hotels/dashboard">
+            <HotelDashboard socket={socket} />
             <Footer crop />
           </Route>
-          <Route path="/students/dashboard">
-            <StudentDashboard socket={socket} />
+          <Route path="/customers/dashboard">
+            <CustomerDashboard socket={socket} />
             <Footer crop />
           </Route>
           <Route path="/messenger">

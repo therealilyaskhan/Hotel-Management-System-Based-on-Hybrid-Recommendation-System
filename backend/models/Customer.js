@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 const Schema = mongoose.Schema;
 const model = mongoose.model;
 
-const studentSchema = new Schema({
+const customerSchema = new Schema({
   firstName: {
     type: String,
     required: [true, 'Please add first name'],
@@ -37,7 +37,7 @@ const studentSchema = new Schema({
   },
   category: {
     type: String,
-    default: "students"
+    default: "customers"
   },
   totalExpenditures: {
     type: Number,
@@ -51,26 +51,26 @@ const studentSchema = new Schema({
   resetPasswordExpire: Date
 }, { timestamps: true });
 
-//by setting timestamps to true, any student document pushed into the mongoDB via the mongoose will implicitly add-onto the the document being inserted two extra fields: 1) createdAt 2) updatedAt fields; the createdAt is going to have the timestamp for when the document was inserted , and the updatedAt is going to have the timestamp for when the record was last updated in the database;
+//by setting timestamps to true, any customer document pushed into the mongoDB via the mongoose will implicitly add-onto the the document being inserted two extra fields: 1) createdAt 2) updatedAt fields; the createdAt is going to have the timestamp for when the document was inserted , and the updatedAt is going to have the timestamp for when the record was last updated in the database;
 
-// adding instance method to the instances of the Student Model:
+// adding instance method to the instances of the Customer Model:
 // Sign JWT and return
-studentSchema.methods.getSignedJwtToken = function () {
+customerSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE
   });
 };
 
-// Match student entered password to hashed password in database
-studentSchema.methods.matchPassword = async function (enteredPassword) {
+// Match customer entered password to hashed password in database
+customerSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Encrypt password using bcrypt
-studentSchema.pre('save', async function (next) {
+customerSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-const Student = model('Student', studentSchema);
-export default Student;
+const Customer = model('Customer', customerSchema);
+export default Customer;

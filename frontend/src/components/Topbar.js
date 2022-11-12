@@ -57,7 +57,7 @@ export default function Topbar({ responsive, sticky, color }) {
   const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
   return (
-    <Box px={xs ? 2.5 : 5} className={`${classes.root} ${sticky ? classes.sticky : ''}`}>
+    <Box px={xs ? 2.5 : 5} className={`${classes.root} navbarBox ${sticky ? classes.sticky : ''}`}>
       <AppBar
         position='static'
         elevation={0}
@@ -71,7 +71,7 @@ export default function Topbar({ responsive, sticky, color }) {
               to='/'
               className={classes.link}
             >
-              TutorPerHour
+              HMS
             </Link>
           </Typography>
           {
@@ -112,7 +112,7 @@ export default function Topbar({ responsive, sticky, color }) {
                   size="small"
                 >
                   <Link
-                    to='/students/signup'
+                    to='/customers/signup'
                   >
                     Sign Up
                   </Link>

@@ -10,7 +10,7 @@ dotenv.config({ path: './config/.env' });
 
 // Load models
 import Tutor from './models/Tutor.js';
-import Student from './models/Student.js';
+import Customer from './models/Customer.js';
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://mik:xenderoo7@clustertutorperhour.5nvdg.mongodb.net/tutorPerHour?retryWrites=true&w=majority', {
@@ -25,15 +25,15 @@ const tutors = JSON.parse(
   fs.readFileSync(__dirname + '/_jsonData/tutors.json', 'utf-8')
 );
 
-const students = JSON.parse(
-  fs.readFileSync(__dirname + '/_jsonData/students.json', 'utf-8')
+const customers = JSON.parse(
+  fs.readFileSync(__dirname + '/_jsonData/customers.json', 'utf-8')
 );
 
 // Insert into DB
 const insertData = async () => {
   try {
     await Tutor.create(tutors);
-    await Student.create(students);
+    await Customer.create(customers);
     console.log('Data inserted...');
     process.exit();
   } catch (err) {
@@ -45,7 +45,7 @@ const insertData = async () => {
 const deleteData = async () => {
   try {
     await Tutor.deleteMany();
-    await Student.deleteMany();
+    await Customer.deleteMany();
     console.log('Data Destroyed...');
     process.exit();
   } catch (err) {

@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function StudentDashboardScreen() {
+export default function CustomerDashboardScreen() {
   const { _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
   const history = useHistory();
   const classes = useStyles();

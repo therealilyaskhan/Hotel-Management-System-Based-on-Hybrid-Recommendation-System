@@ -10,11 +10,11 @@ export default function Inbox({ inbox, currentUser }) {
     const getUser = async () => {
       try {
         let res;
-        if (currentUser.category === 'students') {
-          res = await axios("/tutors/" + endUserID);
+        if (currentUser.category === 'customers') {
+          res = await axios("/hotels/" + endUserID);
         }
         else {
-          res = await axios("/students/" + endUserID);
+          res = await axios("/customers/" + endUserID);
         }
         setEndUser(res.data.data);
       } catch (err) {

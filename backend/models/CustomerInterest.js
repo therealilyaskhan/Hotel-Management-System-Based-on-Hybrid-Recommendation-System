@@ -3,18 +3,18 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 const model = mongoose.model;
 
-const studentInterestSchema = new Schema({
+const customerInterestSchema = new Schema({
   interests: {
     type: Array,
     required: true
   },
-  studentID: {
+  customerID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Student',
+    ref: 'Customer',
     unique: true,
-    required: [true, 'Please provide student ID']
+    required: [true, 'Please provide customer ID']
   }
 }, { timestamps: false });
 
-const StudentInterest = model('StudentInterest', studentInterestSchema);
-export default StudentInterest;
+const CustomerInterest = model('CustomerInterest', customerInterestSchema);
+export default CustomerInterest;

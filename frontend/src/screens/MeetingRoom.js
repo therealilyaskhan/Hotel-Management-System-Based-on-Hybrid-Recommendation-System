@@ -10,21 +10,21 @@ function MeetingRoom({ meeting }) {
 
   const joinMeetingHandler = async () => {
     if (meeting?.length) {
-      //get student and tutor info
+      //get customer and hotel info
       try {
         setLoading(true);
         const meetingInfo = meeting[0];
-        const { tutorID, studentID } = meetingInfo;
-        const tutorRes = await axios.get("tutors/" + tutorID);
-        const studentRes = await axios.get("students/" + studentID);
-        const tutorInfo = tutorRes.data.data;
-        const studentInfo = studentRes.data.data;
+        const { hotelID, customerID } = meetingInfo;
+        const hotelRes = await axios.get("hotels/" + hotelID);
+        const customerRes = await axios.get("customers/" + customerID);
+        const hotelInfo = hotelRes.data.data;
+        const customerInfo = customerRes.data.data;
         setLoading(false);
         history.push({
           pathname: '/room',
           state: {
-            tutorInfo,
-            studentInfo,
+            hotelInfo,
+            customerInfo,
             meetingInfo
           }
         });

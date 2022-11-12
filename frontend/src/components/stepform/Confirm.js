@@ -8,17 +8,17 @@ import axios from 'axios';
 import { useHistory } from 'react-router';
 import { useState } from 'react';
 
-export default function Confirm({ activeStep, setActiveStep, startDate, endDate, venue, tutorID, studentID, setVenue }) {
+export default function Confirm({ activeStep, setActiveStep, startDate, endDate, venue, hotelID, customerID, setVenue }) {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const handleSubmit = async () => {
     //create new meeting here
-    if (studentID && tutorID && startDate && endDate && venue) {
+    if (customerID && hotelID && startDate && endDate && venue) {
       // for a new meeting we need
       /*
-      tutorID
-      studentID
+      hotelID
+      customerID
       startDate
       endDate
       venue
@@ -26,8 +26,8 @@ export default function Confirm({ activeStep, setActiveStep, startDate, endDate,
       const reqBody = {
         latitude: venue.latitude,
         longitude: venue.longitude,
-        studentID,
-        tutorID,
+        customerID,
+        hotelID,
         startDate,
         endDate
       };
@@ -46,7 +46,7 @@ export default function Confirm({ activeStep, setActiveStep, startDate, endDate,
       } catch (err) {
         console.log(err.message);
       }
-    } else if (!studentID) {
+    } else if (!customerID) {
       history.push('/signin');
     }
 

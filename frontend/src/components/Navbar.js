@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   nav: {
     margin: '0px 10px',
     paddingLeft: '20px',
-    paddingRight: '20px'
+    paddingRight: '20px',
   },
   activeNav: {
     backgroundColor: theme.palette.secondary.main,

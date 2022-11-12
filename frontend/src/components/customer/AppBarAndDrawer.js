@@ -101,7 +101,7 @@ function ResponsiveDrawer(props) {
 
   const drawer = (
     <div>
-      <div className={`${classes.toolbar} toolbar`}>Student Dashboard</div>
+      <div className={`${classes.toolbar} toolbar`}>Customer Dashboard</div>
       <Divider />
       <List>
         {[
@@ -114,13 +114,13 @@ function ResponsiveDrawer(props) {
           { text: "map", icon: "map" },
           { text: "logout", icon: "logout" },
         ].map(({ text, icon }, index) => {
-          return category === 'students' && text === 'map' ? null :
+          return category === 'customers' && text === 'map' ? null :
             (
               <ListItem
                 className={activeMeeting && text === 'meeting room' ? 'active-meeting' : ''}
                 component={RouterLink}
-                selected={pathname === `/students/dashboard/profile/${text.replace(/\s/g, '')}`}
-                to={text === 'messenger' ? '/messenger' : `/students/dashboard/${text.replace(/\s/g, '')}`}
+                selected={pathname === `/customers/dashboard/profile/${text.replace(/\s/g, '')}`}
+                to={text === 'messenger' ? '/messenger' : `/customers/dashboard/${text.replace(/\s/g, '')}`}
                 button
                 key={text}
               >
@@ -181,7 +181,7 @@ function ResponsiveDrawer(props) {
             component={RouterLink}
             className={classes.logo}
           >
-            TutorPerHour
+            HMS
           </Typography>
           <div style={{ flexGrow: 1 }}></div>
           <Link to="/messenger" className="inbox-icon">

@@ -12,7 +12,7 @@ import MessageBox from '../components/MessageBox';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWlseWFzayIsImEiOiJja3Z4cmtpeTYxeTFqMnZtOXF4MXVlaHRqIn0.v07SNE-4A3eTY_MYZCOMwQ';
 
-function TutorMapScreen({ _id }) {
+function HotelMapScreen({ _id }) {
 
   const [userLocation, setUserLocation] = useState(localStorage.getItem('userLocation') ? JSON.parse(localStorage.getItem('userLocation')) : false);
 
@@ -33,7 +33,7 @@ function TutorMapScreen({ _id }) {
 
       try {
         if (!latitude && !longitude) {
-          //if user data is not in local storage then look for his current location in the mongo atlas cluster (api get location of a tutorID)
+          //if user data is not in local storage then look for his current location in the mongo atlas cluster (api get location of a hotelID)
           const res = await axios.get("locations/" + _id);
           localStorage.setItem('userLocation', JSON.stringify(res.data.data));
           setUserLocation(res.data.data);
@@ -104,7 +104,7 @@ function TutorMapScreen({ _id }) {
     const location = {
       latitude: lat,
       longitude: lng,
-      tutorID: _id
+      hotelID: _id
     };
 
     try {
@@ -161,4 +161,4 @@ function TutorMapScreen({ _id }) {
   );
 }
 
-export default TutorMapScreen;
+export default HotelMapScreen;

@@ -6,25 +6,25 @@ import ReactTimeslotCalendar from "react-timeslot-calendar";
 import moment from "moment";
 import { useEffect, useState } from 'react';
 
-export default function FirstStep({ activeStep, setActiveStep, setStartDate, startDate, setEndDate, tutorID, studentID }) {
+export default function FirstStep({ activeStep, setActiveStep, setStartDate, startDate, setEndDate, hotelID, customerID }) {
   const [filledSlots, setFilledSlots] = useState([]);
 
   useEffect(() => {
     const getFilledSlots = async () => {
       try {
-        const tutorSlots = await axios.get("meetings/slots/" + tutorID);
-        const slotsToDisableTutor = tutorSlots.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
+        const hotelSlots = await axios.get("meetings/slots/" + hotelID);
+        const slotsToDisableHotel = hotelSlots.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
 
-        const studentSlots = await axios.get("meetings/slots/" + studentID);
-        const slotsToDisableStudent = studentSlots.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
+        const customerSlots = await axios.get("meetings/slots/" + customerID);
+        const slotsToDisableCustomer = customerSlots.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
 
-        setFilledSlots([...slotsToDisableTutor, ...slotsToDisableStudent]);
+        setFilledSlots([...slotsToDisableHotel, ...slotsToDisableCustomer]);
       } catch (err) {
         console.log(err);
       }
     };
     getFilledSlots();
-  }, [tutorID]);
+  }, [hotelID]);
 
   return (
     <Box mt={4}>

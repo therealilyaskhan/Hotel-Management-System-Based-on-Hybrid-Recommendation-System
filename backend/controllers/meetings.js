@@ -8,7 +8,7 @@ export const getMeetings = expressAsyncHandler(async (req, res, next) => {
 
   const meetings = await Meeting.find(
     {
-      $or: [{ tutorID: userID }, { studentID: userID }]
+      $or: [{ tutorID: userID }, { customerID: userID }]
     },
     { __v: 0 }
   );
@@ -47,15 +47,15 @@ export const updateMeeting = expressAsyncHandler(async (req, res, next) => {
 
 export const getFilledSlots = expressAsyncHandler(async (req, res, next) => {
   const { userID } = req.params;
-  //find all meetings having either student or tutor ID:
+  //find all meetings having either customer or tutor ID:
   const meetings = await Meeting.find(
     {
-      $or: [{ tutorID: userID }, { studentID: userID }]
+      $or: [{ tutorID: userID }, { customerID: userID }]
     },
     {
       _id: 0,
       course: 0,
-      studentID: 0,
+      customerID: 0,
       tutorID: 0,
       feedbackID: 0,
       status: 0,
@@ -75,9 +75,9 @@ export const getFilledSlots = expressAsyncHandler(async (req, res, next) => {
 //create new meeting 
 export const createMeeting = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { latitude, longitude, tutorID, studentID, startDate, endDate } = req.body;
+  const { latitude, longitude, tutorID, customerID, startDate, endDate } = req.body;
 
-  if (!(latitude && longitude && tutorID && studentID && startDate && endDate))
+  if (!(latitude && longitude && tutorID && customerID && startDate && endDate))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Meeting
@@ -85,7 +85,7 @@ export const createMeeting = expressAsyncHandler(async (req, res, next) => {
     latitude,
     longitude,
     tutorID,
-    studentID,
+    customerID,
     startDate,
     endDate
   });

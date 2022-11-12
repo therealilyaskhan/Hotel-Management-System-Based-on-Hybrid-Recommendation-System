@@ -4,27 +4,22 @@ import { Link, withRouter } from 'react-router-dom';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 
-const TutorSignupScreen = (props) => {
-  const info = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
-  const [userInfo, setUserInfo] = useState(info);
+const CustomerSignupScreen = (props) => {
+  // const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+  const [userInfo, setUserInfo] = useState(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [experience, setExperience] = useState('');
-  const [hourlyRate, setHourlyRate] = useState('');
-  const [description, setDescription] = useState('');
 
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const descriptionRef = useRef(null);
 
-  const redirect = '/tutors/moreinfo';
+  const redirect = userInfo.category === 'customers' ? '/customers/dashboard/profile' : '/hotels/dashboard/profile';
 
   const isValid = (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -100,34 +95,23 @@ const TutorSignupScreen = (props) => {
       showSuccess(passwordRef.current);
     }
 
-    //description validation
-    if (description === '') {
-      showError(descriptionRef.current, 'Description is required');
-    } else if (description.trim().length < 21) {
-      showError(descriptionRef.current, 'Description must be at least 20 characters');
-    } else {
-      showSuccess(descriptionRef.current);
-    }
-
-    if (firstNameRef.current.classList.contains("1") &&
+    if (
+      firstNameRef.current.classList.contains("1") &&
       lastNameRef.current.classList.contains("1") &&
       emailRef.current.classList.contains("1") &&
       passwordRef.current.classList.contains("1")
-      && experience && hourlyRate && descriptionRef.current.classList.contains("1")) {
+    ) {
       //form submission logic here
-      const tutor = {
+      const customer = {
         firstName,
         lastName,
         email,
-        password,
-        experience,
-        hourlyRate,
-        description
+        password
       };
 
       try {
         setLoading(true);
-        const res = await axios.post("tutors/signup", tutor);
+        const res = await axios.post("customers/signup", customer);
         const data = res.data.data;
         if (data) {
           localStorage.setItem('userInfo', JSON.stringify(data));
@@ -150,16 +134,15 @@ const TutorSignupScreen = (props) => {
     }
   }, [props.history, userInfo, redirect]);
 
-
   return (
 
     <div className="auth-wrapper my-5">
       <div className="auth-inner mt-5">
 
         <form onSubmit={submitHandler} noValidate>
-          <h3>Let's Sign you up as Tutor!</h3>
+          <h3>Let's Sign you up as Customer</h3>
 
-          {loading && <LoadingBox msg={`Registering you as a Tutor! Please wait...`} />}
+          {loading && <LoadingBox msg={`Registering you as a Customer! Please wait...`} />}
           {error && <MessageBox msg={error} variant='danger'></MessageBox>}
 
           <div className="form-group form__control">
@@ -222,75 +205,19 @@ const TutorSignupScreen = (props) => {
             <small class="form__error-msg"></small>
           </div>
 
-          <div className="form-group form__control">
-            <label htmlFor="hourlyRate">Hourly Rate</label>
-
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text">$</span>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                id="hourlyRate"
-                aria-label="Amount (to the nearest dollar)"
-                name="hourlyRate"
-                onChange={(e) => setHourlyRate(e.target.value)}
-                required
-              />
-              <div className="input-group-append">
-                <span className="input-group-text">.00</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="form-group form__control">
-            <label htmlFor="experience">How many years of tutoring experience do you have?</label>
-            <div className="input-group mb-3">
-              <input
-                type="number"
-                className="form-control"
-                id="experience"
-                aria-label="Years of Experience"
-                name="experience"
-                onChange={(e) => setExperience(e.target.value)}
-                required
-              />
-              <div className="input-group-append">
-                <span className="input-group-text">Years</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="form-group form__control">
-            <label htmlFor="description">Description</label>
-            <textarea
-              ref={descriptionRef}
-              rows='3'
-              name="description"
-              id="description"
-              onChange={(e) => setDescription(e.target.value)}
-              className="form-control"
-              placeholder="Please write a little about yourself..."
-              required
-            >
-            </textarea>
-            <small class="form__error-msg"></small>
-          </div>
-
-          <button type="submit" className="btn btn-primary btn-block">Sign Up as Tutor</button>
+          <button type="submit" className="btn btn-primary btn-block">Sign Up as Customer</button>
 
           <hr />
 
-          <Link to="/students/signup" type="submit" className="btn btn-danger btn-block">Take me to Student Sign Up Page <i className="fa fa-arrow-right"></i></Link>
+          <Link to="/hotels/signup" type="submit" className="btn btn-danger btn-block">Take me to Hotel Registration Page <i className="fa fa-arrow-right"></i></Link>
 
           <p className="forgot-password text-right">
             Already registered <Link to="/signin">sign in?</Link>
           </p>
         </form>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
-export default withRouter(TutorSignupScreen);
+export default withRouter(CustomerSignupScreen);
