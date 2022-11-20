@@ -10,14 +10,14 @@ const HotelSignupScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const [firstName, setFirstName] = useState('');
+  const [hotelName, setHotelName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [experience, setExperience] = useState('');
-  const [hourlyRate, setHourlyRate] = useState('');
+  const [rooms, setRooms] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
   const [description, setDescription] = useState('');
 
-  const firstNameRef = useRef(null);
+  const hotelNameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -48,16 +48,16 @@ const HotelSignupScreen = (props) => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    //firstName validation
-    if (firstName === '') {
-      showError(firstNameRef.current, 'First name is required');
-    } else if (firstName.trim().length < 3) {
-      showError(firstNameRef.current, 'First name must be at least 3 characters');
+    //hotelName validation
+    if (hotelName === '') {
+      showError(hotelNameRef.current, 'Hotel name is required');
+    } else if (hotelName.trim().length < 3) {
+      showError(hotelNameRef.current, 'Hotel name must be at least 3 characters');
     }
-    else if (!startWithAlphabet(firstName)) {
-      showError(firstNameRef.current, 'Username must start with an alphabet');
+    else if (!startWithAlphabet(hotelName)) {
+      showError(hotelNameRef.current, 'Hotel Name must start with an alphabet');
     } else {
-      showSuccess(firstNameRef.current);
+      showSuccess(hotelNameRef.current);
     }
 
     //email validation
@@ -95,17 +95,17 @@ const HotelSignupScreen = (props) => {
       showSuccess(descriptionRef.current);
     }
 
-    if (firstNameRef.current.classList.contains("1") &&
+    if (hotelNameRef.current.classList.contains("1") &&
       emailRef.current.classList.contains("1") &&
       passwordRef.current.classList.contains("1")
-      && experience && hourlyRate && descriptionRef.current.classList.contains("1")) {
+      && rooms && contactNumber && descriptionRef.current.classList.contains("1")) {
       //form submission logic here
       const hotel = {
-        firstName,
+        hotelName,
         email,
         password,
-        experience,
-        hourlyRate,
+        rooms,
+        contactNumber,
         description
       };
 
@@ -147,13 +147,13 @@ const HotelSignupScreen = (props) => {
           {error && <MessageBox msg={error} variant='danger'></MessageBox>}
 
           <div className="form-group form__control">
-            <label htmlFor="firstName">Hotel name</label>
+            <label htmlFor="hotelName">Hotel name</label>
             <input
-              ref={firstNameRef}
+              ref={hotelNameRef}
               type="text"
-              name="firstName"
-              id="firstName"
-              onChange={(e) => setFirstName(e.target.value)}
+              name="hotelName"
+              id="hotelName"
+              onChange={(e) => setHotelName(e.target.value)}
               className="form-control"
               placeholder="Enter full name of the hotel"
               required
@@ -192,31 +192,31 @@ const HotelSignupScreen = (props) => {
           </div>
 
           <div className="form-group form__control">
-            <label htmlFor="hourlyRate">Customer service contact number</label>
+            <label htmlFor="contactNumber">Customer service contact number</label>
 
             <div className="input-group">
               <input
                 type="number"
                 className="form-control"
-                id="hourlyRate"
+                id="contactNumber"
                 aria-label="Amount (to the nearest dollar)"
-                name="hourlyRate"
-                onChange={(e) => setHourlyRate(e.target.value)}
+                name="contactNumber"
+                onChange={(e) => setContactNumber(e.target.value)}
                 required
               />
             </div>
           </div>
 
           <div className="form-group form__control">
-            <label htmlFor="experience">Number of Rooms in your Hotel</label>
+            <label htmlFor="rooms">Number of Rooms in your Hotel</label>
             <div className="input-group mb-3">
               <input
                 type="number"
                 className="form-control"
-                id="experience"
-                aria-label="Years of Experience"
-                name="experience"
-                onChange={(e) => setExperience(e.target.value)}
+                id="rooms"
+                aria-label="Years of rooms"
+                name="rooms"
+                onChange={(e) => setRooms(e.target.value)}
                 required
               />
               <div className="input-group-append">

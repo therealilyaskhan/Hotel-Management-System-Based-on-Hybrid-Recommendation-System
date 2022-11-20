@@ -97,7 +97,7 @@ function Row(props) {
                         <TableCell><Link to={{
                           pathname: "/hotels/profile",
                           hotelInfo
-                        }} className="text-info">{hotelInfo?.firstName} {hotelInfo?.lastName}</Link></TableCell>
+                        }} className="text-info">{hotelInfo?.hotelName}</Link></TableCell>
                         <TableCell>
                           {"$" + hotelInfo.hourlyRate.toFixed(2)}
                         </TableCell>

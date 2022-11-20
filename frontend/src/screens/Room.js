@@ -193,7 +193,7 @@ function Room() {
               HOTEL
             </Typography>
             <Typography variant="subtitle1" className="text-white font-weight-bold" align='center'>
-              {hotelInfo.firstName} {hotelInfo.lastName}
+              {hotelInfo.hotelName}
             </Typography>
           </Box>
           {
@@ -255,7 +255,7 @@ function Room() {
             :
             <DialogTitle className="pt-0 mt-0">
               <Typography className="p-2 pt-0 payment__title text-capitalize" variant='h5' align='center'>
-                Great job {currentIsHotel ? hotelInfo.firstName : customerInfo.firstName}! {currentIsHotel ? "You are now about to get paid for the session." : "It's now time to pay your hotel."}
+                Great job {currentIsHotel ? hotelInfo.hotelName : customerInfo.firstName}! {currentIsHotel ? "You are now about to get paid for the session." : "It's now time to pay your hotel."}
               </Typography>
             </DialogTitle>
         }
@@ -263,7 +263,7 @@ function Room() {
           paymentApproved ?
             <DialogContent className="pb-0 mb-0">
               <Typography className="px-2 mx-2 payment__title text-capitalize" variant='h5' align='center'>
-                Your payment has been approved by {hotelInfo.firstName}. Please share your overall experience with the hotel
+                Your payment has been approved by {hotelInfo.hotelName}. Please share your overall experience with the hotel
               </Typography>
             </DialogContent>
             :
@@ -298,7 +298,7 @@ function Room() {
                   </Box>
                 </>
                 :
-                <button disabled={paid} className="text-uppercase btn-block btn btn-info m-2 mx-4" onClick={markAsPaid}>{paid ? `WAITING FOR ${hotelInfo.firstName} TO APPROVE PAYMENT` : "MARK AS PAID"}</button>
+                <button disabled={paid} className="text-uppercase btn-block btn btn-info m-2 mx-4" onClick={markAsPaid}>{paid ? `WAITING FOR ${hotelInfo.hotelName} TO APPROVE PAYMENT` : "MARK AS PAID"}</button>
           }
         </DialogActions>
       </Dialog>

@@ -90,7 +90,7 @@ function HotelProfileScreen() {
           <img src={"http://localhost:5000/" + hotelInfo?.imageURL} width="200" alt="Profile Image" />
         </div>
         <div className="profile-nav-info">
-          <h3 className="user-name">{hotelInfo?.firstName} {hotelInfo?.lastName}</h3>
+          <h3 className="user-name">{hotelInfo?.hotelName} </h3>
           <div className="address">
             <p id="state" className="state">{hotelInfo?.city}</p>
             <span id="country" className="country">{hotelInfo?.country}</span>

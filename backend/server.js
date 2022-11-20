@@ -13,8 +13,8 @@ import reservationsRouter from './routes/reservations.js';
 import hotelsRouter from './routes/hotels.js';
 import errorHandler from './middleware/errorHandler.js';
 import feedbacksRouter from './routes/feedbacks.js';
-import coursesRouter from './routes/courses.js';
-import teachesRouter from './routes/teaches.js';
+import amenitiesRouter from './routes/amenities.js';
+import offersRouter from './routes/offers.js';
 import messagesRouter from './routes/messages.js';
 import transactionsRouter from './routes/transactions.js';
 import inboxesRouter from './routes/inboxes.js';
@@ -68,11 +68,11 @@ app.use('/api/reservations', reservationsRouter);
 //FEEDBACKS
 app.use('/api/feedbacks', feedbacksRouter);
 
-//COURSES
-app.use('/api/courses', coursesRouter);
+//AMENITIES
+app.use('/api/amenities', amenitiesRouter);
 
-//TEACHES
-app.use('/api/teaches', teachesRouter);
+//hotels that OFFERS amenities
+app.use('/api/offers', offersRouter);
 
 //TRANSACTIONS
 app.use('/api/transactions', transactionsRouter);

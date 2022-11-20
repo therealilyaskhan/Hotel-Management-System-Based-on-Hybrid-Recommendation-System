@@ -31,7 +31,7 @@ export default function Inbox({ inbox, currentUser }) {
         src={"http://localhost:5000/" + endUser?.imageURL}
         alt=""
       />
-      <span className="conversationName">{endUser?.firstName} {endUser?.lastName}</span>
+      <span className="conversationName">{endUser?.category === "hotels" ? endUser?.hotelName : endUser?.firstName + " " + endUser?.lastName}</span>
     </div>
   );
 }

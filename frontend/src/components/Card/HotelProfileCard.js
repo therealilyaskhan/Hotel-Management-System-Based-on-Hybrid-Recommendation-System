@@ -79,7 +79,7 @@ function HotelProfileCard({ hotelInfo, currentUser }) {
       <Box mb={0.2}>
         <Rating name="read-only" precision={0.5} value={averageRating} readOnly />
       </Box>
-      <Link to={hotelProfile} className="hotel__info hotel__full-name">{hotelInfo?.firstName} {hotelInfo?.lastName}</Link>
+      <Link to={hotelProfile} className="hotel__info hotel__full-name">{hotelInfo?.hotelName}</Link>
       <p className="hotel__info hotel__role">
         <i className="fas fa-star"></i>
         {hotelInfo?.categoryName} Hotel

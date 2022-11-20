@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const model = mongoose.model;
 
 const hotelSchema = new Schema({
-  firstName: {
+  hotelName: {
     type: String,
     required: [true, 'Please add first name'],
     trim: true,
@@ -25,11 +25,11 @@ const hotelSchema = new Schema({
     required: [true, 'Please enter password'],
     select: false
   },
-  hourlyRate: {
+  contactNumber: {
     type: Number,
     required: [true, 'Please add a hourly rate']
   },
-  experience: {
+  rooms: {
     type: Number,
     required: [true, 'Please add experience']
   },
@@ -49,7 +49,7 @@ const hotelSchema = new Schema({
   },
   categoryName: {
     type: String,
-    enum: ['none', 'science', 'design', 'development', 'religious', 'marketing', 'personal', 'business', 'music', 'photography', 'arts', 'language', 'elementary', 'maths', 'ecommerce'],
+    enum: ['none', 'hotels', 'motels', 'resorts', 'inns', 'all suites', 'extended stay hotels', 'micro hotels', 'heritage hotels', 'one star', 'two star', 'three star', 'four star', 'five star', 'budget hotels'],
     default: "none"
   },
   categoryID: {

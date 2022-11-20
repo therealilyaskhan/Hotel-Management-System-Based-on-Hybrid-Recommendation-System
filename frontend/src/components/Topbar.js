@@ -84,7 +84,8 @@ export default function Topbar({ responsive, sticky, color }) {
                   size="small"
                 >
                   <Link to={`/${userInfo.category}/dashboard/profile`}>
-                    Hi, {userInfo.firstName.split(' ')[0]} {userInfo.firstName.split(' ')[1] ? userInfo.firstName.split(' ')[1] : ''}!
+                    Hi,
+                    {userInfo.category === "customers" ? userInfo.firstName : userInfo.hotelName.split(' ')[0]}
                   </Link>
                 </StyledButton>
                 <Link to={`/${userInfo.category}/dashboard/profile`}>

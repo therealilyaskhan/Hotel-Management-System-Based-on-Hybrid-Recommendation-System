@@ -54,7 +54,7 @@ export const getFilledSlots = expressAsyncHandler(async (req, res, next) => {
     },
     {
       _id: 0,
-      course: 0,
+      amenity: 0,
       customerID: 0,
       hotelID: 0,
       feedbackID: 0,

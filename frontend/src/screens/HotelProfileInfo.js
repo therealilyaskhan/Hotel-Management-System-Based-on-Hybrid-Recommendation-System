@@ -61,7 +61,7 @@ function HotelProfileInfo() {
                           <label htmlFor="files" className="btn btn-primary btn-sm" role="button">Update Profile Image</label>
                           <input id="files" name="image" style={{ visibility: "hidden" }} type="file" onChange={imageUpdateHandler} />
                         </div>
-                        <h6 className="f-w-600 text-uppercase">{hotelInfo.firstName} {hotelInfo.lastName}</h6>
+                        <h6 className="f-w-600 text-uppercase">{hotelInfo.hotelName}</h6>
                         <p>Hotel</p> <i className=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
                       </div>
                     </div>
@@ -81,12 +81,8 @@ function HotelProfileInfo() {
                         <div className="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></div>
                         <div className="row">
                           <div className="col-sm-6">
-                            <p className="m-b-10 f-w-600">First Name</p>
-                            <h6 className="text-muted f-w-400">{hotelInfo.firstName}</h6>
-                          </div>
-                          <div className="col-sm-6">
-                            <p className="m-b-10 f-w-600">Last Name</p>
-                            <h6 className="text-muted f-w-400">{hotelInfo.lastName}</h6>
+                            <p className="m-b-10 f-w-600">Hotel Name</p>
+                            <h6 className="text-muted f-w-400 text-capitalize">{hotelInfo.hotelName}</h6>
                           </div>
                         </div>
                         <div className="row">

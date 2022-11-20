@@ -28,31 +28,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HotelMoreInfoScreen = (props) => {
-  const { firstName, _id, categoryID } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
+  const { hotelName, _id, categoryID } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [courses, setCourses] = useState([]);
+  const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const categories = [
-    { value: "science", label: "Science", id: 1 },
-    { value: "design", label: "Design", id: 2 },
-    { value: "development", label: "Development", id: 3 },
-    { value: "religious", label: "Religious", id: 4 },
-    { value: "marketing", label: "Marketing", id: 5 },
-    { value: "personal", label: "Personal Development", id: 6 },
-    { value: "business", label: "Business", id: 7 },
-    { value: "music", label: "Music", id: 8 },
-    { value: "photography", label: "Photography", id: 9 },
-    { value: "arts", label: "Arts", id: 10 },
-    { value: "language", label: "Language", id: 11 },
-    { value: "elementary", label: "Elementary Education", id: 12 },
-    { value: "maths", label: "Mathematics", id: 13 },
-    { value: "ecommerce", label: "E-commerce", id: 14 },
+    { value: "hotels", label: "Hotels", id: 1 },
+    { value: "motels", label: "Motels", id: 2 },
+    { value: "resorts", label: "Resorts", id: 3 },
+    { value: "inns", label: "Inns", id: 4 },
+    { value: "all suites", label: "All Suites", id: 5 },
+    { value: "extended stay hotels", label: "Extended Stay Hotels", id: 6 },
+    { value: "micro hotels", label: "Micro Hotels", id: 7 },
+    { value: "heritage hotels", label: "Heritage Hotels", id: 8 },
+    { value: "one star", label: "One Star", id: 9 },
+    { value: "two star", label: "Two Star", id: 10 },
+    { value: "three star", label: "Three Star", id: 11 },
+    { value: "four star", label: "Four Star", id: 12 },
+    { value: "five star", label: "Five Star", id: 13 },
+    { value: "budget hotels", label: "Budget Hotels", id: 14 },
   ];
-  const [category, setCategory] = useState('science');
+  const [category, setCategory] = useState('hotels');
 
   useEffect(() => {
     if (!_id) {
@@ -76,12 +76,12 @@ const HotelMoreInfoScreen = (props) => {
     }
   };
 
-  const onCourseAdded = (course, allCourses) => {
-    setCourses(allCourses);
+  const onAmenityAdded = (amenity, allAmenities) => {
+    setAmenities(allAmenities);
   };
 
-  const onCourseDeleted = (course, allCourses) => {
-    setCourses(allCourses);
+  const onAmenityDeleted = (amenity, allAmenities) => {
+    setAmenities(allAmenities);
   };
 
   const handleSubmit = async (e) => {
@@ -92,18 +92,18 @@ const HotelMoreInfoScreen = (props) => {
         categoryID = c.id;
     });
 
-    if (category && categoryID && courses.length) {
-      //posting courses information to courses and teachings api first
-      courses.forEach(async (courseName) => {
+    if (category && categoryID && amenities.length) {
+      //posting amenities information to amenities and offerings api first
+      amenities.forEach(async (amenityName) => {
 
         try {
           setLoading(true);
-          //posting to courses
-          await axios.post("/courses", { title: courseName });
-          //posting to teaches api now to associate courses with hotels
-          await axios.post('/teaches', {
+          //posting to amenities
+          await axios.post("/amenities", { title: amenityName });
+          //posting to offers api now to associate amenities with hotels
+          await axios.post('/offers', {
             hotelID: _id,
-            course: courseName
+            amenity: amenityName
           });
         } catch (err) {
           setLoading(false);
@@ -137,7 +137,7 @@ const HotelMoreInfoScreen = (props) => {
 
   return (
     <div className="h-75">
-      <Box className="extra-info-text bg-info h-25 d-flex align-items-center justify-content-center mb-5">Hi, {firstName}! We would need some extra info from you to finalize your hotel registration process.</Box>
+      <Box className="extra-info-text bg-info h-25 d-flex align-items-center justify-content-center mb-5">Hi, {hotelName}! We would need some extra info from you to finalize your hotel registration process.</Box>
       <Box className="text-center my-5"><a className="btn btn-primary btn-lg" onClick={handleClickOpen}>Click Here & Fill in the Information</a></Box>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose} fullWidth >
         <DialogTitle>Fill the details please!</DialogTitle>
@@ -146,7 +146,7 @@ const HotelMoreInfoScreen = (props) => {
         <DialogContent>
           <Box component="form">
             <FormControl variant='standard' fullWidth margin='normal' required>
-              <InputLabel shrink className={classes.label} variant="standard" htmlFor="demo-dialog-native">Which category your skills fall in ?</InputLabel>
+              <InputLabel shrink className={classes.label} variant="standard" htmlFor="demo-dialog-native">Which category your Hotel belongs to ?</InputLabel>
               <Select
                 native
                 value={category}
@@ -164,13 +164,13 @@ const HotelMoreInfoScreen = (props) => {
             </FormControl>
             <FormControl className="mt-2" fullWidth margin='normal' required variant='standard'>
               <MultipleValueTextInput
-                className={courses.length > 2 ? "multiple-value-text-input" : ""}
-                disabled={courses.length > 2 ? true : false}
-                onItemAdded={onCourseAdded}
-                onItemDeleted={onCourseDeleted}
-                label="Which courses would you like to teach on our platform ?"
+                className={amenities.length > 5 ? "multiple-value-text-input" : ""}
+                disabled={amenities.length > 5 ? true : false}
+                onItemAdded={onAmenityAdded}
+                onItemDeleted={onAmenityDeleted}
+                label="Which amenities would you like to offering on our platform ?"
                 name="item-input"
-                placeholder={courses.length > 2 ? "No more than 3 courses" : "Enter whatever courses you want; separate them with COMMA or ENTER."}
+                placeholder={amenities.length > 5 ? "No more than 3 amenities" : "Enter whatever amenities you want; separate them with COMMA or ENTER."}
               />
             </FormControl>
           </Box>

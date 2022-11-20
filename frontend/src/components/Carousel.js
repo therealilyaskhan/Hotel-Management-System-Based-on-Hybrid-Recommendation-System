@@ -28,7 +28,7 @@ export default function Carousel({ recommendedHotels }) {
             <Link to={{
               pathname: "/hotels/profile",
               hotelInfo: hotel.hotel
-            }} className="hotel__info hotel__full-name recommender">{hotel?.hotel.firstName} {hotel?.hotel.lastName}</Link>
+            }} className="hotel__info hotel__full-name recommender">{hotel?.hotel.hotelName}</Link>
             <p className="hotel__info hotel__place recommender">
               <i className="fas fa-map-marker-alt"></i>
               {hotel?.hotel.city} {hotel?.hotel.country}

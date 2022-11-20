@@ -44,8 +44,8 @@ export default function HomeScreen() {
   const autocomplete = async (e, value) => {
     setInputValue(value.trim());
     try {
-      const res = await axios.get("courses/search?term=" + inputValue);
-      const titles = res.data.map((course) => course.title);
+      const res = await axios.get("amenities/search?term=" + inputValue);
+      const titles = res.data.map((amenity) => amenity.title);
 
       setSuggestions(titles);
     } catch (err) {
@@ -59,13 +59,13 @@ export default function HomeScreen() {
       return;
 
     try {
-      const res = await axios.get("teaches?course=" + inputValue.trim());
+      const res = await axios.get("offers?amenity=" + inputValue.trim());
       if (res.data.length) {
         const hotels = res.data.map((hotel) => hotel.hotelID);
         //first update the interest of the current customer if the customer if signed in
 
         if (userInfo) {
-          //first calculate the most probable category the course belongs to
+          //first calculate the most probable category the amenity belongs to
 
           let res = await axios.all(hotels.map(hotelID => axios.get("hotels/" + hotelID.trim())));
 
