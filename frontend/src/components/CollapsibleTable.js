@@ -116,29 +116,29 @@ function Row(props) {
   );
 }
 
-export default function CollapsibleTable({ meetings, type, mb }) {
+export default function CollapsibleTable({ reservations, type, mb }) {
   return (
     <TableContainer className={mb ? "mb-5" : ""} component={Paper}>
-      <Typography variant="h6" className="d-flex align-items-center justify-content-center py-3 table-title shadow-sm" fontSize={22}><span className="text-capitalize">{type} </span>&nbsp; Meetings</Typography>
+      <Typography variant="h6" className="d-flex align-items-center justify-content-center py-3 table-title shadow-sm" fontSize={22}><span className="text-capitalize">{type} </span>&nbsp; Reservations</Typography>
       <Table aria-label="collapsible table">
         {
-          meetings?.length ?
+          reservations?.length ?
             <>
               <TableHead>
                 <TableRow>
                   <TableCell />
-                  <TableCell>Meeting Time</TableCell>
-                  <TableCell align="center">Meeting Place</TableCell>
-                  <TableCell align="center">Meeting Status</TableCell>
+                  <TableCell>Reservation Time</TableCell>
+                  <TableCell align="center">Reservation Place</TableCell>
+                  <TableCell align="center">Reservation Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {meetings.map((meeting) => (
-                  <Row key={meeting._id} row={meeting} type={type} />
+                {reservations.map((reservation) => (
+                  <Row key={reservation._id} row={reservation} type={type} />
                 ))}
               </TableBody>
             </> :
-            <Box className="d-flex justify-content-center align-items-center p-3">No {type} meetings found! {type == "Past" ? "You have not attended any meetings yet." : ""}</Box>
+            <Box className="d-flex justify-content-center align-items-center p-3">No {type} reservations found! {type == "Past" ? "You have not attended any reservations yet." : ""}</Box>
         }
       </Table>
     </TableContainer>

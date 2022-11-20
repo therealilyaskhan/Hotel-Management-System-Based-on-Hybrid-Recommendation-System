@@ -11,7 +11,6 @@ const HotelSignupScreen = (props) => {
   const [error, setError] = useState(false);
 
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [experience, setExperience] = useState('');
@@ -19,7 +18,6 @@ const HotelSignupScreen = (props) => {
   const [description, setDescription] = useState('');
 
   const firstNameRef = useRef(null);
-  const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -62,18 +60,6 @@ const HotelSignupScreen = (props) => {
       showSuccess(firstNameRef.current);
     }
 
-    //lastName validation
-    if (lastName === '') {
-      showError(lastNameRef.current, 'Last name is required');
-    } else if (lastName.trim().length < 3) {
-      showError(lastNameRef.current, 'Last name must be at least 3 characters');
-    }
-    else if (!startWithAlphabet(lastName)) {
-      showError(lastNameRef.current, 'Username must start with an alphabet');
-    } else {
-      showSuccess(lastNameRef.current);
-    }
-
     //email validation
     if (email === '') {
       showError(emailRef.current, 'Email is required');
@@ -110,14 +96,12 @@ const HotelSignupScreen = (props) => {
     }
 
     if (firstNameRef.current.classList.contains("1") &&
-      lastNameRef.current.classList.contains("1") &&
       emailRef.current.classList.contains("1") &&
       passwordRef.current.classList.contains("1")
       && experience && hourlyRate && descriptionRef.current.classList.contains("1")) {
       //form submission logic here
       const hotel = {
         firstName,
-        lastName,
         email,
         password,
         experience,
@@ -163,7 +147,7 @@ const HotelSignupScreen = (props) => {
           {error && <MessageBox msg={error} variant='danger'></MessageBox>}
 
           <div className="form-group form__control">
-            <label htmlFor="firstName">First name</label>
+            <label htmlFor="firstName">Hotel name</label>
             <input
               ref={firstNameRef}
               type="text"
@@ -171,22 +155,7 @@ const HotelSignupScreen = (props) => {
               id="firstName"
               onChange={(e) => setFirstName(e.target.value)}
               className="form-control"
-              placeholder="Enter first name"
-              required
-            />
-            <small class="form__error-msg"></small>
-          </div>
-
-          <div className="form-group form__control">
-            <label htmlFor="lastName">Last name</label>
-            <input
-              ref={lastNameRef}
-              type="text"
-              name="lastName"
-              id="lastName"
-              onChange={(e) => setLastName(e.target.value)}
-              className="form-control"
-              placeholder="Enter last name"
+              placeholder="Enter full name of the hotel"
               required
             />
             <small class="form__error-msg"></small>
@@ -201,7 +170,7 @@ const HotelSignupScreen = (props) => {
               id="email"
               onChange={(e) => setEmail(e.target.value)}
               className="form-control"
-              placeholder="Enter email"
+              placeholder="Enter email address of hotel"
               required
             />
             <small class="form__error-msg"></small>
@@ -216,19 +185,16 @@ const HotelSignupScreen = (props) => {
               id="password"
               onChange={(e) => setPassword(e.target.value)}
               className="form-control"
-              placeholder="Enter a new password"
+              placeholder="Choose a password"
               required
             />
             <small class="form__error-msg"></small>
           </div>
 
           <div className="form-group form__control">
-            <label htmlFor="hourlyRate">Hourly Rate</label>
+            <label htmlFor="hourlyRate">Customer service contact number</label>
 
             <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text">$</span>
-              </div>
               <input
                 type="number"
                 className="form-control"
@@ -238,14 +204,11 @@ const HotelSignupScreen = (props) => {
                 onChange={(e) => setHourlyRate(e.target.value)}
                 required
               />
-              <div className="input-group-append">
-                <span className="input-group-text">.00</span>
-              </div>
             </div>
           </div>
 
           <div className="form-group form__control">
-            <label htmlFor="experience">How many years of hoteling experience do you have?</label>
+            <label htmlFor="experience">Number of Rooms in your Hotel</label>
             <div className="input-group mb-3">
               <input
                 type="number"
@@ -257,7 +220,7 @@ const HotelSignupScreen = (props) => {
                 required
               />
               <div className="input-group-append">
-                <span className="input-group-text">Years</span>
+                <span className="input-group-text">Rooms</span>
               </div>
             </div>
           </div>
@@ -271,7 +234,7 @@ const HotelSignupScreen = (props) => {
               id="description"
               onChange={(e) => setDescription(e.target.value)}
               className="form-control"
-              placeholder="Please write a little about yourself..."
+              placeholder="Please write a little about your Hotel..."
               required
             >
             </textarea>

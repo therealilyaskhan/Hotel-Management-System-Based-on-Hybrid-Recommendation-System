@@ -1,54 +1,54 @@
-import Meeting from '../models/Meeting.js';
+import Reservation from '../models/Reservation.js';
 import expressAsyncHandler from 'express-async-handler'; // read about express-async-handler in NodeJS Fundamentals notes;
 import ErrorResponse from '../utils/ErrorResponse.js';
 
-export const getMeetings = expressAsyncHandler(async (req, res, next) => {
+export const getReservations = expressAsyncHandler(async (req, res, next) => {
 
   const userID = req.query.userID.trim();
 
-  const meetings = await Meeting.find(
+  const reservations = await Reservation.find(
     {
       $or: [{ hotelID: userID }, { customerID: userID }]
     },
     { __v: 0 }
   );
 
-  if (!meetings)
+  if (!reservations)
     res
       .status(200)
       .json([]);
   else
     res
       .status(200)
-      .json(meetings);
+      .json(reservations);
 
 });
 
-export const getMeetingByID = expressAsyncHandler(async (req, res, next) => {
-  const meeting = await Meeting.findById(req.params.id);
+export const getReservationByID = expressAsyncHandler(async (req, res, next) => {
+  const reservation = await Reservation.findById(req.params.id);
 
-  if (!meeting)
-    throw new ErrorResponse(`Meeting not found with id of ${req.params.id}`, 404);
+  if (!reservation)
+    throw new ErrorResponse(`Reservation not found with id of ${req.params.id}`, 404);
 
-  res.status(200).json({ success: true, data: meeting });
+  res.status(200).json({ success: true, data: reservation });
 });
 
-export const updateMeeting = expressAsyncHandler(async (req, res, next) => {
-  const meeting = await Meeting.findByIdAndUpdate(req.params.id, req.body, {
+export const updateReservation = expressAsyncHandler(async (req, res, next) => {
+  const reservation = await Reservation.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
   });
 
-  if (!meeting)
-    throw new ErrorResponse(`Meeting not found with id of ${req.params.id}`, 404);
+  if (!reservation)
+    throw new ErrorResponse(`Reservation not found with id of ${req.params.id}`, 404);
 
-  res.status(200).json({ success: true, data: meeting });
+  res.status(200).json({ success: true, data: reservation });
 });
 
 export const getFilledSlots = expressAsyncHandler(async (req, res, next) => {
   const { userID } = req.params;
-  //find all meetings having either customer or hotel ID:
-  const meetings = await Meeting.find(
+  //find all reservations having either customer or hotel ID:
+  const reservations = await Reservation.find(
     {
       $or: [{ hotelID: userID }, { customerID: userID }]
     },
@@ -66,22 +66,22 @@ export const getFilledSlots = expressAsyncHandler(async (req, res, next) => {
     }
   );
 
-  if (!meetings.length)
+  if (!reservations.length)
     res.status(200).json([]);
   else
-    res.status(200).json(meetings);
+    res.status(200).json(reservations);
 });
 
-//create new meeting 
-export const createMeeting = expressAsyncHandler(async (req, res, next) => {
+//create new reservation 
+export const createReservation = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
   const { latitude, longitude, hotelID, customerID, startDate, endDate } = req.body;
 
   if (!(latitude && longitude && hotelID && customerID && startDate && endDate))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
-  // Create Meeting
-  const meeting = await Meeting.create({
+  // Create Reservation
+  const reservation = await Reservation.create({
     latitude,
     longitude,
     hotelID,
@@ -90,6 +90,6 @@ export const createMeeting = expressAsyncHandler(async (req, res, next) => {
     endDate
   });
 
-  res.status(200).json({ success: true, data: meeting });
+  res.status(200).json({ success: true, data: reservation });
 
 });

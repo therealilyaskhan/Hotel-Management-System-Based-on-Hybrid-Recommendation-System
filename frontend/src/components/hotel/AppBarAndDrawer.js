@@ -50,9 +50,9 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: activeMeeting => activeMeeting ? '#011627' : '#fff',
+    backgroundColor: activeReservation => activeReservation ? '#011627' : '#fff',
     '& *': {
-      color: activeMeeting => activeMeeting ? '#fff' : '#011627'
+      color: activeReservation => activeReservation ? '#fff' : '#011627'
     }
   },
   content: {
@@ -67,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
 function ResponsiveDrawer(props) {
   const { imageURL } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
-  const { container, activeMeeting, socket } = props;
-  const classes = useStyles(activeMeeting);
+  const { container, activeReservation, socket } = props;
+  const classes = useStyles(activeReservation);
   const theme = useTheme();
   const { pathname } = useLocation();
   const isHome = false; // pathname === "/";
@@ -104,14 +104,14 @@ function ResponsiveDrawer(props) {
           { text: "profile", icon: "person" },
           { text: "messenger", icon: "mail" },
           { text: "dashboard", icon: "dashboard" },
-          { text: "meetings", icon: "room" },
-          { text: "meeting room", icon: "cottage" },
+          { text: "reservations", icon: "room" },
+          { text: "reservation room", icon: "cottage" },
           { text: "transactions", icon: "payment" },
           { text: "map", icon: "map" },
           { text: "logout", icon: "logout" },
         ].map(({ text, icon }, index) => (
           <ListItem
-            className={activeMeeting && text === 'meeting room' ? 'active-meeting' : ''}
+            className={activeReservation && text === 'reservation room' ? 'active-reservation' : ''}
             component={RouterLink}
             selected={pathname === `/hotels/dashboard/profile/${text.replace(/\s/g, '')}`}
             to={text === 'messenger' ? '/messenger' : `/hotels/dashboard/${text.replace(/\s/g, '')}`}
@@ -120,8 +120,8 @@ function ResponsiveDrawer(props) {
           >
             <ListItemIcon>
               {
-                activeMeeting && text === 'meeting room' ?
-                  <Badge badgeContent={activeMeeting} color="error">
+                activeReservation && text === 'reservation room' ?
+                  <Badge badgeContent={activeReservation} color="error">
                     <Icon>{icon}</Icon>
                   </Badge>
                   :

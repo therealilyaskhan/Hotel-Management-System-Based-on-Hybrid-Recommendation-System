@@ -68,7 +68,7 @@ const Time = (props) => {
     else if (props.isOn === false && isCount === true) {
         clearInterval(idInterval.current - 1);
         clearInterval(idInterval.current);
-        props.setMeetingFinished(true);
+        props.setReservationFinished(true);
     }
 
     return (

@@ -769,13 +769,13 @@ h6 {
   background-color: #e0e0ff;
 }
 
-.active-meeting {
+.active-reservation {
   background-color: rgb(100 151 0 / 18%) !important;
 }
 .bg-black {
   background-color: #000;
 }
-.meeting-room {
+.reservation-room {
   background-color: #000;
   min-height: 100vh;
 }

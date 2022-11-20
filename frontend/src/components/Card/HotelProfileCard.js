@@ -55,7 +55,7 @@ function HotelProfileCard({ hotelInfo, currentUser }) {
 
   };
 
-  const scheduleNewMeeting = async () => {
+  const scheduleNewReservation = async () => {
 
     if (hotelInfo?._id && currentUser) {
       //take user to schedule screen and pass there the hotel id and current user id as state
@@ -93,7 +93,7 @@ function HotelProfileCard({ hotelInfo, currentUser }) {
         ${hotelInfo?.hourlyRate}<span>&nbsp;/hour</span>
       </div>
 
-      <button className="hotel__action" onClick={scheduleNewMeeting}>Schedule</button>
+      <button className="hotel__action" onClick={scheduleNewReservation}>Schedule</button>
       <button className="hotel__action inbox" onClick={createNewInbox}>Message</button>
     </div>
   );

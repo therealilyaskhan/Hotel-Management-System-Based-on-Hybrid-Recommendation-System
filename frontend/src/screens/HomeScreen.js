@@ -140,10 +140,10 @@ export default function HomeScreen() {
                       className={classes.root}
                       InputProps={{
                         className: classes.root
-                      }} {...params} autoFocus color="secondary" variant="filled" />
+                      }} {...params} autoFocus color="error" variant="filled" />
                   )}
                 />
-                <button onClick={searchHotels} className="btn btn-primary btn-block mt-3">FIND NEARBY HOTELS</button>
+                <button onClick={searchHotels} className="btn btn-danger btn-block mt-3">FIND NEARBY HOTELS</button>
               </div>
 
             </div>

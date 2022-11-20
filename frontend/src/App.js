@@ -17,7 +17,7 @@ import Room from './screens/Room';
 
 import theme from './theme/theme';
 import ResultsLayout from './layout/ResultsLayout';
-import ScheduleMeetingScreen from './screens/ScheduleMeetingScreen';
+import ScheduleReservationScreen from './screens/ScheduleReservationScreen';
 import { useEffect, useState } from 'react';
 
 function App() {
@@ -88,7 +88,7 @@ function App() {
           </Route>
           <Route path="/schedule">
             <Topbar sticky responsive socket={socket} />
-            <ScheduleMeetingScreen />
+            <ScheduleReservationScreen />
             <Footer />
           </Route>
           <Route path="/room">

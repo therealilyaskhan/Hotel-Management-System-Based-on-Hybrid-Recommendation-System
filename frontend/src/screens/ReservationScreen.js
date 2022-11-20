@@ -1,71 +1,23 @@
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useHistory } from 'react-router';
 import { useEffect, useState } from 'react';
-import SummaryCard from '../components/Card/SummaryCard';
+
 import Content from '../components/Content';
 import axios from 'axios';
+import CollapsibleTable from '../components/CollapsibleTable';
 import moment from 'moment';
 
-const useStyles = makeStyles((theme) => ({
-  headerContainer: {
-    position: "relative",
-    height: "100px",
-  },
-  header: {
-    display: "flex",
-    position: "absolute",
-    width: "calc(100%)",
-    top: "-70px",
-    alignItems: "flex-end",
-    "& > *": {
-      margin: `${theme.spacing(3)}px ${theme.spacing(1)}px`,
-    },
-  },
-  spacer: {
-    flexGrow: "1",
-  },
-  avatar: {
-    border: `3px solid white`,
-    width: theme.spacing(13),
-    height: theme.spacing(13),
-    boxShadow: theme.shadows[3],
-  },
-  actionGroup: {
-    display: "flex",
-    width: "330px",
-    justifyContent: "space-between",
-    marginRight: 0,
-  },
-  summaryCards: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  summaryCard: {
-    margin: theme.spacing(1),
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  tripCard: {
-    margin: theme.spacing(1),
-    padding: theme.spacing(2),
-  },
-  minHeight: {
-    height: 405
-  }
-}));
-
-export default function CustomerDashboardScreen() {
+export default function ReservationScreen() {
   const { _id } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
-  const history = useHistory();
-  const classes = useStyles();
 
-  const [loading, setLoading] = useState(false);
+  const history = useHistory();
+
+  const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState([]);
   const [pendingReservations, setPendingReservations] = useState([]);
   const [activeReservations, setActiveReservations] = useState([]);
   const [attendedReservations, setAttendedReservations] = useState([]);
-  const [totalExpenditures, setTotalExpenditures] = useState(0);
 
   const updateReservationStatus = async (reservationID) => {
 
@@ -83,22 +35,9 @@ export default function CustomerDashboardScreen() {
   };
 
   useEffect(() => {
-    if (loading) {
-      return (
-        <Content>
-          <CircularProgress />
-        </Content>
-      );
-    }
-  }, [loading]);
-
-  useEffect(() => {
     if (_id) {
-      const getInfo = async () => {
+      const getAllReservations = async () => {
         try {
-          const transactions = await axios.get("transactions?userID=" + _id);
-          const allTransactions = transactions.data;
-          setTotalExpenditures(allTransactions.reduce((n, { amount }) => n + amount, 0));
           const res = await axios.get("reservations?userID=" + _id);
           const allReservations = res.data;
           const pendingOnes = [];
@@ -127,26 +66,32 @@ export default function CustomerDashboardScreen() {
           setPendingReservations(pendingOnes);
           setActiveReservations(activeOnes);
           setAttendedReservations(attendedOnes);
+          setLoading(false);
         } catch (err) {
           console.log(err);
         }
       };
-      getInfo();
+      getAllReservations();
     } else {
       history.push('/signin');
     }
   }, [_id]);
 
   return (
-    <div className={classes.minHeight}>
+    <div>
       <Content>
-        <div className={classes.summaryCards}>
-          <SummaryCard title={"Total Amount Spent"} value={"$" + totalExpenditures.toFixed(2)} />
-          <SummaryCard title={"Active Reservations"} value={activeReservations.length} />
-          <SummaryCard title={"Upcoming Reservations"} value={pendingReservations.length} />
-          <SummaryCard title={"Attended Reservations"} value={attendedReservations.length} />
-          <SummaryCard title={"Total Reservations"} value={reservations.length} />
-        </div>
+        {
+          loading ?
+            <Box className="d-flex justify-content-center align-items-center" minHeight={320}>
+              <CircularProgress />
+            </Box>
+            :
+            <>
+              <CollapsibleTable mb={true} type="Active" reservations={activeReservations} />
+              <CollapsibleTable mb={true} type="Upcoming" reservations={pendingReservations} />
+              <CollapsibleTable mb={false} type="Past" reservations={attendedReservations} />
+            </>
+        }
       </Content>
     </div>
   );

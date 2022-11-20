@@ -12,11 +12,11 @@ export default function FirstStep({ activeStep, setActiveStep, setStartDate, sta
   useEffect(() => {
     const getFilledSlots = async () => {
       try {
-        const hotelSlots = await axios.get("meetings/slots/" + hotelID);
-        const slotsToDisableHotel = hotelSlots.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
+        const hotelSlots = await axios.get("reservations/slots/" + hotelID);
+        const slotsToDisableHotel = hotelSlots.data.map(reservation => ({ ...reservation, format: 'MMMM Do YYYY, h:mm:ss A' }));
 
-        const customerSlots = await axios.get("meetings/slots/" + customerID);
-        const slotsToDisableCustomer = customerSlots.data.map(meeting => ({ ...meeting, format: 'MMMM Do YYYY, h:mm:ss A' }));
+        const customerSlots = await axios.get("reservations/slots/" + customerID);
+        const slotsToDisableCustomer = customerSlots.data.map(reservation => ({ ...reservation, format: 'MMMM Do YYYY, h:mm:ss A' }));
 
         setFilledSlots([...slotsToDisableHotel, ...slotsToDisableCustomer]);
       } catch (err) {

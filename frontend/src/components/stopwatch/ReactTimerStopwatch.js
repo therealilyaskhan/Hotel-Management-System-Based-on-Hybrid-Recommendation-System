@@ -7,20 +7,20 @@ const ReactTimerStopwatch = (props) => {
 
     const [hint, setHint] = useState(0);
     const [totalSeconds, setTotalSeconds] = useState(0);
-    const [meetingFinished, setMeetingFinished] = useState(false);
+    const [reservationFinished, setReservationFinished] = useState(false);
     const getHint = (h) => {
         setHint(h);
     };
 
     useEffect(() => {
         setTotalSeconds(totalSeconds + 1);
-        if (meetingFinished)
-            props.setMeetingDuration(totalSeconds);
-    }, [hint, meetingFinished]);
+        if (reservationFinished)
+            props.setReservationDuration(totalSeconds);
+    }, [hint, reservationFinished]);
 
     return (
         <div className="react-stopwatch-timer__table">
-            <Time setMeetingFinished={setMeetingFinished} isOn={props.isOn} hint={getHint} watchType={props.watchType} displayHours={props.displayHours}
+            <Time setReservationFinished={setReservationFinished} isOn={props.isOn} hint={getHint} watchType={props.watchType} displayHours={props.displayHours}
                 displayMinutes={props.displayMinutes} displaySeconds={props.displaySeconds}
                 fromTime={props.fromTime} />
             {(props.displayCircle === true) ?

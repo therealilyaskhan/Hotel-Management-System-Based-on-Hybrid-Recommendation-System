@@ -9,7 +9,7 @@ export default function Success({ customerName, hotelName, venue, startDate }) {
         Thank you <span className="text-capitalize text-info font-weight-bold">{customerName}!</span>
       </Typography>
       <Typography component='p' align='center'>
-        Your meeting has been scheduled with <span className="text-capitalize font-weight-bold text-warning">{hotelName}</span> on <span className="text-warning text-capitalize font-weight-bold">{startDate}</span> at <span className="text-capitalize font-weight-bold text-warning">{venue}</span>
+        Your reservation has been scheduled with <span className="text-capitalize font-weight-bold text-warning">{hotelName}</span> on <span className="text-warning text-capitalize font-weight-bold">{startDate}</span> at <span className="text-capitalize font-weight-bold text-warning">{venue}</span>
       </Typography>
     </Box>
   );

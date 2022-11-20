@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 const model = mongoose.model;
 
 const transactionSchema = new Schema({
-  meetingID: {
+  reservationID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Meeting',
+    ref: 'Reservation',
     required: [true, 'Please provide transaction ID']
   },
   hotelID: {
@@ -19,7 +19,7 @@ const transactionSchema = new Schema({
     ref: 'Customer',
     required: [true, 'Please provide transaction ID']
   },
-  meetingDuration: {
+  reservationDuration: {
     type: Number,
     required: true
   },

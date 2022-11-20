@@ -16,7 +16,7 @@ const StepForm = ({ hotelInfo, customerInfo }) => {
   const [venue, setVenue] = useState('');
 
   // Step titles
-  const labels = ['When are you available for meeting ?', `Where would you like to meet ${hotelInfo.firstName}`, 'Confirmation'];
+  const labels = ['When are you available for reservation ?', `Where would you like to meet ${hotelInfo.firstName}`, 'Confirmation'];
 
   const handleSteps = (step) => {
     switch (step) {
@@ -40,10 +40,10 @@ const StepForm = ({ hotelInfo, customerInfo }) => {
         <>
           <Box my={5}>
             <Typography className="text-secondary" variant='h4' align='center'>
-              Meeting Scheduler
+              Reservation Scheduler
             </Typography>
             <Typography variant='subtitle1' align='center' className="mt-2 text-info">
-              Hi {customerInfo.firstName}! Let's schedule your meeting with <span className="text-capitalize">{hotelInfo.firstName}</span>
+              Hi {customerInfo.firstName}! Let's schedule your reservation with <span className="text-capitalize">{hotelInfo.firstName}</span>
             </Typography>
           </Box>
           <Stepper activeStep={activeStep} className="py-3" alternativeLabel>

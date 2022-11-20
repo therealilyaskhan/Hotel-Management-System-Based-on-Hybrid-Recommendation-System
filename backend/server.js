@@ -9,7 +9,7 @@ import cors from 'cors';
 
 import connectDB from './db.js';
 import customersRouter from './routes/customers.js';
-import meetingsRouter from './routes/meetings.js';
+import reservationsRouter from './routes/reservations.js';
 import hotelsRouter from './routes/hotels.js';
 import errorHandler from './middleware/errorHandler.js';
 import feedbacksRouter from './routes/feedbacks.js';
@@ -62,8 +62,8 @@ app.use('/api/customers', customersRouter);
 //HOTELS
 app.use('/api/hotels', hotelsRouter);
 
-// MEETINGS
-app.use('/api/meetings', meetingsRouter);
+// RESERVATIONS
+app.use('/api/reservations', reservationsRouter);
 
 //FEEDBACKS
 app.use('/api/feedbacks', feedbacksRouter);

@@ -59,22 +59,22 @@ export default function HotelDashboardScreen() {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
-  const [meetings, setMeetings] = useState([]);
-  const [pendingMeetings, setPendingMeetings] = useState([]);
-  const [activeMeetings, setActiveMeetings] = useState([]);
-  const [attendedMeetings, setAttendedMeetings] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [pendingReservations, setPendingReservations] = useState([]);
+  const [activeReservations, setActiveReservations] = useState([]);
+  const [attendedReservations, setAttendedReservations] = useState([]);
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
 
-  const updateMeetingStatus = async (meetingID) => {
+  const updateReservationStatus = async (reservationID) => {
 
-    //updating meeting status to attended
-    const meetingStatus = {
+    //updating reservation status to attended
+    const reservationStatus = {
       status: "attended"
     };
 
     try {
-      await axios.put(`meetings/${meetingID}`, meetingStatus);
+      await axios.put(`reservations/${reservationID}`, reservationStatus);
     } catch (err) {
       console.log(err.message);
     }
@@ -101,34 +101,34 @@ export default function HotelDashboardScreen() {
           const feedbacks = await axios.get("feedbacks/" + _id);
           if (feedbacks.data.length)
             setAverageRating(feedbacks.data.reduce((n, { rating }) => n + rating, 0) / feedbacks.data.length);
-          const res = await axios.get("meetings?userID=" + _id);
-          const allMeetings = res.data;
+          const res = await axios.get("reservations?userID=" + _id);
+          const allReservations = res.data;
           const pendingOnes = [];
           const activeOnes = [];
           const attendedOnes = [];
-          allMeetings.forEach((meeting) => {
-            //first check if meeting status is simply attended (no need to update the status as the meeting is a past meeting)
-            if (meeting.status === 'attended') {
-              attendedOnes.push(meeting);
+          allReservations.forEach((reservation) => {
+            //first check if reservation status is simply attended (no need to update the status as the reservation is a past reservation)
+            if (reservation.status === 'attended') {
+              attendedOnes.push(reservation);
             }
-            //then check if a meeting is past meeting but status is still pending in the database, then push that meeting into attended ones and also update in the DB:
-            else if (meeting.status === 'pending' && moment(meeting.endDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) < 5000) {
-              attendedOnes.push(meeting);
-              updateMeetingStatus(meeting._id);
+            //then check if a reservation is past reservation but status is still pending in the database, then push that reservation into attended ones and also update in the DB:
+            else if (reservation.status === 'pending' && moment(reservation.endDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) < 5000) {
+              attendedOnes.push(reservation);
+              updateReservationStatus(reservation._id);
             }
-            //now check if meeting is a pending one but is an active one (no need to update the DB simply push it into active meetings array and mark it as active on frontend)
-            else if (meeting.status === 'pending' && moment(meeting.startDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) < 5000 && moment(meeting.endDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) >= 5000) {
-              activeOnes.push(meeting);
+            //now check if reservation is a pending one but is an active one (no need to update the DB simply push it into active reservations array and mark it as active on frontend)
+            else if (reservation.status === 'pending' && moment(reservation.startDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) < 5000 && moment(reservation.endDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) >= 5000) {
+              activeOnes.push(reservation);
             }
-            //then check if meeting is pending check if the start time is farther than now
-            else if (meeting.status === 'pending' && moment(meeting.startDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) >= 5000) {
-              pendingOnes.push(meeting);
+            //then check if reservation is pending check if the start time is farther than now
+            else if (reservation.status === 'pending' && moment(reservation.startDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) >= 5000) {
+              pendingOnes.push(reservation);
             }
           });
-          setMeetings(allMeetings);
-          setPendingMeetings(pendingOnes);
-          setActiveMeetings(activeOnes);
-          setAttendedMeetings(attendedOnes);
+          setReservations(allReservations);
+          setPendingReservations(pendingOnes);
+          setActiveReservations(activeOnes);
+          setAttendedReservations(attendedOnes);
         } catch (err) {
           console.log(err);
         }
@@ -146,10 +146,10 @@ export default function HotelDashboardScreen() {
         <SummaryCard title={"Total Earnings"} value={"$" + totalEarnings?.toFixed(2)} />
         <SummaryCard title={"Hourly Rate"} value={"$" + hourlyRate} />
         <SummaryCard title={"Experience"} value={experience + " years"} />
-        <SummaryCard title={"Active Meetings"} value={activeMeetings.length} />
-        <SummaryCard title={"Upcoming Meetings"} value={pendingMeetings.length} />
-        <SummaryCard title={"Attended Meetings"} value={attendedMeetings.length} />
-        <SummaryCard title={"Total Meetings"} value={meetings.length} />
+        <SummaryCard title={"Active Reservations"} value={activeReservations.length} />
+        <SummaryCard title={"Upcoming Reservations"} value={pendingReservations.length} />
+        <SummaryCard title={"Attended Reservations"} value={attendedReservations.length} />
+        <SummaryCard title={"Total Reservations"} value={reservations.length} />
         <SummaryCard title={"Average Rating"} value={<Rating name="read-only" value={averageRating} precision={0.5} readOnly />} />
       </div>
       <div className="mb-4"></div>

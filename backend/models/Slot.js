@@ -11,14 +11,14 @@ const slotSchema = new Schema({
   },
   day: {
     type: String,
-    required: [true, 'Please add a day for the meeting'],
+    required: [true, 'Please add a day for the reservation'],
     trim: true,
     lowercase: true,
     enum: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
   },
   slot: {
     type: Number,
-    required: [true, 'Please add a slot for meeting'],
+    required: [true, 'Please add a slot for reservation'],
     enum: [0, 1, 2]
   }
 });

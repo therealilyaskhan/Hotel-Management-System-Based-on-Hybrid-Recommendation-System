@@ -67,7 +67,7 @@ function HotelProfileScreen() {
 
   };
 
-  const scheduleNewMeeting = async () => {
+  const scheduleNewReservation = async () => {
 
     if (hotelInfo?._id && currentUser) {
       //take user to schedule screen and pass there the hotel id and current user id as state
@@ -115,7 +115,7 @@ function HotelProfileScreen() {
             </div>
             <div className="profile-btn">
               <button onClick={createNewInbox} className="chatbtn" id="chatBtn"><i className="fa fa-comment"></i> Chat</button>
-              <button onClick={scheduleNewMeeting} className="createbtn" id="Create-post"><i className="fa fa-plus"></i> Schedule</button>
+              <button onClick={scheduleNewReservation} className="createbtn" id="Create-post"><i className="fa fa-plus"></i> Schedule</button>
             </div>
             <div className="user-rating mt-2">
               <h3 className="rating">{averageRating.toFixed(1)}</h3>

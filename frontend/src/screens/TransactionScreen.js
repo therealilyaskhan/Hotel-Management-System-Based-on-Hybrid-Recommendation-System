@@ -37,19 +37,19 @@ function Row(props) {
   const [open, setOpen] = React.useState(false);
   const [hotelInfo, setHotelInfo] = React.useState(false);
   const [customerInfo, setCustomerInfo] = React.useState(false);
-  const [meetingInfo, setMeetingInfo] = React.useState(false);
+  const [reservationInfo, setReservationInfo] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
-  const fetchInfo = async (hotelID, customerID, meetingID) => {
+  const fetchInfo = async (hotelID, customerID, reservationID) => {
     setOpen(!open);
     try {
       setLoading(true);
       const hotelRes = await axios.get("hotels/" + hotelID);
       const customerRes = await axios.get("customers/" + customerID);
-      const meetingRes = await axios.get("meetings/" + meetingID);
+      const reservationRes = await axios.get("reservations/" + reservationID);
       setHotelInfo(hotelRes.data.data);
       setCustomerInfo(customerRes.data.data);
-      setMeetingInfo(meetingRes.data.data);
+      setReservationInfo(reservationRes.data.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -63,7 +63,7 @@ function Row(props) {
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => fetchInfo(row.hotelID, row.customerID, row.meetingID)}
+            onClick={() => fetchInfo(row.hotelID, row.customerID, row.reservationID)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -72,22 +72,22 @@ function Row(props) {
           {moment(row.createdAt).format("MMMM Do YYYY, h:mm:ss A")}
         </TableCell>
         <TableCell align="center">${row.amount.toFixed(2)}</TableCell>
-        <TableCell align="center">{new Date(row.meetingDuration * 1000).toISOString().substr(11, 8)}</TableCell>
+        <TableCell align="center">{new Date(row.reservationDuration * 1000).toISOString().substr(11, 8)}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box>
               <Typography variant="h6" gutterBottom component="div">
-                Transaction For Meeting:
+                Transaction For Reservation:
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
                     <TableCell>Customer</TableCell>
                     <TableCell>Hotel</TableCell>
-                    <TableCell>Meeting Date</TableCell>
-                    <TableCell>Meeting Place</TableCell>
+                    <TableCell>Reservation Date</TableCell>
+                    <TableCell>Reservation Place</TableCell>
                   </TableRow>
                 </TableHead>
                 {
@@ -106,10 +106,10 @@ function Row(props) {
                           hotelInfo
                         }} className="text-info">{hotelInfo?.firstName} {hotelInfo?.lastName}</Link></TableCell>
                         <TableCell>
-                          {meetingInfo.startDate}
+                          {reservationInfo.startDate}
                         </TableCell>
                         <TableCell>
-                          {meetingInfo.venue.formattedAddress}
+                          {reservationInfo.venue.formattedAddress}
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -136,7 +136,7 @@ function CollapsibleTable({ transactions, type }) {
                   <TableCell />
                   <TableCell align="left">Date & Time</TableCell>
                   <TableCell align="center">{type === 'hotel' ? "Earner" : "Spent"}</TableCell>
-                  <TableCell align="center">Meeting Duration</TableCell>
+                  <TableCell align="center">Reservation Duration</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

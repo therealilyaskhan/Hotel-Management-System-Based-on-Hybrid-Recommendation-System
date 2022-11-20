@@ -28,11 +28,11 @@ function Room() {
   const [review, setReview] = useState('');
   const [paid, setPaid] = useState(false);
   const [isOn, setIsOn] = useState(false);
-  const [meetingDuration, setMeetingDuration] = useState(0);
+  const [reservationDuration, setReservationDuration] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { hotelInfo, customerInfo, meetingInfo } = location.state;
+  const { hotelInfo, customerInfo, reservationInfo } = location.state;
 
-  // real time notification on joining room starting meeting and making payment all
+  // real time notification on joining room starting reservation and making payment all
   const socket = useRef();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function Room() {
     socket.current.emit("addUser", _id);
   }, [socket, _id]);
 
-  const startMeeting = () => {
+  const startReservation = () => {
     setIsOn(true);
     const receiverID = currentIsHotel ? customerInfo._id : hotelInfo._id;
     socket.current.emit("sendNotification", {
@@ -52,7 +52,7 @@ function Room() {
     });
   };
 
-  const stopMeeting = () => {
+  const stopReservation = () => {
     setIsOn(false);
   };
 
@@ -73,14 +73,14 @@ function Room() {
       review,
       hotelID
       customerID
-      meetingID
+      reservationID
       */
       const payload = {
         rating,
         review: review.trim(),
         hotelID: hotelInfo._id,
         customerID: customerInfo._id,
-        meetingID: meetingInfo._id
+        reservationID: reservationInfo._id
       };
 
       const res = await axios.post('feedbacks', payload);
@@ -93,15 +93,15 @@ function Room() {
   };
 
   useEffect(() => {
-    if (meetingDuration) {
+    if (reservationDuration) {
       const receiverID = currentIsHotel ? customerInfo._id : hotelInfo._id;
       socket.current.emit("sendNotification", {
         receiverID,
-        meetingDuration,
+        reservationDuration,
         type: 'stop',
       });
     }
-  }, [meetingDuration]);
+  }, [reservationDuration]);
 
   useEffect(() => {
     socket.current.on("getNotification", (data) => {
@@ -109,7 +109,7 @@ function Room() {
         setCustomerStarted(true);
       }
       else if (data.type === 'stop') {
-        setMeetingDuration(data.meetingDuration);
+        setReservationDuration(data.reservationDuration);
         setOpenPaymentModal(true);
       }
       else if (data.type === 'paid') {
@@ -123,43 +123,43 @@ function Room() {
   }, [socket]);
 
   useEffect(() => {
-    if (meetingDuration)
+    if (reservationDuration)
       setOpenPaymentModal(true);
-  }, [meetingDuration, isOn]);
+  }, [reservationDuration, isOn]);
 
   const approvePayment = async () => {
     //create payment record in the database
     // we need following info in the payload
     /*
-    meetingID,
+    reservationID,
     hotelID,
     customerID,
-    meetingDuration,
+    reservationDuration,
     amount
     */
-    if (meetingDuration) {
+    if (reservationDuration) {
       //lets calculate amount first
-      const amount = (meetingDuration / 3600 * hotelInfo.hourlyRate).toFixed(2);
+      const amount = (reservationDuration / 3600 * hotelInfo.hourlyRate).toFixed(2);
 
       const reqBody = {
         hotelID: hotelInfo._id,
         customerID: customerInfo._id,
-        meetingID: meetingInfo._id,
-        meetingDuration,
+        reservationID: reservationInfo._id,
+        reservationDuration,
         amount
       };
 
       try {
         setLoading(true);
-        //first mark the meeting as attended via it's id
-        //updating meeting status to attended
-        const meetingStatus = {
+        //first mark the reservation as attended via it's id
+        //updating reservation status to attended
+        const reservationStatus = {
           status: "attended"
         };
 
-        const meetingAttended = await axios.put(`meetings/${meetingInfo._id}`, meetingStatus);
+        const reservationAttended = await axios.put(`reservations/${reservationInfo._id}`, reservationStatus);
 
-        if (meetingAttended.data.success) {
+        if (reservationAttended.data.success) {
           const res = await axios.post('transactions', reqBody);
           const transactionCreated = res.data.success;
           if (transactionCreated) {
@@ -181,7 +181,7 @@ function Room() {
   };
 
   return (
-    <Box className="meeting-room d-flex justify-content-center align-items-center text-white">
+    <Box className="reservation-room d-flex justify-content-center align-items-center text-white">
       <Box className="room__details">
         <Typography className="mb-4" variant='h3' align='center' sx={{ py: 4 }}>
           <span className="text-capitalize text-info font-weight-bold">Participants</span>
@@ -201,15 +201,15 @@ function Room() {
               ?
               <Box>
                 <ReactTimerStopwatch
-                  setMeetingDuration={setMeetingDuration}
+                  setReservationDuration={setReservationDuration}
                   isOn={isOn}
                   className="react-stopwatch-timer__table" watchType="stopwatch"
                   displayCircle={true} color="gray" hintColor="greenyellow" fromTime={fromTime} displayHours={true}>
                   <button className={`btn-block btn-${isOn ? "danger" : "info"} font-weight-bold btn mt-3`} onClick={() => {
                     if (!isOn)
-                      startMeeting();
+                      startReservation();
                     else if (isOn)
-                      stopMeeting();
+                      stopReservation();
                   }}>{isOn ? "STOP" : "START"}</button>
                 </ReactTimerStopwatch>
               </Box>
@@ -223,7 +223,7 @@ function Room() {
                   </ReactTimerStopwatch>
                 </Box> :
                 <Box>
-                  Customer has not started the meeting yet.
+                  Customer has not started the reservation yet.
                 </Box>
           }
           <Box className="room__participant">
@@ -240,7 +240,7 @@ function Room() {
           <span className="text-capitalize text-info font-weight-bold">Location</span>
         </Typography>
         <Typography variant="subtitle1" className="text-white font-weight-bold" align='center'>
-          {meetingInfo.venue.formattedAddress}
+          {reservationInfo.venue.formattedAddress}
         </Typography>
       </Box>
       {/* modal */}
@@ -269,7 +269,7 @@ function Room() {
             :
             <DialogContent>
               <Typography variant="subtitle1" className="text-text-center" align='center'>
-                Your meeting lasted for <span className="text-info font-weight-bold">{new Date(meetingDuration * 1000).toISOString().substr(11, 8)}.</span> You {currentIsHotel ? "conducted" : "took"} the session for about <span className="text-info font-weight-bold">{(meetingDuration / 3600).toFixed(4)} hours!</span> and you will {currentIsHotel ? "get paid " : "pay your hotel "}<span className="text-info font-weight-bold">${(meetingDuration / 3600 * hotelInfo.hourlyRate).toFixed(2)}</span>
+                Your reservation lasted for <span className="text-info font-weight-bold">{new Date(reservationDuration * 1000).toISOString().substr(11, 8)}.</span> You {currentIsHotel ? "conducted" : "took"} the session for about <span className="text-info font-weight-bold">{(reservationDuration / 3600).toFixed(4)} hours!</span> and you will {currentIsHotel ? "get paid " : "pay your hotel "}<span className="text-info font-weight-bold">${(reservationDuration / 3600 * hotelInfo.hourlyRate).toFixed(2)}</span>
               </Typography>
             </DialogContent>
         }

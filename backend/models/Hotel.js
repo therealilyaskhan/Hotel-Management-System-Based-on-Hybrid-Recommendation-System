@@ -13,12 +13,6 @@ const hotelSchema = new Schema({
     trim: true,
     maxlength: [50, 'name can not be more than 50 characters']
   },
-  lastName: {
-    type: String,
-    required: [true, 'Please add last name'],
-    trim: true,
-    maxlength: [50, 'name can not be more than 50 characters']
-  },
   email: {
     type: String,
     required: [true, 'Please add email address'],
@@ -68,7 +62,7 @@ const hotelSchema = new Schema({
     type: Number,
     default: 0
   },
-  totalMeetings: {
+  totalReservations: {
     type: Number,
     default: 0
   },

@@ -13,9 +13,9 @@ export default function Confirm({ activeStep, setActiveStep, startDate, endDate,
   const history = useHistory();
 
   const handleSubmit = async () => {
-    //create new meeting here
+    //create new reservation here
     if (customerID && hotelID && startDate && endDate && venue) {
-      // for a new meeting we need
+      // for a new reservation we need
       /*
       hotelID
       customerID
@@ -34,9 +34,9 @@ export default function Confirm({ activeStep, setActiveStep, startDate, endDate,
 
       try {
         setLoading(true);
-        const res = await axios.post('meetings', reqBody);
-        const meetingCreated = res.data.success;
-        if (meetingCreated) {
+        const res = await axios.post('reservations', reqBody);
+        const reservationCreated = res.data.success;
+        if (reservationCreated) {
           // Show last component or success message
           setLoading(false);
           setVenue(res.data.data.venue.formattedAddress);
@@ -61,13 +61,13 @@ export default function Confirm({ activeStep, setActiveStep, startDate, endDate,
       }
       <List disablePadding>
         <ListItem>
-          <ListItemText primary='Meeting Date & Time' secondary={`From ${startDate} to ${endDate}`} />
+          <ListItemText primary='Reservation Date & Time' secondary={`From ${startDate} to ${endDate}`} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary='Meeting Place' secondary={'Latitude: ' + venue.latitude + ' Longitude: ' + venue.longitude} />
+          <ListItemText primary='Reservation Place' secondary={'Latitude: ' + venue.latitude + ' Longitude: ' + venue.longitude} />
         </ListItem>
 
         <Divider />

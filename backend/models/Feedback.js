@@ -14,7 +14,7 @@ const feedbackSchema = new Schema({
     ref: 'Customer',
     required: [true, 'Please provide customer ID']
   },
-  meetingID: {
+  reservationID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Feedback',
     default: null

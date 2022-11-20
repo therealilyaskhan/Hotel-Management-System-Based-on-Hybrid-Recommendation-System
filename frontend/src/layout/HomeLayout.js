@@ -21,11 +21,6 @@ export default function Home() {
 
   return (
     <>
-      <Navbar
-        navs={navs}
-        activeNav={activeNav}
-        setActiveNav={setActiveNav}
-      />
       <HomeScreen />
     </>
   );

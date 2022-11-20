@@ -2,7 +2,7 @@ import { Container, Paper } from '@material-ui/core';
 import StepForm from '../components/stepform/StepForm';
 import { useLocation } from 'react-router-dom';
 
-function ScheduleMeetingScreen() {
+function ScheduleReservationScreen() {
   const location = useLocation();
 
   const { hotelInfo, customerInfo } = location.state;
@@ -16,4 +16,4 @@ function ScheduleMeetingScreen() {
   );
 }
 
-export default ScheduleMeetingScreen;
+export default ScheduleReservationScreen;

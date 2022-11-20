@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
   });
 
   // send and get notification on timer
-  socket.on("sendNotification", ({ receiverID, type, meetingDuration }) => {
+  socket.on("sendNotification", ({ receiverID, type, reservationDuration }) => {
     const receiver = getUser(receiverID);
     if (type === 'start')
       io.to(receiver.socketID).emit("getNotification", {
@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
     else if (type === 'stop')
       io.to(receiver.socketID).emit("getNotification", {
         type,
-        meetingDuration
+        reservationDuration
       });
     else if (type === 'paid')
       io.to(receiver.socketID).emit("getNotification", {

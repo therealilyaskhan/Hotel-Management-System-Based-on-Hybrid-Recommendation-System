@@ -8,11 +8,11 @@ import {
 import AppBarAndDrawer from '../components/hotel/AppBarAndDrawer';
 import HotelProfileInfo from '../screens/HotelProfileInfo';
 import HotelDashboardScreen from '../screens/HotelDashboardScreen';
-import MeetingScreen from '../screens/MeetingScreen';
+import ReservationScreen from '../screens/ReservationScreen';
 import TransactionScreen from '../screens/TransactionScreen';
 import HotelMapScreen from '../screens/HotelMapScreen';
 import LogoutScreen from '../screens/LogoutScreen';
-import MeetingRoom from '../screens/MeetingRoom';
+import ReservationRoom from '../screens/ReservationRoom';
 import moment from 'moment';
 import axios from 'axios';
 
@@ -33,7 +33,7 @@ function HotelDashboard({ socket }) {
 
   const { _id, categoryID } = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false;
 
-  const [activeMeeting, setActiveMeeting] = useState([]);
+  const [activeReservation, setActiveReservation] = useState([]);
 
   const history = useHistory();
 
@@ -47,24 +47,24 @@ function HotelDashboard({ socket }) {
 
   useEffect(() => {
     if (_id) {
-      const getAllMeetings = async () => {
+      const getAllReservations = async () => {
         try {
-          const res = await axios.get("meetings?userID=" + _id);
-          const allMeetings = res.data;
+          const res = await axios.get("reservations?userID=" + _id);
+          const allReservations = res.data;
 
           const activeOnes = [];
-          allMeetings.forEach((meeting) => {
-            //check if meeting is a pending one but is an active one (no need to update the DB simply push it into active meetings array and mark it as active on frontend)
-            if (meeting.status === 'pending' && moment(meeting.startDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) < 5000 && moment(meeting.endDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) >= 5000) {
-              activeOnes.push(meeting);
+          allReservations.forEach((reservation) => {
+            //check if reservation is a pending one but is an active one (no need to update the DB simply push it into active reservations array and mark it as active on frontend)
+            if (reservation.status === 'pending' && moment(reservation.startDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) < 5000 && moment(reservation.endDate, "MMMM Do YYYY, h:mm:ss A").diff(moment()) >= 5000) {
+              activeOnes.push(reservation);
             }
           });
-          setActiveMeeting(activeOnes);
+          setActiveReservation(activeOnes);
         } catch (err) {
           console.log(err);
         }
       };
-      getAllMeetings();
+      getAllReservations();
     } else {
       history.push('/signin');
     }
@@ -82,7 +82,7 @@ function HotelDashboard({ socket }) {
         draggable
         pauseOnHover
       />
-      <AppBarAndDrawer socket={socket} activeMeeting={activeMeeting.length ? activeMeeting.length : false} />
+      <AppBarAndDrawer socket={socket} activeReservation={activeReservation.length ? activeReservation.length : false} />
       <Switch>
         <Route exact path="/hotels/dashboard/profile">
           <HotelProfileInfo />
@@ -93,11 +93,11 @@ function HotelDashboard({ socket }) {
         <Route path="/hotels/dashboard/map">
           <HotelMapScreen _id={_id} />
         </Route>
-        <Route exact path="/hotels/dashboard/meetings">
-          <MeetingScreen />
+        <Route exact path="/hotels/dashboard/reservations">
+          <ReservationScreen />
         </Route>
-        <Route exact path="/hotels/dashboard/meetingroom">
-          <MeetingRoom meeting={activeMeeting.length ? activeMeeting : false} />
+        <Route exact path="/hotels/dashboard/reservationroom">
+          <ReservationRoom reservation={activeReservation.length ? activeReservation : false} />
         </Route>
         <Route exact path="/hotels/dashboard/transactions">
           <TransactionScreen type="hotel" />

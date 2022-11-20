@@ -60,17 +60,17 @@ export const deleteTransaction = expressAsyncHandler(async (req, res, next) => {
 //create new transaction 
 export const createTransaction = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { meetingID, hotelID, customerID, meetingDuration, amount } = req.body;
+  const { reservationID, hotelID, customerID, reservationDuration, amount } = req.body;
 
-  if (!(meetingID && hotelID && customerID && meetingDuration && amount))
+  if (!(reservationID && hotelID && customerID && reservationDuration && amount))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Transaction
   const transaction = await Transaction.create({
-    meetingID,
+    reservationID,
     hotelID,
     customerID,
-    meetingDuration,
+    reservationDuration,
     amount
   });
 

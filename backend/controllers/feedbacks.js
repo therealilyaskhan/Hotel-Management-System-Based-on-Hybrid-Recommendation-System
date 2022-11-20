@@ -50,16 +50,16 @@ export const deleteFeedback = expressAsyncHandler(async (req, res, next) => {
 //create new feedback 
 export const createFeedback = expressAsyncHandler(async (req, res, next) => {
   //pulling props out of req.body for validation reasons
-  const { hotelID, customerID, meetingID, rating, review } = req.body;
+  const { hotelID, customerID, reservationID, rating, review } = req.body;
 
-  if (!(hotelID && customerID && meetingID && rating && review))
+  if (!(hotelID && customerID && reservationID && rating && review))
     throw new ErrorResponse('One of the required fields is missing. Make sure all fields are filled correctly.', 400);
 
   // Create Feedback
   const feedback = await Feedback.create({
     hotelID,
     customerID,
-    meetingID,
+    reservationID,
     rating,
     review
   });
