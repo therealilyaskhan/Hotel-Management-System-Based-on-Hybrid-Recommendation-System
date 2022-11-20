@@ -1,5 +1,5 @@
 {
-  "name":"hotel-management-system-based-on-hybrid-recommendation-system",
+  "name": "hotel-management-system-based-on-hybrid-recommendation-system",
   "type": "module",
   "version": "1.0.0",
   "engines": {
@@ -10,16 +10,8 @@
   "scripts": {
     "start": "nodemon --watch backend --exec node --experimental-modules backend/server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/therealilyaskhan/tutor-per-hour.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/therealilyaskhan/tutor-per-hour/issues"
-  },
-  "homepage": "https://github.com/therealilyaskhan/tutor-per-hour#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
