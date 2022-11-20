@@ -124,14 +124,14 @@ export const hotelImageUpload = expressAsyncHandler(async (req, res, next) => {
 
 //hotel signup endpoint function
 export const signup = expressAsyncHandler(async (req, res, next) => {
-  const { hotelName, email, password, contactNumber, rooms, description } = req.body;
+  const { hotelName, email, password, hourlyRate, rooms, description } = req.body;
 
   // Create Hotel
   const hotel = await Hotel.create({
     hotelName,
     email,
     password,
-    contactNumber,
+    hourlyRate,
     rooms,
     description
   });

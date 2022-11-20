@@ -16,7 +16,7 @@ const StepForm = ({ hotelInfo, customerInfo }) => {
   const [venue, setVenue] = useState('');
 
   // Step titles
-  const labels = ['When are you available for reservation ?', `Where would you like to meet ${hotelInfo.hotelName}`, 'Confirmation'];
+  const labels = ['When are you available for reservation ?', `Choose your preferred room type at ${hotelInfo.hotelName}`, 'Confirmation'];
 
   const handleSteps = (step) => {
     switch (step) {

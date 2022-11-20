@@ -14,7 +14,7 @@ const HotelSignupScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rooms, setRooms] = useState('');
-  const [contactNumber, setContactNumber] = useState('');
+  const [hourlyRate, setHourlyRate] = useState('');
   const [description, setDescription] = useState('');
 
   const hotelNameRef = useRef(null);
@@ -98,14 +98,14 @@ const HotelSignupScreen = (props) => {
     if (hotelNameRef.current.classList.contains("1") &&
       emailRef.current.classList.contains("1") &&
       passwordRef.current.classList.contains("1")
-      && rooms && contactNumber && descriptionRef.current.classList.contains("1")) {
+      && rooms && hourlyRate && descriptionRef.current.classList.contains("1")) {
       //form submission logic here
       const hotel = {
         hotelName,
         email,
         password,
         rooms,
-        contactNumber,
+        hourlyRate,
         description
       };
 
@@ -192,18 +192,24 @@ const HotelSignupScreen = (props) => {
           </div>
 
           <div className="form-group form__control">
-            <label htmlFor="contactNumber">Customer service contact number</label>
+            <label htmlFor="hourlyRate">Hourly Charges Starts From:</label>
 
             <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">$</span>
+              </div>
               <input
                 type="number"
                 className="form-control"
-                id="contactNumber"
+                id="hourlyRate"
                 aria-label="Amount (to the nearest dollar)"
-                name="contactNumber"
-                onChange={(e) => setContactNumber(e.target.value)}
+                name="hourlyRate"
+                onChange={(e) => setHourlyRate(e.target.value)}
                 required
               />
+              <div className="input-group-append">
+                <span className="input-group-text">.00</span>
+              </div>
             </div>
           </div>
 

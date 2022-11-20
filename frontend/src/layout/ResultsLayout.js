@@ -25,8 +25,8 @@ function ResultsLayout(props) {
       const getHotelsData = async () => {
         let res = await axios.all(hotelIDs.map(hotelID => axios.get("hotels/" + hotelID.trim())));
         hotels = res.map((r) => {
-          const { _id, imageURL, description, categoryName, hotelName, contactNumber, rooms, averageRating, city, country } = r.data.data;
-          return { _id, description, imageURL, categoryName, hotelName, city, country, contactNumber, rooms, averageRating };
+          const { _id, imageURL, description, categoryName, hotelName, hourlyRate, rooms, averageRating, city, country } = r.data.data;
+          return { _id, description, imageURL, categoryName, hotelName, city, country, hourlyRate, rooms, averageRating };
         });
         setHotelsData(hotels);
       };

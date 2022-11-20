@@ -25,7 +25,7 @@ const hotelSchema = new Schema({
     required: [true, 'Please enter password'],
     select: false
   },
-  contactNumber: {
+  hourlyRate: {
     type: Number,
     required: [true, 'Please add a hourly rate']
   },
