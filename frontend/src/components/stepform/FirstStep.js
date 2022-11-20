@@ -51,7 +51,7 @@ export default function FirstStep({ activeStep, setActiveStep, setStartDate, sta
           onClick={() => {
             setActiveStep(activeStep + 1);
           }}
-          disabled={startDate ? false : true}
+          disabled={startDate ? true : true}
         >
           Next
         </Button>
