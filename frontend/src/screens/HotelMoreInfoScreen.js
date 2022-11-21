@@ -170,7 +170,7 @@ const HotelMoreInfoScreen = (props) => {
                 onItemDeleted={onAmenityDeleted}
                 label="Which amenities would you like to offering on our platform ?"
                 name="item-input"
-                placeholder={amenities.length > 5 ? "No more than 3 amenities" : "Enter whatever amenities you want; separate them with COMMA or ENTER."}
+                placeholder={amenities.length > 5 ? "No more than 5 amenities" : "Enter whatever amenities you want; separate them with COMMA or ENTER."}
               />
             </FormControl>
           </Box>
